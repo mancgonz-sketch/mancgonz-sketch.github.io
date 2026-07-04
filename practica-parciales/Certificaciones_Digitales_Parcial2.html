@@ -590,14 +590,21 @@ function registrarEvento(payload){
   }catch(err){ /* si falla el registro, no interrumpe el estudio */ }
 }
 
-function mostrarBannerIdentidad(){
+function bloquearSiNoIdentificado(){
   if(obtenerIdentidad()) return;
-  const b = document.createElement('div');
-  b.style.cssText = 'background:#fff3e0;border-bottom:2px solid var(--naranja);padding:8px 14px;text-align:center;font-size:.8rem;color:var(--text);';
-  b.innerHTML = 'No estás identificado — tu progreso se guarda como "Anónimo". <a href="index.html" style="color:var(--bordo);font-weight:700;">Ir al inicio para identificarte</a>';
-  document.body.insertBefore(b, document.body.firstChild);
+  document.body.style.overflow = 'hidden';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(43,35,32,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:360px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+      <h2 style="margin:0 0 8px;font-size:1.1rem;">Necesitás identificarte</h2>
+      <p style="color:#6b615a;font-size:.88rem;margin:0 0 18px;">Esta app se accede desde el inicio, iniciando sesión con Google, para que tu progreso quede registrado a tu nombre.</p>
+      <a href="index.html" style="display:block;background:#8b0000;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:700;">Ir al inicio para identificarme</a>
+    </div>`;
+  document.body.appendChild(overlay);
 }
-mostrarBannerIdentidad();
+bloquearSiNoIdentificado();
 
 // ---- Motor de tandas aleatorias con reciclado del banco completo ----
 let mazo = [];          // cola de índices de preguntas aún no usados en el ciclo actual
