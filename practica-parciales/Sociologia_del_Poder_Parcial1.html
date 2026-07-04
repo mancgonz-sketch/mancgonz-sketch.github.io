@@ -142,9 +142,25 @@
   .rev .ln .ic{flex:none;font-weight:900}
   .rev .yours{color:var(--ox)} .rev .right{color:var(--green)}
   .foot{margin-top:32px;text-align:center;font-size:11px;color:var(--ink-soft);letter-spacing:.04em;line-height:1.7;border-top:1px solid var(--line);padding-top:18px}
+  #barraIdentidad{
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+    background:#2b2320; color:#fff; padding:6px 14px; font-size:.75rem; gap:4px 12px;
+    width:100vw; margin-left:calc(-50vw + 50%); margin-right:calc(-50vw + 50%);
+    box-sizing:border-box; position:relative;
+  }
+  #barraIdentidad .quien{
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:55vw;
+  }
+  #barraIdentidad .acciones{ display:flex; flex-shrink:0; white-space:nowrap; }
+  #barraIdentidad a, #barraIdentidad button{
+    color:#fff; text-decoration:none; background:none; border:none; font-size:.75rem;
+    cursor:pointer; padding:0; margin-left:12px; font-family:inherit; white-space:nowrap;
+  }
+  #barraIdentidad a:hover, #barraIdentidad button:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
+<div id="barraIdentidad"></div>
 <div class="wrap">
 
   <div class="topbar">
@@ -410,7 +426,7 @@
       </div>
     </section>
 
-    <div class="foot">Sociología del Poder · Universidad Siglo 21 · Teoría Parcial 1<br>Compilado por <b>Gonzalo Manca</b> · 2026 · Tocá ✎ Simulacro para autoevaluarte.</div>
+    <div class="foot">Sociología del Poder · Universidad Siglo 21 · Teoría Parcial 1<br>Compilado por <b>Gonzalo Daniel Manca</b> · mancgonz@gmail.com · 2255411525 · Tocá ✎ Simulacro para autoevaluarte.</div>
   </div>
 
   <!-- ============ VIEW: SIMULACRO ============ -->
@@ -468,20 +484,71 @@
 </div>
 
 <script>
-/* ====== REGISTRO DE ACCESOS ======
-   Pegá abajo la URL de tu Web App de Google Apps Script (ver instrucciones).
-   Mientras diga XXXXX no registra nada (no rompe la app). */
-const TRACK={ enabled:true, url:"https://script.google.com/macros/s/XXXXX/exec" };
-function logAccess(){
+// ---- Identidad, registro (Google Sheet vía Apps Script) y candado ----
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI2lCBNrkdU_4DNYEDhoTbf8O60ZWoyNijdqgk_qsQfXHmjMhBxB_jdO2HtagC2mKQ/exec';
+const NOMBRE_APP = 'Sociología del Poder · Parcial 1';
+const IDENTIDAD_KEY = 'siglo21_identidad';
+
+function obtenerIdentidad(){
   try{
-    if(!TRACK.enabled || TRACK.url.indexOf("XXXXX")>=0) return;
-    let vid="";
-    try{ vid=localStorage.getItem("sp_vid")||""; if(!vid){ vid=Date.now().toString(36)+Math.random().toString(36).slice(2,8); localStorage.setItem("sp_vid",vid);} }catch(e){}
-    const data={ ts:new Date().toISOString(), vid, ref:document.referrer||"directo", ua:navigator.userAgent, pantalla:screen.width+"x"+screen.height, idioma:navigator.language };
-    fetch(TRACK.url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)}).catch(()=>{});
-  }catch(e){}
+    const raw = localStorage.getItem(IDENTIDAD_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
 }
-logAccess();
+
+function registrarEvento(payload){
+  if(!APPS_SCRIPT_URL) return;
+  const idn = obtenerIdentidad();
+  try{
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(Object.assign({
+        app: NOMBRE_APP,
+        nombre: idn ? idn.nombre : 'Anónimo',
+        email: idn ? idn.email : ''
+      }, payload))
+    });
+  }catch(err){ /* si falla el registro, no interrumpe el estudio */ }
+}
+
+function pintarBarraIdentidad(){
+  const idn = obtenerIdentidad();
+  const barra = document.getElementById('barraIdentidad');
+  if(idn){
+    barra.innerHTML = `<span class="quien">👋 ${idn.nombre}</span>
+      <span class="acciones"><a href="index.html">‹ Inicio</a><button onclick="cerrarSesionLocal()">Cerrar sesión</button></span>`;
+  } else {
+    barra.innerHTML = `<span class="quien">No identificado</span>
+      <span class="acciones"><a href="index.html">‹ Ir al inicio</a></span>`;
+  }
+}
+
+function cerrarSesionLocal(){
+  localStorage.removeItem(IDENTIDAD_KEY);
+  window.location.href = 'index.html';
+}
+
+function bloquearSiNoIdentificado(){
+  if(obtenerIdentidad()) return;
+  document.body.style.overflow = 'hidden';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(43,35,32,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:360px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+      <h2 style="margin:0 0 8px;font-size:1.1rem;">Necesitás identificarte</h2>
+      <p style="color:#6b615a;font-size:.88rem;margin:0 0 18px;">Esta app se accede desde el inicio, iniciando sesión con Google, para que tu progreso quede registrado a tu nombre.</p>
+      <a href="index.html" style="display:block;background:#8f2d27;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:700;">Ir al inicio para identificarme</a>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+pintarBarraIdentidad();
+bloquearSiNoIdentificado();
+registrarEvento({tipo:'visita'});
+let intentoNum = 1;
 
 const THEMES={
   1:{name:"Definición y bases del poder",n:"01"},
@@ -599,6 +666,8 @@ function showResults(){
   let msg;if(pct>=90)msg="¡Excelente! Tenés el módulo dominado.";else if(pct>=70)msg="Muy bien encaminado. Repasá los errores.";
   else if(pct>=50)msg="Vas bien, reforzá los temas flojos.";else msg="A darle un repaso fuerte. Mirá las correctas abajo.";
   $("#resMsg").textContent=msg;
+  registrarEvento({tipo:'resultado', ronda: intentoNum, correctas: score, total: total, pct: pct});
+  intentoNum++;
   const wrap=$("#reviewWrap");wrap.innerHTML="";
   if(wrong.length){const h=document.createElement("div");h.className="review-h";h.textContent="Para repasar ("+wrong.length+")";wrap.appendChild(h);
     wrong.forEach(w=>{const d=document.createElement("div");d.className="rev";
