@@ -109,9 +109,25 @@ select{width:100%;padding:10px;border-radius:6px;border:1px solid var(--line);fo
 .score-screen .big{font-family:'Fraunces';font-size:3rem;color:var(--oxblood);}
 .wrong-list .qcard{border-left:4px solid var(--bad);}
 footer.credit{text-align:center;padding:20px;font-size:.75rem;color:var(--ink-soft);border-top:1px solid var(--line);}
+  #barraIdentidad{
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+    background:#2b2320; color:#fff; padding:6px 14px; font-size:.75rem; gap:4px 12px;
+    width:100vw; margin-left:calc(-50vw + 50%); margin-right:calc(-50vw + 50%);
+    box-sizing:border-box; position:relative;
+  }
+  #barraIdentidad .quien{
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:55vw;
+  }
+  #barraIdentidad .acciones{ display:flex; flex-shrink:0; white-space:nowrap; }
+  #barraIdentidad a, #barraIdentidad button{
+    color:#fff; text-decoration:none; background:none; border:none; font-size:.75rem;
+    cursor:pointer; padding:0; margin-left:12px; font-family:inherit; white-space:nowrap;
+  }
+  #barraIdentidad a:hover, #barraIdentidad button:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
+<div id="barraIdentidad"></div>
 <div class="app">
 
   <header class="top">
@@ -335,10 +351,76 @@ footer.credit{text-align:center;padding:20px;font-size:.75rem;color:var(--ink-so
 
   </section>
 
-  <footer class="credit">Compilado por Gonzalo Manca · Sociología del Poder, Siglo 21</footer>
+  <footer class="credit">Compilado por Gonzalo Daniel Manca · mancgonz@gmail.com · 2255411525 · Sociología del Poder, Siglo 21</footer>
 </div>
 
 <script>
+// ---- Identidad, registro (Google Sheet vía Apps Script) y candado ----
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI2lCBNrkdU_4DNYEDhoTbf8O60ZWoyNijdqgk_qsQfXHmjMhBxB_jdO2HtagC2mKQ/exec';
+const NOMBRE_APP = 'Sociología del Poder · Parcial 2';
+const IDENTIDAD_KEY = 'siglo21_identidad';
+let intentoNum = 1;
+
+function obtenerIdentidad(){
+  try{
+    const raw = localStorage.getItem(IDENTIDAD_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function registrarEvento(payload){
+  if(!APPS_SCRIPT_URL) return;
+  const idn = obtenerIdentidad();
+  try{
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(Object.assign({
+        app: NOMBRE_APP,
+        nombre: idn ? idn.nombre : 'Anónimo',
+        email: idn ? idn.email : ''
+      }, payload))
+    });
+  }catch(err){ /* si falla el registro, no interrumpe el estudio */ }
+}
+
+function pintarBarraIdentidad(){
+  const idn = obtenerIdentidad();
+  const barra = document.getElementById('barraIdentidad');
+  if(idn){
+    barra.innerHTML = `<span class="quien">👋 ${idn.nombre}</span>
+      <span class="acciones"><a href="index.html">‹ Inicio</a><button onclick="cerrarSesionLocal()">Cerrar sesión</button></span>`;
+  } else {
+    barra.innerHTML = `<span class="quien">No identificado</span>
+      <span class="acciones"><a href="index.html">‹ Ir al inicio</a></span>`;
+  }
+}
+
+function cerrarSesionLocal(){
+  localStorage.removeItem(IDENTIDAD_KEY);
+  window.location.href = 'index.html';
+}
+
+function bloquearSiNoIdentificado(){
+  if(obtenerIdentidad()) return;
+  document.body.style.overflow = 'hidden';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(43,35,32,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:360px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+      <h2 style="margin:0 0 8px;font-size:1.1rem;">Necesitás identificarte</h2>
+      <p style="color:#6b615a;font-size:.88rem;margin:0 0 18px;">Esta app se accede desde el inicio, iniciando sesión con Google, para que tu progreso quede registrado a tu nombre.</p>
+      <a href="index.html" style="display:block;background:#8f2d27;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:700;">Ir al inicio para identificarme</a>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+pintarBarraIdentidad();
+bloquearSiNoIdentificado();
+registrarEvento({tipo:'visita'});
+
 const EJES = {
   1:"Colonialidad del poder", 2:"Colonialidad y decolonialidad del saber",
   3:"Poder y violencia simbólica", 4:"Poder, sexo y género",
@@ -581,6 +663,8 @@ function showScore(){
   else if(pct>=50) msg='Vas bien, pero conviene repasar la teoría de los ejes falladas.';
   else msg='Convendría repasar la teoría antes de reintentar.';
   document.getElementById('scoreMsg').textContent = `${pct}% correctas. ${msg}`;
+  registrarEvento({tipo:'resultado', ronda: intentoNum, correctas: score, total: quizPool.length, pct: pct});
+  intentoNum++;
   const reviewBtn = document.getElementById('reviewBtn');
   const wrongList = document.getElementById('wrongList');
   wrongList.innerHTML='';
