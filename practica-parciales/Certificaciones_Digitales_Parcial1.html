@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificaciones Digitales — Estudio y Simulacro</title>
+<style>
+  :root{ --verde:#0F6E56; --verde-claro:#E1F5EE; --gris:#5F5E5A; --linea:#d8d8d2; --amber:#854F0B; --amber-bg:#FAEEDA; --ok:#1D9E75; --okbg:#E1F5EE; --bad:#E24B4A; --badbg:#FCEBEB; }
+  *{ box-sizing:border-box; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.6; color:#2C2C2A; max-width:820px; margin:0 auto; padding:0 0 60px; background:#fff; }
+  header{ background:var(--verde); color:#fff; padding:18px; }
+  header h1{ font-size:21px; margin:0 0 2px; }
+  header .sub{ opacity:.9; font-size:14px; }
+  nav{ position:sticky; top:0; z-index:10; display:flex; background:#fff; border-bottom:1px solid var(--linea); }
+  nav button{ flex:1; border:none; background:none; padding:14px; font-size:16px; font-weight:600; color:var(--gris); cursor:pointer; border-bottom:3px solid transparent; }
+  nav button.active{ color:var(--verde); border-bottom-color:var(--verde); }
+  main{ padding:18px; }
+  .view{ display:none; }
+  .view.active{ display:block; }
+  h2{ font-size:19px; color:#fff; background:var(--verde); padding:8px 14px; border-radius:8px; margin:28px 0 14px; }
+  h3{ font-size:16px; color:var(--verde); margin:20px 0 6px; border-bottom:1px solid var(--linea); padding-bottom:4px; }
+  ul{ margin:6px 0 6px 4px; padding-left:20px; } li{ margin:4px 0; }
+  strong{ color:#000; }
+  table{ width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+  th,td{ border:1px solid var(--linea); padding:7px 9px; text-align:left; vertical-align:top; }
+  th{ background:var(--verde-claro); color:var(--verde); }
+  code{ background:#f1efe8; padding:2px 6px; border-radius:4px; font-family:Menlo,Consolas,monospace; font-size:13px; }
+  .nota{ background:var(--amber-bg); border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:8px 12px; margin:10px 0; font-size:14px; color:var(--amber); }
+  blockquote{ border-left:3px solid var(--verde); margin:10px 0; padding:4px 14px; color:var(--gris); background:#fafaf7; }
+  .controls{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:var(--verde-claro); border-radius:10px; padding:12px 14px; margin-bottom:18px; }
+  .controls label{ font-size:14px; color:var(--verde); font-weight:600; }
+  select,button.btn{ font-size:15px; padding:8px 14px; border-radius:8px; border:1px solid var(--verde); background:#fff; color:var(--verde); cursor:pointer; font-weight:600; }
+  button.btn.primary{ background:var(--verde); color:#fff; }
+  .q{ border:1px solid var(--linea); border-radius:12px; padding:14px 16px; margin-bottom:14px; }
+  .q .num{ font-size:13px; color:var(--gris); }
+  .q .txt{ font-weight:600; margin:2px 0 10px; }
+  .q .tag{ font-weight:400; color:#999; font-size:13px; }
+  .opt{ display:flex; align-items:flex-start; gap:10px; font-size:15px; padding:9px 11px; border:1px solid var(--linea); border-radius:8px; margin-bottom:8px; cursor:pointer; line-height:1.4; }
+  .opt input{ margin-top:3px; flex-shrink:0; }
+  .opt.ok{ border-color:var(--ok); background:var(--okbg); }
+  .opt.bad{ border-color:var(--bad); background:var(--badbg); }
+  .fb{ font-size:14px; line-height:1.55; margin-top:4px; }
+  #score{ margin-top:8px; }
+  .scorecard{ background:var(--verde-claro); border-radius:12px; padding:16px; text-align:center; }
+  .scorecard .big{ font-size:30px; font-weight:700; }
+  #barraIdentidad{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#2b2320; color:#fff; padding:6px 14px; font-size:.78rem;
+  }
+  #barraIdentidad a, #barraIdentidad button{
+    color:#fff; text-decoration:none; background:none; border:none; font-size:.78rem;
+    cursor:pointer; padding:0; margin-left:14px; font-family:inherit;
+  }
+  #barraIdentidad a:hover, #barraIdentidad button:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div id="barraIdentidad"></div>
+
+<header>
+  <h1>Certificaciones Digitales</h1>
+  <div class="sub">Universidad Siglo 21 · Estudio + Simulacro · Módulos 1 y 2</div>
+</header>
+
+<nav>
+  <button id="tab-teoria" class="active" onclick="showView('teoria')">📖 Teoría</button>
+  <button id="tab-sim" onclick="showView('sim')">📝 Simulacro</button>
+</nav>
+
+<main>
+
+<!-- ====================== TEORÍA ====================== -->
+<section id="view-teoria" class="view active">
+
+<p style="background:var(--verde-claro);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--verde);margin-bottom:18px;">Desarrollo completo de las <strong>8 lecturas</strong> (4 de cada módulo). Casos de ejemplo: <strong>Elektra</strong> (zapatos, M1) y <strong>Crepes &amp; Waffles</strong> (restaurante, M2).</p>
+
+<h2>Módulo 1 · El ecosistema de medios publicitarios</h2>
+
+<h3>Lectura 1 · Los medios digitales como canal publicitario</h3>
+<p>Los medios (radio, TV, diarios, revistas) tienen el objetivo común de <strong>informar o entretener</strong>. Generar ese contenido es caro, así que se financian con <strong>publicidad</strong>. De ahí el esquema del negocio publicitario, con tres actores interdependientes:</p>
+<blockquote><strong>Anunciante → Medio → Audiencia.</strong> El anunciante paga por espacios; el medio inserta los anuncios en su contenido; parte de la audiencia compra. Un medio <strong>sin anunciantes</strong> es inviable económicamente; un medio <strong>sin audiencia</strong> no atrae anunciantes.</blockquote>
+<p>También existen <strong>medios exclusivamente publicitarios</strong> (vía pública / outdoors), que solo muestran anuncios.</p>
+<p><strong>Medios tradicionales</strong> (lo que usaba Elektra antes de internet): televisión (spots de 15"), diarios y revistas (promociones y cupones), radio (prime time, sorteos) y vía pública. Por llegar de forma amplia se los llama <strong>masivos</strong> o <strong>ATL</strong> (<em>above the line</em>).</p>
+<p><strong>Medios no tradicionales</strong> o <strong>BTL</strong> (<em>below the line</em>): marketing directo (catálogo, telemarketing, postales), eventos, merchandising y promociones. Son <strong>más segmentados</strong>, de <strong>menor alcance</strong>, pero <strong>permiten medir resultados</strong>.</p>
+<p><strong>Internet como medio publicitario:</strong> desde fines de los 90 compite con los tradicionales generando contenido para una audiencia, y se financia con publicidad. Los actores que más inversión reciben son <strong>Google y Facebook</strong>, porque permiten que <strong>cualquier anunciante</strong> —de cualquier tamaño y lugar— publicite. La inversión en digitales crece año a año: desde 2012 internet es el <strong>segundo medio</strong> con más inversión, detrás de la TV.</p>
+
+<h3>Lectura 2 · Cambio de paradigma en los medios publicitarios</h3>
+<p>La masificación de internet cambió el <strong>paradigma de consumo</strong>. El nuevo consumidor digital tiene cinco características clave:</p>
+<ul>
+  <li><strong>Conectado 24/7:</strong> usa sus momentos de ocio para comprar/consultar. Penetración de internet: <strong>mundo 49,6 % · Sudamérica 65 % · Argentina 79,4 %</strong>.</li>
+  <li><strong>Más informado:</strong> llega a la compra prácticamente decidido y, a veces, sabe más que el vendedor (gracias al <strong>acceso a la información</strong>).</li>
+  <li><strong>Multipantalla:</strong> ≈86 % de las interacciones con los medios ocurren a través de pantallas (celular, PC, tablet, TV). Cada pantalla es un punto de contacto.</li>
+  <li><strong>Impaciente:</strong> espera resultados inmediatos. Por eso la <strong>usabilidad, el tiempo de carga y el diseño responsive</strong> mejoran la <strong>experiencia del usuario</strong>.</li>
+  <li><strong>Con poder:</strong> puede generar contenido en cualquier formato y difundirlo (sobre todo en redes), lo que obliga a contemplarlo en las <strong>estrategias digitales</strong>.</li>
+</ul>
+<p><strong>ZMOT — Momento Cero de la Verdad.</strong> El esquema tradicional tenía <strong>3 pasos</strong>:</p>
+<blockquote>Estímulo → 1.<sup>er</sup> momento de la verdad (góndola) → 2.º momento de la verdad (experiencia).</blockquote>
+<p>En 2011, <strong>Google</strong> (Lecinski) introdujo el <strong>momento cero de la verdad (ZMOT)</strong>, un paso que se ubica <strong>entre el estímulo y la compra</strong>: ahí el usuario usa internet para informarse. El nuevo modelo tiene entonces <strong>4 pasos</strong>. Cada paso es "un momento de la verdad", y el ZMOT de una persona se convierte en el ZMOT de la siguiente (las reseñas que deja alimentan a quien investiga después).</p>
+
+<h3>Lectura 3 · Medios tradicionales vs. medios digitales</h3>
+<p>Comparación por aspectos (con la experiencia de Elektra):</p>
+<ul>
+  <li><strong>Económico:</strong> los tradicionales exigen presupuestos altos y son excluyentes para marcas chicas. Los digitales tienen mínimos de inversión bajos → <strong>democratización de la publicidad</strong> (mil impresiones en Google pueden costar &lt; $10).</li>
+  <li><strong>Segmentación y relevancia:</strong> los masivos ofrecen <strong>pocas opciones</strong> de segmentación; los digitales permiten llegar a la persona adecuada y ser <strong>relevantes</strong>.</li>
+  <li><strong>Cobertura:</strong> tradicional <strong>limitada y poco controlable</strong>; digital <strong>global y controlable</strong>.</li>
+  <li><strong>Medición:</strong> tradicional con estimaciones (rating, circulación, readership); digital <strong>online y casi inmediata</strong>.</li>
+  <li><strong>Optimización:</strong> nula durante la campaña en lo tradicional; <strong>posible durante</strong> en lo digital.</li>
+  <li><strong>Respuesta directa:</strong> difícil de medir en tradicional; <strong>casi inmediata</strong> en digital, y permite calcular el <strong>ROI</strong>.</li>
+</ul>
+<table>
+  <tr><th>Característica</th><th>Tradicionales</th><th>Digitales</th></tr>
+  <tr><td>Económica</td><td>Presupuestos altos</td><td>Mínimos de inversión bajos</td></tr>
+  <tr><td>Segmentación y relevancia</td><td>Baja</td><td>Alta</td></tr>
+  <tr><td>Cobertura</td><td>Limitada al medio</td><td>Global y controlable</td></tr>
+  <tr><td>Medición</td><td>Estudios estadísticos</td><td>Online casi inmediata</td></tr>
+  <tr><td>Optimización</td><td>Nula durante la campaña</td><td>Posible durante la campaña</td></tr>
+  <tr><td>Respuesta directa</td><td>Difícil de medir</td><td>Medible</td></tr>
+</table>
+<p>Por público: <strong>masivo</strong> → diarios, TV, radio. <strong>Segmentado</strong> → redes sociales, email marketing, publicidad en buscadores.</p>
+
+<h3>Lectura 4 · Los grandes actores de la publicidad digital</h3>
+<p><strong>Google Ads.</strong> Google nació como buscador y monetizó mostrando anuncios según las <strong>palabras</strong> que el usuario busca. En una búsqueda hay <strong>resultados patrocinados</strong> (anuncios pagos) y <strong>resultados orgánicos</strong> (gratuitos, por relevancia). Se paga por <strong>CPC</strong> (costo por clic). A esta actividad se la llama <strong>SEM</strong>. Google Ads tiene <strong>3 redes</strong>:</p>
+<ul>
+  <li><strong>Red de búsqueda:</strong> el buscador de Google y socios. Anuncios de <strong>texto</strong>.</li>
+  <li><strong>Red de display (GDN):</strong> sitios y apps que ceden espacios. Anuncios de <strong>texto, gráficos (banners) y video</strong>. Funciona con <strong>AdSense</strong> (dueños de <strong>sitios</strong> cobran por los clics) y <strong>AdMob</strong> (<strong>apps</strong> móviles). Pago por <strong>CPC o CPM</strong>.</li>
+  <li><strong>YouTube</strong> (Google lo adquirió en <strong>2006</strong>): banners y videos antes/durante/después. Pago por <strong>CPC, CPM o CPV</strong>.</li>
+</ul>
+<p><strong>Facebook Ads.</strong> Permite promocionar elementos de Facebook e Instagram. Los anuncios aparecen sobre todo en la <strong>sección noticias</strong> y la <strong>columna derecha</strong>. Ventajas: promocionar publicaciones, <strong>dirigir tráfico fuera de Facebook</strong> (e-commerce) y <strong>segmentación muy precisa</strong> (datos demográficos + intereses + comportamiento). Para apps/sitios fuera de Facebook existe <strong>Audience Network</strong>. Una publicación promocionada se distingue por la etiqueta <strong>"Publicidad" / "Sponsored"</strong>.</p>
+<p><strong>Otros medios:</strong> <strong>Twitter</strong> (microblogging, real time; segmenta por <strong>seguidores de cuentas</strong>), <strong>Instagram</strong> (propiedad de <strong>Facebook</strong> desde 2012; se pauta desde la plataforma de FB) y <strong>LinkedIn</strong> (perfiles <strong>profesionales</strong>).</p>
+
+<h2>Módulo 2 · Google Ads en profundidad</h2>
+
+<h3>Lectura 1 · La plataforma de Google Ads</h3>
+<p><strong>SEO vs. SEM.</strong> El <strong>SEO</strong> es una <strong>estrategia</strong> técnica y de contenido para mejorar la posición <strong>orgánica</strong> (gratuita). El <strong>SEM</strong> son campañas <strong>pagas</strong> en buscadores (PPC, <em>pay per click</em>); por el peso de Google, hacer Ads se usa como sinónimo de SEM.</p>
+<div class="nota">⚠️ Destinar mucho presupuesto a Ads <strong>NO</strong> mejora el posicionamiento orgánico: son procesos independientes.</div>
+<p><strong>Google Partners y certificaciones.</strong> Programa para acreditar profesionales y agencias. El profesional independiente debe aprobar <strong>al menos dos exámenes</strong>: <strong>Fundamentos de Ads</strong> + uno especializado. Certificaciones específicas: <strong>Búsqueda, Display, Video y Shopping</strong>.</p>
+<p><strong>Tipos de campaña:</strong> Búsqueda · Display · Shopping · Video · Aplicaciones. Shopping entra dentro de la <strong>red de búsqueda</strong>; la campaña universal de apps publica en las <strong>tres redes</strong>.</p>
+<p><strong>Subasta y ofertas.</strong> Cada anunciante define su <strong>oferta máxima</strong> (CPC máx / CPM máx). En cada búsqueda Google activa una subasta: la oferta más alta obtiene la 1ª posición, la segunda el 2º lugar, etc. El <strong>CPC máx define la posición, pero no es el único factor</strong>. En display, si compiten una oferta por CPC y otra por CPM, Google calcula el <strong>CPM efectivo</strong> para compararlas.</p>
+<table>
+  <tr><th>Campaña</th><th>Dónde aparece</th><th>Activación</th><th>Puja</th><th>Formato</th></tr>
+  <tr><td>Búsqueda <em>(performance)</em></td><td>Buscadores</td><td>Palabra clave</td><td>CPC</td><td>Texto</td></tr>
+  <tr><td>Display <em>(branding)</em></td><td>Sitios y apps</td><td>P. clave, temas, intereses, ubicaciones, remarketing</td><td>CPC / CPM</td><td>Texto y gráfico</td></tr>
+  <tr><td>YouTube <em>(branding)</em></td><td>YouTube y otros</td><td>ídem display</td><td>CPC / CPM / CPV</td><td>Video</td></tr>
+</table>
+<p>La <strong>red de búsqueda</strong> conviene para objetivos de <strong>resultados directos</strong> (ventas, suscripciones, descargas) = <em>performance</em>. <strong>Display y YouTube</strong> para <strong>exposición de marca</strong> = <em>branding</em>.</p>
+
+<h3>Lectura 2 · Creación de una cuenta de Google Ads</h3>
+<p>La cuenta está organizada por <strong>niveles</strong>:</p>
+<blockquote><strong>Cuenta → Campañas → Grupos de anuncios → Anuncios y palabras clave.</strong></blockquote>
+<ul>
+  <li><strong>Nivel cuenta:</strong> una por anunciante/negocio. Al crearla se piden <strong>email y contraseña</strong>, y se definen <strong>zona horaria y moneda</strong> (no se modifican luego). La campaña no se ejecuta hasta cargar <strong>facturación</strong> (en Argentina: pagos automáticos con tarjeta o manuales por PagoMisCuentas/homebanking). Los <strong>accesos</strong> a colaboradores se dan en <strong>Configuración</strong>. Una misma dirección de correo asocia hasta <strong>5 cuentas</strong>.</li>
+  <li><strong>Nivel campaña:</strong> debería tener <strong>un solo objetivo</strong>. Se define tipo, <strong>ubicación geográfica</strong>, idioma, estrategia de puja, puja predeterminada, <strong>presupuesto diario</strong> y fechas de inicio/fin.</li>
+  <li><strong>Nivel grupo de anuncios:</strong> contiene al menos un anuncio y una palabra clave/ubicación. Sirve para <strong>ordenar</strong> la cuenta.</li>
+  <li><strong>Nivel anuncios y palabras clave:</strong> se crean y editan los anuncios y las palabras clave con sus pujas.</li>
+</ul>
+<p><strong>MCC (Mi Centro de Clientes):</strong> cuenta <strong>"agencia"</strong> para administrar varias cuentas con un solo acceso; <strong>ahorra tiempo</strong> y permite <strong>desvincular</strong> una cuenta <strong>sin perder el historial</strong>. <strong>AdWords Editor:</strong> herramienta para ver/editar <strong>varias cuentas a la vez</strong>, trabajar <strong>sin conexión</strong>, descargar la información, mover elementos entre grupos y subir las modificaciones.</p>
+
+<h3>Lectura 3 · Configuración de una campaña en la red de búsqueda</h3>
+<p>Desde la pestaña <strong>Campañas</strong> → botón <strong>+ Campaña</strong> → se elige el <strong>objetivo de marketing</strong> (ventas, oportunidades de venta, tráfico al sitio, cobertura, etc.).</p>
+<div class="nota">Para que las personas <strong>completen un formulario de contacto</strong> → objetivo <strong>"Oportunidades de venta"</strong>. Para aumentar <strong>visitas</strong> a un sitio → <strong>"Tráfico al sitio web"</strong>.</div>
+<p>Pasos de configuración:</p>
+<ul>
+  <li><strong>Nombre</strong> de la campaña.</li>
+  <li><strong>Redes:</strong> buscador de Google y socios de búsqueda (se incluyen de forma <strong>predeterminada</strong>; conviene compararlos al inicio).</li>
+  <li><strong>Cobertura geográfica</strong> e <strong>idioma</strong>.</li>
+  <li><strong>Estrategia de puja</strong> (conversiones, clics, etc.) y <strong>presupuesto diario</strong> (al alcanzarlo, no muestra más anuncios hasta el día siguiente).</li>
+  <li><strong>Calendario y programación.</strong> ⚠️ La <strong>fecha de fin no viene por defecto</strong>: si se olvida, la campaña sigue gastando.</li>
+</ul>
+<p>En el <strong>grupo de anuncios</strong>: nombre + <strong>10 a 20 palabras clave</strong> + el anuncio de texto, con <strong>URL final</strong> (página de destino), <strong>Título 1 y 2</strong> (máx. <strong>30</strong> caracteres c/u), <strong>Ruta</strong> y <strong>Descripción</strong> (máx. <strong>80</strong> caracteres). Los anuncios deben cumplir las <strong>políticas publicitarias</strong> (sin abuso de signos de admiración, sin todo en mayúsculas, sin "Clic aquí") y pasan por un proceso de <strong>revisión</strong> (aprobado/rechazado).</p>
+<p><strong>Modificar:</strong> tipo, fechas, presupuesto y cobertura → a nivel <strong>campaña</strong>; pujas y nuevos grupos → a nivel <strong>grupo</strong>; anuncios y palabras clave → a su nivel. Los <strong>estados</strong> (activo/pausado/eliminado) se heredan: al pausar una campaña se pausan sus grupos, anuncios y palabras clave.</p>
+<p><strong>Concordancia de palabras clave:</strong></p>
+<table>
+  <tr><th>Tipo</th><th>Sintaxis</th><th>Qué hace</th></tr>
+  <tr><td>Amplia (predeterminada)</td><td><code>delivery de wafles</code></td><td>Activa con sinónimos, plurales y errores ortográficos</td></tr>
+  <tr><td>Modificador de amplia</td><td><code>delivery de +wafles</code></td><td>Exige el término marcado con <code>+</code></td></tr>
+  <tr><td>De frase</td><td><code>"delivery de wafles"</code></td><td>La frase debe estar contenida en la búsqueda</td></tr>
+  <tr><td>Exacta</td><td><code>[delivery de wafles]</code></td><td>Debe coincidir exactamente</td></tr>
+  <tr><td>Negativa</td><td><code>-helado</code></td><td>Evita que el anuncio aparezca si está ese término</td></tr>
+</table>
+
+<h3>Lectura 4 · Campaña en la red de búsqueda avanzada</h3>
+<p><strong>Conceptos y métricas:</strong></p>
+<ul>
+  <li><strong>Impresión:</strong> cada vez que se muestra un anuncio (texto o banner).</li>
+  <li><strong>Clic:</strong> cuando el usuario hace clic en el anuncio.</li>
+  <li><strong>CPC / CPM / CPV:</strong> pago por clic / por mil impresiones / por visualización.</li>
+  <li><strong>CPC máx / CPM máx:</strong> la <strong>oferta</strong> de subasta (máximo dispuesto a pagar).</li>
+  <li><strong>CPC medio / CPM medio:</strong> lo que <strong>realmente</strong> se paga (coste ÷ clics, o ÷ impresiones × 1000); suele ser <strong>menor</strong> al máximo.</li>
+  <li><strong>CTR</strong> (click through rate): <strong>clics ÷ impresiones</strong>. Mide qué tan atractivo es el anuncio.</li>
+  <li><strong>Conversión:</strong> acción de valor que se busca tras el clic (compra, pedido, suscripción). Definirle un valor monetario permite calcular el <strong>ROI</strong>.</li>
+  <li><strong>CPA</strong> (costo por adquisición): oferta automática disponible tras lograr <strong>≥30 conversiones en 30 días</strong>.</li>
+  <li><strong>Nivel de calidad (Quality Score):</strong> Google califica del <strong>1 al 10</strong> las palabras clave, los anuncios y las <strong>páginas de destino</strong>. Un QS alto → <strong>menores costos + mejores posiciones</strong>.</li>
+</ul>
+<p><strong>Extensiones de anuncio</strong> (amplían el anuncio y mejoran la visibilidad; no tienen costo extra): <strong>de ubicación</strong>, <strong>de llamada</strong> (teléfono → ideal para <strong>delivery</strong>), <strong>de extractos del sitio</strong>, <strong>de texto destacado</strong> ("Envío gratis") y <strong>de aplicaciones</strong> (App Store / Google Play).</p>
+<p><strong>Otras funciones:</strong> los <strong>anuncios dinámicos de búsqueda</strong> generan título y URL automáticamente desde el sitio (útil para catálogos grandes); la <strong>inserción de palabras clave</strong> (<code>{Keyword: merienda}</code>) hace el anuncio más relevante. Herramientas: <strong>Planificador de palabras clave</strong> (ideas + volumen + estimación de CPC, a partir de otras palabras o del contenido de un sitio) y <strong>Vista previa y diagnóstico</strong>. Contenido prohibido: <strong>productos falsificados</strong> y contenido para adultos.</p>
+
+</section>
+
+<!-- ====================== SIMULACRO ====================== -->
+<section id="view-sim" class="view">
+  <div class="controls">
+    <label>Cantidad:</label>
+    <select id="count">
+      <option value="15">15 preguntas</option>
+      <option value="25" selected>25 preguntas</option>
+      <option value="40">40 preguntas</option>
+      <option value="999">Todas</option>
+    </select>
+    <button class="btn primary" onclick="startQuiz()">Nuevo intento</button>
+  </div>
+  <div id="quiz"></div>
+  <button class="btn primary" style="width:100%;margin-top:8px;padding:12px;" onclick="gradeQuiz()">Corregir parcial</button>
+  <div id="score"></div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:18px;border-top:1px solid var(--linea);color:var(--gris);font-size:13px;">Compilado por <strong>Gonzalo Daniel Manca</strong> · mancgonz@gmail.com · 2255411525</footer>
+
+<script>
+// ---- Identidad, registro (Google Sheet vía Apps Script) y candado ----
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI2lCBNrkdU_4DNYEDhoTbf8O60ZWoyNijdqgk_qsQfXHmjMhBxB_jdO2HtagC2mKQ/exec';
+const NOMBRE_APP = 'Certificaciones Digitales · Parcial 1';
+const IDENTIDAD_KEY = 'siglo21_identidad';
+let intentoNum = 1;
+
+function obtenerIdentidad(){
+  try{
+    const raw = localStorage.getItem(IDENTIDAD_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function registrarEvento(payload){
+  if(!APPS_SCRIPT_URL) return;
+  const idn = obtenerIdentidad();
+  try{
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(Object.assign({
+        app: NOMBRE_APP,
+        nombre: idn ? idn.nombre : 'Anónimo',
+        email: idn ? idn.email : ''
+      }, payload))
+    });
+  }catch(err){ /* si falla el registro, no interrumpe el estudio */ }
+}
+
+function pintarBarraIdentidad(){
+  const idn = obtenerIdentidad();
+  const barra = document.getElementById('barraIdentidad');
+  if(idn){
+    barra.innerHTML = `<span>👋 ${idn.nombre}</span>
+      <span><a href="index.html">‹ Volver al inicio</a><button onclick="cerrarSesionLocal()">Cerrar sesión</button></span>`;
+  } else {
+    barra.innerHTML = `<span>No identificado</span>
+      <span><a href="index.html">‹ Ir al inicio para identificarme</a></span>`;
+  }
+}
+
+function cerrarSesionLocal(){
+  localStorage.removeItem(IDENTIDAD_KEY);
+  window.location.href = 'index.html';
+}
+
+function bloquearSiNoIdentificado(){
+  if(obtenerIdentidad()) return;
+  document.body.style.overflow = 'hidden';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(43,35,32,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:360px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+      <h2 style="margin:0 0 8px;font-size:1.1rem;">Necesitás identificarte</h2>
+      <p style="color:#6b615a;font-size:.88rem;margin:0 0 18px;">Esta app se accede desde el inicio, iniciando sesión con Google, para que tu progreso quede registrado a tu nombre.</p>
+      <a href="index.html" style="display:block;background:#0F6E56;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:700;">Ir al inicio para identificarme</a>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function showView(v){
+  document.getElementById('view-teoria').classList.toggle('active', v==='teoria');
+  document.getElementById('view-sim').classList.toggle('active', v==='sim');
+  document.getElementById('tab-teoria').classList.toggle('active', v==='teoria');
+  document.getElementById('tab-sim').classList.toggle('active', v==='sim');
+  window.scrollTo(0,0);
+  if(v==='sim' && !document.getElementById('quiz').hasChildNodes()) startQuiz();
+}
+
+// Banco de preguntas. t:'s' single, 'm' multi. o:[texto, esCorrecta]
+var BANK = [
+  {q:"El posicionamiento de anuncios en Facebook se define por un sistema de:",t:'s',o:[["Subasta",1],["Suscripción",0],["Orden de llegada",0],["Sorteo",0]],e:"Funciona por subasta entre anunciantes."},
+  {q:"Elegir el público al que se desea llegar con el anuncio se denomina:",t:'s',o:[["Segmentación",1],["Cobertura",0],["Optimización",0],["Conversión",0]]},
+  {q:"En el esquema del marketing tradicional, el primer paso sobre el destinatario inicia en:",t:'s',o:[["El estímulo",1],["La góndola",0],["La experiencia",0],["El momento cero",0]]},
+  {q:"En Facebook, los anunciantes aparecen en lugares concretos denominados:",t:'s',o:[["Espacios publicitarios",1],["Grupos de anuncios",0],["Extensiones",0],["Redes de display",0]]},
+  {q:"En Facebook, las campañas con metas específicas se denominan:",t:'s',o:[["Objetivos publicitarios",1],["Pujas",0],["Segmentaciones",0],["Conversiones",0]]},
+  {q:"La usabilidad, el tiempo de carga y poder verse en cualquier dispositivo generan una mejor:",t:'s',o:[["Experiencia del usuario",1],["Cobertura",0],["Segmentación",0],["Posición orgánica",0]]},
+  {q:"Las extensiones de anuncio tienen un costo extra para la campaña.",t:'s',o:[["Falso",1],["Verdadero",0]],e:"No tienen costo extra; mejoran la visibilidad."},
+  {q:"Los anunciantes de apps móviles pueden mostrar anuncios fuera de Facebook a través de:",t:'s',o:[["Audience Network",1],["Google Display Network",0],["AdMob",0],["AdSense",0]]},
+  {q:"Luego de publicarse, las campañas en medios masivos NO permiten:",t:'s',o:[["Modificarse",1],["Emitirse",0],["Repetirse",0],["Pagarse",0]]},
+  {q:"¿Qué le permite la red de Internet a los consumidores?",t:'s',o:[["Estar más informados",1],["Evitar la publicidad",0],["Pagar menos impuestos",0],["Comprar solo en horario comercial",0]]},
+  {q:"Pequeña empresa con poco presupuesto que conoce bien a su público. ¿Qué medios le convienen?",t:'s',o:[["Medios digitales: puede segmentar y decidir cuánto invertir",1],["Televisión, por su alcance masivo",0],["Vía pública, por ser económica",0],["Radio en horario prime time",0]]},
+  {q:"Dos jugadores definen el mercado de la publicidad digital: Google y Facebook.",t:'s',o:[["Verdadero",1],["Falso",0]]},
+  {q:"El cambio de paradigma en el esquema de compra se debió a:",t:'s',o:[["El acceso a la información",1],["La baja de precios",0],["El crecimiento de la TV",0],["Una crisis económica",0]]},
+  {q:"En cualquier búsqueda en Google, el consumidor pretende resultados:",t:'s',o:[["Inmediatos",1],["Gratuitos",0],["Orgánicos",0],["Patrocinados",0]]},
+  {q:"Internet cambió el paradigma de:",t:'s',o:[["Consumo",1],["Producción",0],["Distribución",0],["Precio",0]]},
+  {q:"La cobertura de los medios masivos tradicionales es limitada y también:",t:'s',o:[["Poco controlable",1],["Muy medible",0],["Global",0],["Económica",0]]},
+  {q:"Se conoce como medios publicitarios tradicionales a: (3 correctas)",t:'m',o:[["Televisión",1],["Diario",1],["Radio",1],["Redes sociales",0],["Email marketing",0]]},
+  {q:"Wall-Mart hizo responsive su sitio porque los nuevos consumidores son:",t:'s',o:[["Multipantalla: compran en cualquier plataforma",1],["Impacientes",0],["Más informados",0],["Con poder sobre las marcas",0]]},
+  {q:"En el esquema tradicional de marketing encontramos:",t:'s',o:[["3 pasos",1],["2 pasos",0],["4 pasos",0],["5 pasos",0]]},
+  {q:"En el marketing tradicional, cada paso de contacto con el consumidor se define como:",t:'s',o:[["Un momento de la verdad",1],["Una conversión",0],["Una impresión",0],["Un clic",0]]},
+  {q:"La capacidad de los usuarios de generar y difundir contenido debe contemplarse en nuestras:",t:'s',o:[["Estrategias digitales",1],["Pujas",0],["Extensiones",0],["Concordancias",0]]},
+  {q:"Los medios tradicionales, por su carácter masivo, brindan pocas opciones de:",t:'s',o:[["Segmentación",1],["Cobertura",0],["Emisión",0],["Presupuesto",0]]},
+  {q:"En MKT digital, el paso que se ubica entre el estímulo y la compra se denomina:",t:'s',o:[["Momento cero (ZMOT)",1],["Primer momento de la verdad",0],["Segundo momento de la verdad",0],["Góndola",0]]},
+  {q:"El nuevo modelo mental tiene cuántos pasos y cuál se ubica entre el estímulo y el primero:",t:'s',o:[["4 y el momento cero",1],["3 y la góndola",0],["5 y la experiencia",0],["2 y el estímulo",0]]},
+  {q:"La penetración de internet es de:",t:'s',o:[["Mundo 49,6 %, Sudamérica 65 %, Argentina 79,4 %",1],["Mundo 65 %, Sudamérica 80 %, Argentina 90 %",0],["Mundo 30 %, Sudamérica 50 %, Argentina 60 %",0]]},
+  {q:"Una característica diferenciadora de los medios digitales respecto a los tradicionales está en:",t:'s',o:[["El costo de la pauta",1],["La duración del spot",0],["El tamaño del cartel",0],["La cantidad de actores",0]]},
+  {q:"Formas NO tradicionales (BTL) de publicidad: (4 correctas)",t:'m',o:[["Promociones",1],["Bolsas con la imagen de la marca",1],["Eventos",1],["Telemarketing",1],["Spot en TV abierta",0],["Aviso en el diario",0]]},
+  {q:"Algunos tipos de campaña en Google Ads: (4 correctas)",t:'m',o:[["Búsqueda con selección de Display",1],["Solo red de búsqueda",1],["Video",1],["Solo red de Display",1],["Red de radio",0],["Red de prensa",0]]},
+  {q:"AdWords Editor es útil para editar y ver:",t:'s',o:[["Varias cuentas al mismo tiempo",1],["Una sola campaña",0],["Videos de YouTube",0],["Solo palabras clave",0]]},
+  {q:"Con AdWords Editor puedes: (4 correctas)",t:'m',o:[["Ahorrar tiempo",1],["Descargar la información de tu cuenta",1],["Editar campañas sin conexión",1],["Subir las modificaciones a AdWords",1],["Editar videos para Vimeo",0]]},
+  {q:"Todas las cuentas de AdWords pueden administrarse desde un solo lugar con:",t:'s',o:[["MCC (Mi Centro de Clientes)",1],["AdSense",0],["Audience Network",0],["Analytics",0]]},
+  {q:"MCC (Mi Centro de Clientes) funciona como una cuenta:",t:'s',o:[["Agencia",1],["Individual",0],["De solo lectura",0],["Estándar",0]]},
+  {q:"En el 2006, Google adquiere:",t:'s',o:[["YouTube",1],["Instagram",0],["Twitter",0],["LinkedIn",0]]},
+  {q:"En Facebook, una publicación promocionada se diferencia de una orgánica por la etiqueta:",t:'s',o:[["Publicidad",1],["Patrocinado por el medio",0],["Orgánico",0],["Destacado",0]]},
+  {q:"En Facebook, las campañas se pueden segmentar con criterios:",t:'s',o:[["Demográficos",1],["Climáticos",0],["Aleatorios",0],["Telefónicos",0]]},
+  {q:"La plataforma Google AdWords está conformada por:",t:'s',o:[["3 redes o espacios",1],["2 redes",0],["4 redes",0],["1 sola red",0]]},
+  {q:"En Twitter se puede segmentar por ser:",t:'s',o:[["Seguidores de ciertas cuentas",1],["Vecinos de un barrio",0],["Clientes de un banco",0],["Lectores de diarios",0]]},
+  {q:"Instagram es propiedad de:",t:'s',o:[["Facebook",1],["Google",0],["Twitter",0],["Microsoft",0]]},
+  {q:"La elección entre CPC y CPM depende de los objetivos de las campañas.",t:'s',o:[["Verdadero",1],["Falso",0]]},
+  {q:"La red de Display (GDN) está conformada por:",t:'s',o:[["Sitios (y apps asociadas)",1],["Solo el buscador de Google",0],["Solo YouTube",0],["Solo Facebook",0]]},
+  {q:"Los resultados orgánicos:",t:'s',o:[["Son gratuitos",1],["Se pagan por clic",0],["Se pagan por impresión",0],["Requieren subasta",0]]},
+  {q:"El sistema que permite a dueños de sitios ofrecer espacios a Google a cambio de dinero es:",t:'s',o:[["AdSense",1],["AdMob",0],["Audience Network",0],["MCC",0]]},
+  {q:"Como parte de la red de Display, los anuncios también pueden verse en aplicaciones de:",t:'s',o:[["Los teléfonos móviles",1],["Las consolas de videojuegos",0],["Los televisores analógicos",0],["Las radios",0]]},
+  {q:"Con la red de Display, además de anuncios de texto en el buscador, se pueden publicar anuncios:",t:'s',o:[["Gráficos y de video",1],["Solo de audio",0],["Solo impresos",0],["Solo de texto",0]]},
+  {q:"En Google se pueden obtener resultados: (2 correctas)",t:'m',o:[["Patrocinados",1],["Orgánicos",1],["Impresos",0],["Televisivos",0]]},
+  {q:"Un Lic. en Marketing Digital que quiere promocionar sus servicios profesionales debería usar:",t:'s',o:[["LinkedIn, red de perfiles profesionales",1],["Twitter, por el real time",0],["Instagram, por las imágenes",0],["Facebook Marketplace",0]]},
+  {q:"Los anuncios de Facebook se muestran principalmente en:",t:'s',o:[["La sección noticias",1],["El buscador de Google",0],["YouTube",0],["La red de Display",0]]},
+  {q:"La página de destino es la página web a la que llegan las personas después de hacer clic en un:",t:'s',o:[["Anuncio",1],["Banner orgánico",0],["Resultado patrocinado del competidor",0],["Email",0]]},
+  {q:"Al indicador que surge de clics sobre impresiones se lo denomina:",t:'s',o:[["CTR",1],["CPC",0],["CPM",0],["ROI",0]]},
+  {q:"Certificaciones específicas de Ads: (4 correctas)",t:'m',o:[["Publicidad en Búsqueda",1],["Publicidad en Display",1],["Publicidad en Video",1],["Fundamentos de Ads",1],["Publicidad en Radio",0]]},
+  {q:"Al crear una campaña en la Red de búsqueda, los socios de búsqueda se incluyen de forma:",t:'s',o:[["Predeterminada",1],["Manual obligatoria",0],["Aleatoria",0],["Paga aparte",0]]},
+  {q:"Las campañas de AdWords denominadas Shopping se encuentran dentro de:",t:'s',o:[["La Red de Búsqueda",1],["La Red de Display",0],["YouTube",0],["Audience Network",0]]},
+  {q:"La idea de los grupos de anuncios es:",t:'s',o:[["Ordenar",1],["Pagar",0],["Segmentar geográficamente",0],["Crear la cuenta",0]]},
+  {q:"Cada campaña tiene al menos:",t:'s',o:[["Un grupo de anuncios",1],["Cinco anuncios",0],["Una cuenta MCC",0],["Tres redes",0]]},
+  {q:"Un grupo de anuncios contiene al menos un anuncio y:",t:'s',o:[["Una palabra clave o ubicación",1],["Una tarjeta de crédito",0],["Una cuenta de administrador",0],["Un video",0]]},
+  {q:"La concordancia amplia permite que el anuncio aparezca con sinónimos, plurales o:",t:'s',o:[["Errores ortográficos",1],["Otros idiomas",0],["Marcas competidoras",0],["Búsquedas exactas únicamente",0]]},
+  {q:"Las estrategias de puja se pueden dividir en:",t:'s',o:[["Automáticas o manuales",1],["Orgánicas o pagas",0],["Locales o globales",0],["Diarias o mensuales",0]]},
+  {q:"Una vez creada una campaña, los anuncios entran en un proceso de:",t:'s',o:[["Revisión",1],["Subasta",0],["Conversión",0],["Optimización automática",0]]},
+  {q:"Un personal trainer crea una campaña en la red de búsqueda. ¿Cómo se paga?",t:'s',o:[["CPC: se paga por cada clic",1],["CPM: por mil impresiones",0],["CPV: por visualización",0],["CPA fija mensual",0]]},
+  {q:"Cualquier acción que deseamos que hagan en el sitio tras hacer clic en el anuncio es una:",t:'s',o:[["Conversión",1],["Impresión",0],["Extensión",0],["Concordancia",0]]},
+  {q:"El Planificador de Palabras Clave encuentra ideas a partir de otras palabras clave o de:",t:'s',o:[["El contenido de un sitio web",1],["El historial bancario",0],["Las redes sociales del competidor",0],["La zona horaria",0]]},
+  {q:"En Display, si compiten una oferta por CPC y otra por CPM, Google calcula el:",t:'s',o:[["CPM efectivo",1],["CPC máximo",0],["CTR promedio",0],["ROI total",0]]},
+  {q:"La segmentación geográfica puede contribuir a aumentar el:",t:'s',o:[["ROI",1],["CPM",0],["CTR",0],["CPC máximo",0]]},
+  {q:"Para que los anuncios sean más relevantes con la búsqueda se utiliza la inserción de:",t:'s',o:[["Palabras clave",1],["Imágenes",0],["Extensiones de llamada",0],["Banners",0]]},
+  {q:"Carolina quiere dar acceso a su cuenta a una colaboradora. ¿Dónde lo hace?",t:'s',o:[["En Configuración",1],["En Facturación",0],["En Palabras clave",0],["En Extensiones",0]]},
+  {q:"El SEO consiste en desarrollar:",t:'s',o:[["Una estrategia",1],["Una subasta",0],["Una campaña paga",0],["Un anuncio de video",0]]},
+  {q:"En los anuncios de Google NO se permite contenido para:",t:'s',o:[["Productos falsificados",1],["Productos regionales",0],["Servicios profesionales",0],["Comida saludable",0]]},
+  {q:"En una misma dirección de correo electrónico se pueden asociar hasta:",t:'s',o:[["5 cuentas de AdWords",1],["2 cuentas",0],["10 cuentas",0],["Cuentas ilimitadas",0]]},
+  {q:"La concordancia amplia es el tipo de concordancia predeterminada que se asigna a:",t:'s',o:[["Las palabras clave",1],["Las campañas",0],["Las cuentas",0],["Las extensiones",0]]},
+  {q:"Un diario digital quiere aumentar las visitas a su sitio. ¿Qué objetivo de campaña elige?",t:'s',o:[["Tráfico al sitio web",1],["Ventas",0],["Oportunidades de venta",0],["Cobertura y notoriedad",0]]},
+  {q:"Una empresa de bálsamos labiales quiere promocionar en YouTube. ¿Qué anuncio usa?",t:'s',o:[["Un anuncio de video",1],["Un anuncio de texto",0],["Un banner gráfico",0],["Un anuncio impreso",0]]},
+  {q:"Eugenia (cupcakes) promociona en la red de búsqueda. ¿Qué tipo de anuncio?",t:'s',o:[["Un anuncio de texto",1],["Un anuncio de video",0],["Un banner gráfico",0],["Una historia de Instagram",0]]},
+  {q:"El CPC máximo ofertado (CPC máx.) define la posición donde aparecerá:",t:'s',o:[["El anuncio",1],["La cuenta",0],["El grupo de anuncios",0],["La palabra negativa",0]]},
+  {q:"En YouTube se puede pagar por: (3 correctas)",t:'m',o:[["CPV",1],["CPC",1],["CPM",1],["CPA fijo obligatorio",0]]},
+  {q:"Si orientás la publicidad a un área donde NO está tu empresa, igual se podrá ver el anuncio.",t:'s',o:[["Falso",1],["Verdadero",0]]},
+  {q:"Cada vez que un anuncio (texto o banner) es mostrado, se contabiliza una:",t:'s',o:[["Impresión",1],["Conversión",0],["Puja",0],["Extensión",0]]},
+  {q:"Analía usó 'celulares' en concordancia amplia. ¿Qué búsqueda quedaría EXCLUIDA?",t:'s',o:[["Tablet, porque no es un sinónimo",1],["Celular",0],["Celulares baratos",0],["Teléfonos celulares",0]]},
+  {q:"La concordancia exacta se define poniendo las palabras clave entre:",t:'s',o:[["Corchetes [ ]",1],["Comillas \" \"",0],["Paréntesis ( )",0],["Un signo +",0]]},
+  {q:"La concordancia negativa define palabras para que el anuncio NO aparezca si están en la búsqueda.",t:'s',o:[["Verdadero",1],["Falso",0]]},
+  {q:"Cosméticos usó [maquillaje profesional] (exacta). ¿Con qué búsqueda se activa?",t:'s',o:[["Maquillaje profesional",1],["Maquillaje barato",0],["Profesional de maquillaje a domicilio",0],["Cursos de maquillaje",0]]},
+  {q:"El nivel de calidad estima la calidad de los anuncios, la palabra clave y:",t:'s',o:[["Las páginas de destino",1],["La zona horaria",0],["La moneda de la cuenta",0],["El número de campañas",0]]},
+  {q:"Las extensiones de anuncio brindan:",t:'s',o:[["Un nivel de visibilidad mejorado",1],["Un descuento en la puja",0],["Posicionamiento orgánico",0],["Más cuentas MCC",0]]},
+  {q:"El CPA objetivo (Smart Bidding) define el importe de:",t:'s',o:[["Las pujas",1],["El presupuesto anual",0],["Las impresiones",0],["Las conversiones",0]]},
+  {q:"Lo que se paga cada mil apariciones de los anuncios se denomina:",t:'s',o:[["CPM",1],["CPC",0],["CPV",0],["CTR",0]]},
+  {q:"Al crear una cuenta de Google Ads definimos: (2 correctas)",t:'m',o:[["La zona horaria",1],["La moneda que utilizaremos",1],["El nombre del grupo de anuncios",0],["Las palabras negativas",0]]},
+  {q:"Cuando se selecciona el tipo de oferta CPC, se paga cada vez que alguien VISUALIZA el anuncio.",t:'s',o:[["Falso",1],["Verdadero",0]],e:"En CPC se paga por clic, no por visualización."},
+  {q:"El costo de un anuncio en Google:",t:'s',o:[["Lo configura el anunciante al crear la campaña",1],["Lo fija Google de forma única",0],["Depende del medio tradicional",0],["Es siempre gratuito",0]]},
+  {q:"Days Inn promociona en la red de Display. ¿Qué anuncios puede usar? (2 correctas)",t:'m',o:[["Un anuncio gráfico",1],["Un anuncio de texto",1],["Un anuncio de radio",0],["Un anuncio impreso",0]]},
+  {q:"Si administra varias cuentas de AdWords, ¿qué herramienta ahorra tiempo?",t:'s',o:[["Una cuenta de administrador (MCC)",1],["Una cuenta individual por cada cliente",0],["AdSense",0],["Audience Network",0]]},
+  {q:"Una característica de la Red de Display es que tiene:",t:'s',o:[["2 formas de pagar los anuncios (CPC o CPM)",1],["Una sola forma de pago",0],["Pago únicamente por conversión",0],["Pago anual fijo",0]]},
+  {q:"Una cuenta individual de AdWords puede desvincularse de una de administración:",t:'s',o:[["Sin perder el historial de la campaña",1],["Perdiendo todos los datos",0],["Solo pagando una multa",0],["Únicamente con AdSense",0]]},
+
+  // ===== Preguntas creadas desde el texto de las 8 lecturas =====
+  {q:"El esquema del negocio publicitario está formado por tres actores interdependientes:",t:'s',o:[["Anunciante, medio y audiencia",1],["Google, Facebook y Twitter",0],["Cuenta, campaña y anuncio",0],["SEO, SEM y display",0]]},
+  {q:"Un medio sin audiencia:",t:'s',o:[["No resulta atractivo para los anunciantes",1],["Aumenta su valor publicitario",0],["Sigue siendo el más rentable",0],["Mejora su posición orgánica",0]]},
+  {q:"Los carteles de vía pública (outdoors), que solo muestran anuncios, son:",t:'s',o:[["Medios exclusivamente publicitarios",1],["Medios digitales",0],["Resultados orgánicos",0],["Extensiones de anuncio",0]]},
+  {q:"La sigla ATL significa:",t:'s',o:[["Above the line",1],["After the launch",0],["Around the link",0],["Ad targeting list",0]]},
+  {q:"La sigla BTL significa:",t:'s',o:[["Below the line",1],["Brandticket list",0],["Buy the lead",0],["Banner top level",0]]},
+  {q:"El marketing por catálogo, el telemarketing y los envíos personalizados son ejemplos de:",t:'s',o:[["Marketing directo (BTL)",1],["Medios masivos (ATL)",0],["Red de display",0],["Resultados orgánicos",0]]},
+  {q:"Desde 2012, internet es el segundo medio con más inversión publicitaria, detrás de:",t:'s',o:[["La televisión",1],["La radio",0],["Los diarios",0],["La vía pública",0]]},
+  {q:"Aproximadamente, ¿qué porcentaje de las interacciones con los medios ocurre a través de pantallas?",t:'s',o:[["Cerca del 86 %",1],["Cerca del 25 %",0],["Cerca del 50 %",0],["Cerca del 10 %",0]]},
+  {q:"El concepto de Momento Cero de la Verdad (ZMOT) fue introducido por:",t:'s',o:[["Google, en 2011",1],["Facebook, en 2006",0],["Twitter, en 2015",0],["Instagram, en 2012",0]]},
+  {q:"La 'democratización de la publicidad' en medios digitales se refiere a que:",t:'s',o:[["Cualquier anunciante puede pautar, sin importar su tamaño o presupuesto",1],["Toda la publicidad es gratuita",0],["Solo las grandes marcas pueden anunciar",0],["Google fija el precio para todos",0]]},
+  {q:"El rating y la circulación/readership son formas de medición propias de:",t:'s',o:[["Los medios tradicionales",1],["Los medios digitales",0],["Google Ads",0],["Facebook Ads",0]]},
+  {q:"PPC (modelo de las campañas SEM) significa:",t:'s',o:[["Pay per click (pago por clic)",1],["Price per campaign",0],["Page position control",0],["Public placement cost",0]]},
+  {q:"Los resultados orgánicos en Google aparecen en función de:",t:'s',o:[["La relevancia de la página para la búsqueda (no son pagos)",1],["La oferta más alta de CPC",0],["La cantidad de impresiones compradas",0],["El presupuesto diario de la campaña",0]]},
+  {q:"La sigla CPV significa:",t:'s',o:[["Costo por visualización",1],["Costo por venta",0],["Clic por visita",0],["Conversión por video",0]]},
+  {q:"En la red de búsqueda, el formato del anuncio es:",t:'s',o:[["De texto",1],["De video",0],["Banner gráfico",0],["De audio",0]]},
+  {q:"La campaña universal de aplicaciones permite publicar anuncios en:",t:'s',o:[["Las tres redes",1],["Solo la red de búsqueda",0],["Solo YouTube",0],["Solo Facebook",0]]},
+  {q:"AdMob permite monetizar mediante publicidad a:",t:'s',o:[["Las aplicaciones móviles",1],["Los diarios impresos",0],["Las radios AM",0],["Los carteles de vía pública",0]]},
+  {q:"Para una campaña de branding (exposición de marca) conviene usar:",t:'s',o:[["Display y YouTube",1],["Solo la red de búsqueda",0],["Solo email marketing",0],["Solo vía pública",0]]},
+  {q:"Para una campaña de performance (resultados directos) conviene usar:",t:'s',o:[["La red de búsqueda",1],["La red de display",0],["YouTube",0],["Audience Network",0]]},
+  {q:"Si una campaña alcanza su presupuesto diario, entonces:",t:'s',o:[["No muestra más anuncios hasta el día siguiente",1],["Se cancela definitivamente",0],["Duplica la inversión automáticamente",0],["Cambia a la red de display",0]]},
+  {q:"En la configuración de una campaña, la fecha de finalización:",t:'s',o:[["No viene definida por defecto: si se olvida, la campaña sigue gastando",1],["Se asigna automáticamente a 30 días",0],["No se puede modificar",0],["Es obligatoria antes de guardar",0]]},
+  {q:"El título de un anuncio de texto admite un máximo de:",t:'s',o:[["30 caracteres",1],["80 caracteres",0],["10 caracteres",0],["140 caracteres",0]]},
+  {q:"La descripción de un anuncio de texto admite un máximo de:",t:'s',o:[["80 caracteres",1],["30 caracteres",0],["160 caracteres",0],["50 caracteres",0]]},
+  {q:"¿Cuántas palabras clave se recomienda incluir por grupo de anuncios?",t:'s',o:[["Entre 10 y 20",1],["Entre 1 y 2",0],["Más de 100",0],["Exactamente 50",0]]},
+  {q:"Si se pausa una campaña, ¿qué ocurre con sus elementos dependientes?",t:'s',o:[["Se pausan también sus grupos de anuncios, anuncios y palabras clave",1],["Solo se pausa la campaña; el resto sigue activo",0],["Se eliminan de forma permanente",0],["Se duplican en otra cuenta",0]]},
+  {q:"La concordancia de frase se escribe:",t:'s',o:[["Entre comillas",1],["Entre corchetes",0],["Con un signo +",0],["Con un guion -",0]]},
+  {q:"El modificador de concordancia amplia se indica con:",t:'s',o:[["Un signo + delante del término",1],["Comillas",0],["Corchetes",0],["Un guion delante del término",0]]},
+  {q:"Para calcular el ROI de una campaña, primero hay que definir:",t:'s',o:[["El valor (monetario) de cada conversión",1],["La zona horaria",0],["El idioma del anuncio",0],["La cantidad de palabras negativas",0]]},
+  {q:"El nivel de calidad (Quality Score) se califica en una escala de:",t:'s',o:[["1 a 10",1],["1 a 5",0],["0 a 100",0],["A a F",0]]},
+  {q:"Para sitios con catálogos grandes, generar el título y la URL final de forma automática es propio de:",t:'s',o:[["Los anuncios dinámicos de búsqueda",1],["Las palabras negativas",0],["La extensión de llamada",0],["El planificador de palabras clave",0]]},
+  {q:"La sintaxis {Keyword: ...} dentro de un anuncio corresponde a:",t:'s',o:[["La inserción de palabras clave",1],["Una palabra negativa",0],["Una extensión de ubicación",0],["Una concordancia exacta",0]]},
+  {q:"La herramienta que permite ver cómo se muestran los anuncios y por qué no se muestran es:",t:'s',o:[["Vista previa y diagnóstico",1],["El Planificador de palabras clave",0],["AdSense",0],["Mi Centro de Clientes",0]]},
+  {q:"Como buena práctica, se recomienda crear:",t:'s',o:[["Una cuenta de Ads por anunciante o negocio",1],["Una cuenta por cada palabra clave",0],["Una cuenta por anuncio",0],["Una sola cuenta para todas las empresas del mundo",0]]},
+  {q:"El CPC medio (lo que realmente se paga) respecto del CPC máximo ofertado, suele ser:",t:'s',o:[["Menor que el máximo",1],["Siempre igual al máximo",0],["Siempre mayor al máximo",0],["Cero",0]]},
+  {q:"Audience Network es la red que permite mostrar anuncios fuera de su plataforma a:",t:'s',o:[["Facebook",1],["Google",0],["Twitter",0],["LinkedIn",0]]}
+];
+
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+var current = [];
+
+function startQuiz(){
+  document.getElementById('score').innerHTML='';
+  var n = parseInt(document.getElementById('count').value,10);
+  var pool = shuffle(BANK.slice());
+  current = pool.slice(0, Math.min(n,pool.length));
+  var html='';
+  current.forEach(function(item,idx){
+    var opts = shuffle(item.o.map(function(o,i){ return {t:o[0], c:o[1], oi:i}; }));
+    item._opts = opts;
+    var inputType = item.t==='m' ? 'checkbox' : 'radio';
+    var tag = item.t==='m' ? ' <span class="tag">(varias respuestas)</span>' : '';
+    html += '<div class="q" data-idx="'+idx+'">';
+    html += '<div class="num">Pregunta '+(idx+1)+' de '+current.length+'</div>';
+    html += '<div class="txt">'+item.q+tag+'</div>';
+    opts.forEach(function(o,j){
+      html += '<label class="opt"><input type="'+inputType+'" name="q'+idx+'" data-c="'+(o.c?1:0)+'"> '+o.t+'</label>';
+    });
+    html += '<div class="fb"></div></div>';
+  });
+  document.getElementById('quiz').innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function gradeQuiz(){
+  var qs = document.querySelectorAll('#quiz .q');
+  if(!qs.length){ return; }
+  var correct=0;
+  qs.forEach(function(q){
+    var idx = q.getAttribute('data-idx');
+    var item = current[idx];
+    var inputs = q.querySelectorAll('input');
+    var ok = true;
+    inputs.forEach(function(i){
+      var should = i.getAttribute('data-c')==='1';
+      if(i.checked !== should) ok=false;
+      var lbl = i.closest('.opt');
+      lbl.classList.remove('ok','bad');
+      if(should) lbl.classList.add('ok');
+      else if(i.checked) lbl.classList.add('bad');
+    });
+    if(ok) correct++;
+    var fb = q.querySelector('.fb');
+    var mark = ok ? '<span style="color:var(--ok);font-weight:600;">✓ Correcto. </span>' : '<span style="color:var(--bad);font-weight:600;">✗ Revisá. </span>';
+    fb.innerHTML = mark + (item.e ? '<span style="color:var(--gris);">'+item.e+'</span>' : '');
+  });
+  var pct = Math.round(correct/current.length*100);
+  var aprob = pct>=60;
+  var col = aprob ? 'var(--ok)' : 'var(--bad)';
+  document.getElementById('score').innerHTML =
+    '<div class="scorecard"><div style="font-size:13px;color:var(--gris);">Resultado</div>'+
+    '<div class="big" style="color:'+col+';">'+correct+'/'+current.length+' · '+pct+'%</div>'+
+    '<div style="color:var(--gris);">'+(aprob?'Aprobado (umbral 60%)':'Por debajo del 60% — repasá las marcadas en rojo')+'</div></div>';
+  const scoreEl = document.getElementById('score');
+  if(typeof scoreEl.scrollIntoView === 'function') scoreEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  registrarEvento({tipo:'resultado', ronda: intentoNum, correctas: correct, total: current.length, pct: pct});
+  intentoNum++;
+}
+
+pintarBarraIdentidad();
+bloquearSiNoIdentificado();
+registrarEvento({tipo:'visita'});
+</script>
+</body>
+</html>
