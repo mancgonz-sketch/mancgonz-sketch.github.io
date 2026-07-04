@@ -83,6 +83,33 @@
   }
 
   footer{text-align:center; font-size:.78rem; color:var(--muted); margin-top:30px; padding:0 16px;}
+
+  /* ---- Feedback ---- */
+  #btnFeedback{
+    display:block; margin:0 auto 10px; padding:10px 18px; border-radius:20px;
+    background:#2b2320; color:#fff; border:none; font-size:.85rem; cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+  }
+  #feedbackOverlay{
+    display:none; position:fixed; inset:0; background:rgba(43,35,32,.5);
+    align-items:center; justify-content:center; z-index:100; padding:16px;
+  }
+  #feedbackOverlay.abierto{display:flex;}
+  .feedback-box{
+    background:#fff; border-radius:12px; padding:22px; max-width:420px; width:100%;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+  }
+  .feedback-box h3{margin:0 0 4px; font-family:Georgia,'Times New Roman',serif;}
+  .feedback-box p{margin:0 0 14px; color:var(--muted); font-size:.82rem;}
+  .feedback-box label{display:block; font-size:.78rem; font-weight:700; margin:10px 0 4px;}
+  .feedback-box input, .feedback-box textarea{
+    width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:6px; font-size:.88rem; font-family:inherit; resize:vertical;
+  }
+  .feedback-botones{display:flex; gap:8px; margin-top:16px;}
+  .feedback-botones button{flex:1; padding:10px; border-radius:8px; border:none; font-size:.88rem; cursor:pointer;}
+  .fb-cancelar{background:var(--paper); color:var(--muted); border:1px solid var(--line) !important;}
+  .fb-enviar{background:#2b2320; color:#fff;}
+  #fbGracias{text-align:center; margin-top:14px; font-size:.88rem; color:#2e7d32; font-weight:700;}
 </style>
 </head>
 <body>
@@ -94,6 +121,26 @@
 </header>
 
 <main id="main"></main>
+
+<button id="btnFeedback" onclick="abrirFeedback()">💬 Sugerencias / Consultas</button>
+
+<div id="feedbackOverlay">
+  <div class="feedback-box">
+    <h3>Sugerencias, consultas o recomendaciones</h3>
+    <p>Le llega directo a Gonzalo por email. Si estás logueado, ya sabe quién sos.</p>
+    <label>Tu nombre</label>
+    <input type="text" id="fbNombre" placeholder="Nombre y apellido">
+    <label>Tu email</label>
+    <input type="email" id="fbEmail" placeholder="tu@email.com">
+    <label>Mensaje</label>
+    <textarea id="fbMensaje" rows="4" placeholder="Contame qué se te ocurre, qué falta, o cualquier consulta..."></textarea>
+    <div class="feedback-botones">
+      <button class="fb-cancelar" onclick="cerrarFeedback()">Cancelar</button>
+      <button class="fb-enviar" onclick="enviarFeedback()">Enviar</button>
+    </div>
+    <div id="fbGracias" style="display:none;">✅ ¡Gracias! Tu mensaje ya está en camino.</div>
+  </div>
+</div>
 
 <footer>Compilado por Gonzalo Daniel Manca · mancgonz@gmail.com · 2255411525</footer>
 
@@ -115,7 +162,7 @@ const materias = [
     color: "#c1580c",
     fichas: [
       { tipo:"Parcial 1", titulo:"Módulos 1 y 2 · Google Ads y Facebook Ads (fundamentos)",
-        desc:"Teoría completa + simulacro de 126 preguntas.", url:"certificaciones-digitales-parcial-1.html" },
+        desc:"Teoría completa + simulacro de 126 preguntas.", url:"#" },
       { tipo:"Parcial 2", titulo:"Módulos 3 y 4 · Optimización de Google Ads y Facebook Ads",
         desc:"Teoría completa + simulacro con tandas aleatorias (181 preguntas).", url:"Certificaciones_Digitales_Parcial2.html" }
     ]
@@ -303,9 +350,50 @@ function render(){
   }
 }
 
+/* ================= FEEDBACK ================= */
+function abrirFeedback(){
+  const idn = obtenerIdentidad();
+  document.getElementById('fbNombre').value = idn ? idn.nombre : '';
+  document.getElementById('fbMensaje').value = '';
+  document.getElementById('fbGracias').style.display = 'none';
+  document.querySelector('.feedback-botones').style.display = 'flex';
+  const campoEmail = document.getElementById('fbEmail');
+  if(idn){
+    campoEmail.value = idn.email;
+    campoEmail.readOnly = true;
+  } else {
+    campoEmail.value = '';
+    campoEmail.readOnly = false;
+  }
+  document.getElementById('feedbackOverlay').classList.add('abierto');
+}
+
+function cerrarFeedback(){
+  document.getElementById('feedbackOverlay').classList.remove('abierto');
+}
+
+function enviarFeedback(){
+  const nombre = document.getElementById('fbNombre').value.trim();
+  const email = document.getElementById('fbEmail').value.trim();
+  const mensaje = document.getElementById('fbMensaje').value.trim();
+  if(!mensaje){
+    alert('Escribí tu mensaje antes de enviar.');
+    return;
+  }
+  registrarEvento({
+    tipo: 'feedback',
+    nombre: nombre || 'Anónimo',
+    email: email,
+    mensaje: mensaje,
+    materia: materiaActual ? materiaActual.nombre : ''
+  });
+  document.querySelector('.feedback-botones').style.display = 'none';
+  document.getElementById('fbGracias').style.display = 'block';
+  setTimeout(cerrarFeedback, 1800);
+}
+
 render();
 </script>
 
 </body>
 </html>
-
