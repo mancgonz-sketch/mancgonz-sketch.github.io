@@ -1,1 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siglo 21 · Práctica de Parciales</title>
+<script src="https://accounts.google.com/gsi/client" async defer onload="gisReady=true;"></script>
+<style>
+  :root{
+    --paper:#f6f1e7;
+    --ink:#2b2320;
+    --muted:#8a7f6f;
+    --line:#ddd2bd;
+    --card:#fffdf8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink); padding-bottom:60px; min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  header{
+    padding:34px 20px 22px; text-align:center; border-bottom:3px double var(--line);
+  }
+  header .kicker{
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:700;
+  }
+  header h1{
+    font-family:Georgia,'Times New Roman',serif; font-size:1.9rem; margin:6px 0 4px; font-weight:700;
+  }
+  header p{margin:0; color:var(--muted); font-size:.9rem;}
+
+  main{max-width:640px; margin:0 auto; padding:24px 16px;}
+
+  /* ---- Portada: rectángulos de materia ---- */
+  .grid-materias{display:grid; gap:14px;}
+  .rect-materia{
+    display:block; border:none; border-radius:10px; padding:22px 20px; cursor:pointer;
+    color:#fff; text-align:left; font-family:inherit; position:relative; overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.12); transition:transform .12s ease;
+  }
+  .rect-materia:hover{transform:translateY(-2px);}
+  .rect-materia h2{margin:0 0 4px; font-family:Georgia,'Times New Roman',serif; font-size:1.2rem;}
+  .rect-materia span{font-size:.8rem; opacity:.85;}
+
+  /* ---- Login ---- */
+  .login-box{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:28px 22px; text-align:center;
+  }
+  .login-box .materia-chip{
+    display:inline-block; padding:5px 14px; border-radius:20px; color:#fff; font-size:.8rem; font-weight:700; margin-bottom:14px;
+  }
+  .login-box p{color:var(--muted); font-size:.9rem; margin:6px 0 20px;}
+  #googleBtnWrap{display:flex; justify-content:center; min-height:44px;}
+  .volver{display:block; margin-top:18px; font-size:.82rem; color:var(--muted); text-decoration:underline; cursor:pointer; background:none; border:none;}
+
+  /* ---- Fichas de materia ---- */
+  .topbar-materia{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; font-size:.82rem;
+  }
+  .topbar-materia .quien{color:var(--muted);}
+  .topbar-materia button{
+    background:none; border:1px solid var(--line); border-radius:8px; padding:5px 10px; font-size:.78rem; cursor:pointer; color:var(--muted);
+  }
+  .materia-label{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .materia-label .tab{width:14px; height:28px; border-radius:3px;}
+  .materia-label h2{font-family:Georgia,'Times New Roman',serif; font-size:1.15rem; margin:0;}
+
+  .ficha{
+    display:flex; background:var(--card); border:1px solid var(--line); border-radius:4px;
+    margin-bottom:10px; overflow:hidden; text-decoration:none; color:inherit;
+    box-shadow:0 1px 2px rgba(0,0,0,.03); transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .ficha:hover{transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.08);}
+  .ficha .lomo{width:8px; flex-shrink:0;}
+  .ficha .cuerpo{padding:14px 16px; flex:1;}
+  .ficha .tipo{font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:700;}
+  .ficha h3{margin:3px 0 4px; font-size:1rem;}
+  .ficha .desc{font-size:.83rem; color:var(--muted); line-height:1.4;}
+  .ficha .flecha{display:flex; align-items:center; padding:0 16px; color:var(--muted); font-size:1.1rem;}
+  .placeholder{
+    border:1.5px dashed var(--line); border-radius:4px; padding:14px 16px; font-size:.83rem;
+    color:var(--muted); text-align:center; margin-bottom:10px;
+  }
+
+  footer{text-align:center; font-size:.78rem; color:var(--muted); margin-top:30px; padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Universidad Siglo 21</div>
+  <h1 id="tituloHeader">Práctica de Parciales</h1>
+  <p id="subHeader">Apps de estudio propias · Teoría + Simulacro por materia</p>
+</header>
+
+<main id="main"></main>
+
+<footer>Compilado por Gonzalo Daniel Manca · mancgonz@gmail.com · 2255411525</footer>
+
+<script>
+/* ================= CONFIGURACIÓN ================= */
+// Pegá acá tu Client ID de Google (console.cloud.google.com > Credentials).
+const GOOGLE_CLIENT_ID = '493300948870-l2c1re8aci0s394es3vlosqjv5g8qo01.apps.googleusercontent.com';
+// Pegá acá la URL /exec de tu Apps Script (ver apps-script-registro.gs).
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI2lCBNrkdU_4DNYEDhoTbf8O60ZWoyNijdqgk_qsQfXHmjMhBxB_jdO2HtagC2mKQ/exec';
+const IDENTIDAD_KEY = 'siglo21_identidad';
+
+/*
+  EDITÁ ESTE ARRAY para agregar cada materia nueva que armes.
+  color: cualquier color hex, se usa para el rectángulo y el "lomo" de cada ficha.
+*/
+const materias = [
+  {
+    nombre: "Certificaciones Digitales",
+    color: "#c1580c",
+    fichas: [
+      { tipo:"Parcial 1", titulo:"Módulos 1 y 2 · Google Ads y Facebook Ads (fundamentos)",
+        desc:"Teoría completa + simulacro de 126 preguntas.", url:"certificaciones-digitales-parcial-1.html" },
+      { tipo:"Parcial 2", titulo:"Módulos 3 y 4 · Optimización de Google Ads y Facebook Ads",
+        desc:"Teoría completa + simulacro con tandas aleatorias (181 preguntas).", url:"Certificaciones_Digitales_Parcial2.html" }
+    ]
+  },
+  {
+    nombre: "Sociología del Poder",
+    color: "#8b0000",
+    fichas: [
+      { tipo:"Parcial 1", titulo:"Módulos 1 y 2",
+        desc:"182 preguntas, 8 ejes temáticos, caso Daniela Puglisi.", url:"#" },
+      { tipo:"Parcial 2", titulo:"Módulos 3 y 4",
+        desc:"121 preguntas, 8 ejes: Quijano, Bourdieu, Foucault, Crozier/Friedberg.", url:"#" }
+    ]
+  }
+];
+
+/* ================= ESTADO ================= */
+let vista = 'portada';       // 'portada' | 'login' | 'fichas'
+let materiaActual = null;
+let gisReady = false;
+let gisInicializado = false;
+
+/* ================= IDENTIDAD (localStorage, compartida con las apps de la misma carpeta) ================= */
+function obtenerIdentidad(){
+  try{
+    const raw = localStorage.getItem(IDENTIDAD_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function guardarIdentidad(idn){
+  localStorage.setItem(IDENTIDAD_KEY, JSON.stringify(idn));
+}
+function cerrarSesion(){
+  localStorage.removeItem(IDENTIDAD_KEY);
+  vista = 'portada';
+  materiaActual = null;
+  render();
+}
+
+/* ================= REGISTRO (Apps Script) ================= */
+function registrarEvento(payload){
+  if(!APPS_SCRIPT_URL) return;
+  try{
+    fetch(APPS_SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    });
+  }catch(e){ /* no bloquea la navegación si falla */ }
+}
+
+/* ================= NAVEGACIÓN ================= */
+function elegirMateria(m){
+  materiaActual = m;
+  const idn = obtenerIdentidad();
+  if(idn){
+    vista = 'fichas';
+    registrarEvento({tipo:'visita', app:'Hub Siglo 21', nombre:idn.nombre, email:idn.email, materia:m.nombre});
+  } else {
+    vista = 'login';
+  }
+  render();
+}
+
+function volverAPortada(){
+  vista = 'portada';
+  materiaActual = null;
+  render();
+}
+
+/* ================= GOOGLE SIGN-IN ================= */
+function decodeJwt(token){
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g,'+').replace(/_/g,'/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  return JSON.parse(jsonPayload);
+}
+
+function handleCredentialResponse(response){
+  const payload = decodeJwt(response.credential);
+  const idn = { nombre: payload.name, email: payload.email, foto: payload.picture };
+  guardarIdentidad(idn);
+  registrarEvento({
+    tipo:'login', idToken: response.credential,
+    nombre: idn.nombre, email: idn.email, materia: materiaActual ? materiaActual.nombre : ''
+  });
+  vista = 'fichas';
+  render();
+}
+
+function intentarMontarBotonGoogle(intentos){
+  if(!document.getElementById('googleBtnWrap')) return; // ya no estamos en la vista de login
+  if(window.google && window.google.accounts && window.google.accounts.id){
+    if(!gisInicializado){
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
+      gisInicializado = true;
+    }
+    google.accounts.id.renderButton(document.getElementById('googleBtnWrap'), { theme:'outline', size:'large', text:'signin_with', shape:'pill', width:240 });
+  } else if(intentos < 25){
+    setTimeout(()=>intentarMontarBotonGoogle(intentos+1), 200);
+  } else {
+    document.getElementById('googleBtnWrap').innerHTML = '<span style="color:#c62828; font-size:.82rem;">No se pudo cargar el botón de Google. Revisá tu conexión o recargá la página.</span>';
+  }
+}
+
+/* ================= RENDER ================= */
+function render(){
+  const main = document.getElementById('main');
+  const titulo = document.getElementById('tituloHeader');
+  const sub = document.getElementById('subHeader');
+
+  if(vista === 'portada'){
+    titulo.textContent = 'Práctica de Parciales';
+    sub.textContent = 'Elegí una materia para ver sus apps de estudio';
+    main.innerHTML = '<div class="grid-materias" id="gridMaterias"></div>';
+    const grid = document.getElementById('gridMaterias');
+    materias.forEach(m=>{
+      const btn = document.createElement('button');
+      btn.className = 'rect-materia';
+      btn.style.background = m.color;
+      btn.innerHTML = `<h2>${m.nombre}</h2><span>${m.fichas.length} ${m.fichas.length===1?'app':'apps'} disponibles</span>`;
+      btn.onclick = ()=> elegirMateria(m);
+      grid.appendChild(btn);
+    });
+
+  } else if(vista === 'login'){
+    titulo.textContent = 'Identificate para continuar';
+    sub.textContent = 'Usamos tu cuenta de Google solo para llevar un registro real de uso';
+    main.innerHTML = `
+      <div class="login-box">
+        <div class="materia-chip" style="background:${materiaActual.color}">${materiaActual.nombre}</div>
+        <p>Iniciá sesión con tu cuenta de Google para entrar a esta materia.<br>Tu nombre y email quedan registrados junto con tus resultados.</p>
+        <div id="googleBtnWrap"></div>
+        <button class="volver" onclick="volverAPortada()">‹ Volver a la portada</button>
+      </div>`;
+    intentarMontarBotonGoogle(0);
+
+  } else if(vista === 'fichas'){
+    const idn = obtenerIdentidad();
+    titulo.textContent = materiaActual.nombre;
+    sub.textContent = 'Elegí el parcial que querés repasar';
+    main.innerHTML = '';
+    const topbar = document.createElement('div');
+    topbar.className = 'topbar-materia';
+    topbar.innerHTML = `<span class="quien">👋 ${idn ? idn.nombre : 'Invitado'}</span>`;
+    const btns = document.createElement('div');
+    btns.style.display='flex'; btns.style.gap='6px';
+    const btnCambiar = document.createElement('button');
+    btnCambiar.textContent = '‹ Cambiar de materia';
+    btnCambiar.onclick = volverAPortada;
+    const btnSalir = document.createElement('button');
+    btnSalir.textContent = 'No soy yo';
+    btnSalir.onclick = cerrarSesion;
+    btns.appendChild(btnCambiar); btns.appendChild(btnSalir);
+    topbar.appendChild(btns);
+    main.appendChild(topbar);
+
+    const sec = document.createElement('div');
+    const totalFichas = materiaActual.fichas.length;
+    sec.innerHTML = `<div class="materia-label">
+        <div class="tab" style="background:${materiaActual.color}"></div>
+        <h2>${materiaActual.nombre}</h2>
+      </div>`;
+    materiaActual.fichas.forEach(f=>{
+      if(f.url === '#'){
+        const ph = document.createElement('div');
+        ph.className = 'placeholder';
+        ph.textContent = `${f.tipo} · ${f.titulo} — pendiente de subir`;
+        sec.appendChild(ph);
+      } else {
+        const a = document.createElement('a');
+        a.className = 'ficha';
+        a.href = f.url;
+        a.innerHTML = `<div class="lomo" style="background:${materiaActual.color}"></div>
+          <div class="cuerpo">
+            <div class="tipo">${f.tipo}</div>
+            <h3>${f.titulo}</h3>
+            <div class="desc">${f.desc}</div>
+          </div>
+          <div class="flecha">→</div>`;
+        sec.appendChild(a);
+      }
+    });
+    main.appendChild(sec);
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
 
