@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificaciones Digitales · Parcial 2</title>
+<style>
+  :root{
+    --naranja:#c1580c;
+    --naranja-dark:#8f4009;
+    --bordo:#8b0000;
+    --bordo-dark:#650000;
+    --bg:#faf7f2;
+    --card:#ffffff;
+    --text:#2b2320;
+    --muted:#6b615a;
+    --border:#e8ddd0;
+    --good:#2e7d32;
+    --bad:#c62828;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); padding-bottom:60px;
+  }
+  header.top{
+    background:linear-gradient(120deg,var(--bordo),var(--naranja));
+    color:#fff; padding:22px 16px 18px; text-align:center;
+  }
+  header.top h1{margin:0 0 4px; font-size:1.35rem;}
+  header.top p{margin:0; opacity:.9; font-size:.85rem;}
+  nav.tabs{
+    display:flex; position:sticky; top:0; z-index:50; background:#fff;
+    border-bottom:2px solid var(--border);
+  }
+  nav.tabs button{
+    flex:1; padding:14px 8px; border:none; background:none; font-size:1rem; font-weight:600;
+    color:var(--muted); cursor:pointer; border-bottom:3px solid transparent;
+  }
+  nav.tabs button.active{color:var(--bordo); border-bottom-color:var(--bordo);}
+  main{max-width:760px; margin:0 auto; padding:14px;}
+  .tabcontent{display:none;}
+  .tabcontent.active{display:block;}
+
+  /* ---- TEORIA ---- */
+  .modheader{
+    color:#fff; padding:14px 16px; border-radius:10px; margin:18px 0 10px; font-size:1.1rem; font-weight:700;
+  }
+  .mod3 .modheader{background:var(--naranja);}
+  .mod4 .modheader{background:var(--bordo);}
+  details.lec{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  details.lec summary{
+    padding:12px 14px; font-weight:600; cursor:pointer; list-style:none; position:relative;
+  }
+  details.lec summary::-webkit-details-marker{display:none;}
+  details.lec summary::after{
+    content:"+"; position:absolute; right:14px; top:10px; font-size:1.3rem; color:var(--muted);
+  }
+  details.lec[open] summary::after{content:"−";}
+  .mod3 details.lec summary{border-left:4px solid var(--naranja);}
+  .mod4 details.lec summary{border-left:4px solid var(--bordo);}
+  .leccontent{padding:2px 16px 16px; font-size:.92rem; line-height:1.55;}
+  .leccontent h4{margin:14px 0 6px; font-size:.95rem;}
+  .mod3 .leccontent h4{color:var(--naranja-dark);}
+  .mod4 .leccontent h4{color:var(--bordo-dark);}
+  .leccontent table{width:100%; border-collapse:collapse; margin:10px 0; font-size:.85rem;}
+  .leccontent th,.leccontent td{border:1px solid var(--border); padding:6px 8px; text-align:left;}
+  .leccontent th{background:var(--bg);}
+  .nota{
+    background:#fff3e0; border-left:4px solid var(--naranja); padding:8px 10px; margin:10px 0;
+    font-size:.85rem; border-radius:4px;
+  }
+  .mod4 .nota{background:#fdeaea; border-left-color:var(--bordo);}
+  .caso{
+    background:#f5f0e8; border-radius:6px; padding:10px 12px; font-size:.85rem; font-style:italic; margin:8px 0;
+  }
+
+  /* ---- SIMULACRO ---- */
+  #quizmeta{
+    display:flex; justify-content:center; align-items:center; margin-bottom:10px; font-size:.85rem; color:var(--muted); font-weight:600;
+  }
+  #roundControls{
+    display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:6px; font-size:.85rem;
+  }
+  #roundControls select{
+    padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:#fff; font-size:.85rem;
+  }
+  #siguienteBtn{
+    display:block; width:100%; padding:14px; background:var(--good); color:#fff; border:none;
+    border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; margin:8px 0;
+  }
+  #reiniciarTodoBtn{
+    display:block; width:100%; background:none; border:1px solid var(--border); color:var(--muted);
+    border-radius:8px; padding:8px; font-size:.8rem; cursor:pointer; margin-top:6px;
+  }
+  .qcard{
+    background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px;
+  }
+  .qcard .qnum{font-size:.75rem; color:var(--muted); margin-bottom:4px;}
+  .qcard .qtext{font-weight:600; margin-bottom:10px; font-size:.95rem;}
+  .opt{
+    display:block; width:100%; text-align:left; padding:9px 12px; margin-bottom:6px;
+    border:1px solid var(--border); border-radius:8px; background:#fff; font-size:.88rem; cursor:pointer;
+  }
+  .opt.selected{border-color:var(--bordo); background:#fdeaea;}
+  .opt.correct{border-color:var(--good); background:#e8f5e9; font-weight:600;}
+  .opt.incorrect{border-color:var(--bad); background:#fdecea;}
+  .opt:disabled{cursor:default;}
+  #corregirBtn{
+    display:block; width:100%; padding:14px; background:var(--bordo); color:#fff; border:none;
+    border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; margin:16px 0 8px;
+  }
+  #resultado{
+    text-align:center; font-size:1.1rem; font-weight:700; margin:10px 0; padding:12px;
+    border-radius:10px; background:var(--card); border:1px solid var(--border);
+  }
+  footer{text-align:center; font-size:.78rem; color:var(--muted); margin-top:30px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>Certificaciones Digitales</h1>
+  <p>Universidad Siglo 21 · Parcial 2 · Módulos 3 y 4</p>
+</header>
+
+<nav class="tabs">
+  <button id="tabBtnTeoria" class="active" onclick="showTab('teoria')">📖 Teoría</button>
+  <button id="tabBtnQuiz" onclick="showTab('quiz')">✎ Simulacro</button>
+</nav>
+
+<main>
+
+<!-- ============ TEORIA ============ -->
+<div id="teoria" class="tabcontent active">
+
+  <div class="mod3">
+  <div class="modheader">MÓDULO 3 · Google Ads — Control y optimización (caso Frávega)</div>
+
+  <details class="lec" open>
+    <summary>Lectura 1 · Control y mejoras en las campañas de Google Ads</summary>
+    <div class="leccontent">
+      <div class="caso">Caso Frávega (Copa del Mundo 2018): usó Google Marketing Platform (Campaign Manager + Analytics 360) para medir el impacto de sus anuncios de YouTube y Red de Display. Resultados: +28% tiempo en el sitio, +10,5% páginas por sesión, +13,5% tasa de conversión, −14% tasa de rebote.</div>
+      <p>La medición de resultados es la acción que <strong>inicia el proceso de optimización</strong>. Al analizar los datos hay que considerar dos cosas:</p>
+      <h4>1. El objetivo de la campaña</h4>
+      <p>Se define <strong>antes</strong> de crear la campaña. La pregunta clave: ¿la campaña cumple el objetivo planteado?</p>
+      <table>
+        <tr><th>Objetivo</th><th>Métricas clave</th></tr>
+        <tr><td>Exposición</td><td>Impresiones y CPM medio</td></tr>
+        <tr><td>Visitas al sitio</td><td>Clics y CPC medio</td></tr>
+        <tr><td>Conversiones</td><td>Conversiones, Costo por conversión y ROI</td></tr>
+      </table>
+      <div class="nota">⚠️ ROI = (Valor de las conversiones − Costo) / Costo. Permite saber si la campaña genera más ingresos que gasto.</div>
+      <h4>2. El contexto de los datos</h4>
+      <p>Los datos deben analizarse en relación con otras dimensiones: tiempo, comparación histórica, tipo de producto. Ejemplos del material:</p>
+      <ul>
+        <li>1000 impresiones puede ser poco en un día de campaña, pero mucho en 1 minuto.</li>
+        <li>Un CTR de 2% es malo si el habitual es 5%, pero excelente si el habitual es 1%.</li>
+        <li>Un costo por conversión de $100 es malo vendiendo fundas de celular, pero muy bueno vendiendo heladeras.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 2 · Informes de resultados</summary>
+    <div class="leccontent">
+      <h4>Columnas, segmentos y filtros</h4>
+      <p>Desde <strong>Columnas &gt; Modificar columnas</strong> se agregan o sacan métricas de las tablas (CPC medio, CPM medio, costo por conversión, nivel de calidad, etc.), según el objetivo de cada campaña.</p>
+      <p><strong>Filtros:</strong> muestran solo los datos que cumplen un criterio definido (ej. CTR &gt; 5%).<br>
+      <strong>Segmentos:</strong> dividen los datos en secciones (por dispositivo, posición, tipo de clic, etc.).</p>
+      <h4>Exportar informes / Editor de informes</h4>
+      <p>Se pueden <strong>exportar</strong> a hoja de cálculo, <strong>programar y enviar por email</strong> de forma periódica, y el <strong>Editor de informes</strong> permite armar tablas y gráficos <strong>dinámicos</strong>.</p>
+      <h4>Gráfico de rendimiento</h4>
+      <p>Muestra la evolución de las campañas en un período de tiempo; permite comparar dos métricas y activar la comparación entre períodos.</p>
+      <h4>Alcance y frecuencia</h4>
+      <p><strong>Alcance:</strong> cantidad de personas que vieron el anuncio. <strong>Frecuencia:</strong> cantidad de veces que un anuncio fue visto (en promedio, por persona). Más habitual en Display y video.</p>
+      <h4>Porcentaje de impresiones</h4>
+      <p>Compara las impresiones logradas contra las disponibles. Se descompone en:</p>
+      <ul>
+        <li><strong>% impresiones perdidas por ranking:</strong> puja u nivel de calidad bajo.</li>
+        <li><strong>% impresiones perdidas por presupuesto:</strong> se acabó el presupuesto diario.</li>
+      </ul>
+      <h4>Google Analytics</h4>
+      <p>Se vincula desde Herramientas &gt; Mediciones. Permite: ver datos de Ads dentro de Analytics, importar objetivos de Analytics como conversiones en Ads, e importar audiencias de Analytics como listas de <strong>remarketing</strong> en Ads.</p>
+      <div class="nota">⚠️ Remarketing: mostrar anuncios a personas que ya visitaron el sitio. Debe usarse con cuidado para no generar rechazo.</div>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 3 · Acciones de optimización</summary>
+    <div class="leccontent">
+      <p>Se recomienda, sobre todo para usuarios iniciales, <strong>concentrarse en 1 o 2 métricas</strong> a la vez para mejorar.</p>
+      <h4>Nivel de calidad</h4>
+      <p>Frávega separa palabras clave en grupos de anuncios según su nivel de calidad (alto 7-10, medio 4-6, bajo 1-3) y crea anuncios específicos con páginas de destino relacionadas. Esto sube el CTR y, por ende, el nivel de calidad.</p>
+      <div class="nota">⚠️ Todo cambio tarda en producir resultados: se recomienda esperar <strong>una semana</strong> antes de volver a ajustar.</div>
+      <h4>Cambio de ofertas</h4>
+      <p>Requiere configurar la estrategia de puja en modo <strong>manual</strong> (Configuración &gt; Estrategia de puja). El CPC máx. se cambia a nivel de grupo de anuncios (predeterminado) o por palabra clave individual.</p>
+      <h4>Valores de la competencia</h4>
+      <table>
+        <tr><th>Columna</th><th>Qué muestra</th></tr>
+        <tr><td>Cuota de impresiones</td><td>% de impresiones logradas sobre las disponibles</td></tr>
+        <tr><td>% impresiones perdidas (ranking)</td><td>se perdieron por bajo ranking</td></tr>
+        <tr><td>% impresiones perdidas (presupuesto)</td><td>se perdieron por falta de presupuesto</td></tr>
+      </table>
+      <h4>Concordancia de palabras clave</h4>
+      <p>Concordancia <strong>amplia</strong> → muchas impresiones, pocos clics, baja el CTR y el nivel de calidad, gasta presupuesto rápido. Solución: analizar y pasar a concordancia de <strong>frase o exacta</strong>.</p>
+      <h4>Términos de búsqueda</h4>
+      <p>Muestra las búsquedas reales que activaron el anuncio. Sirve para: encontrar <strong>nuevas palabras clave relevantes</strong>, y detectar palabras <strong>irrelevantes</strong> para agregarlas como <strong>negativas</strong>.</p>
+      <h4>Comparativa de subastas / Ajuste de ofertas / Automatización</h4>
+      <p><strong>Comparativa de subastas:</strong> muestra cómo está la cuenta frente a competidores por las mismas palabras clave.<br>
+      <strong>Ajuste de ofertas:</strong> subir/bajar la puja según dispositivo, ubicación u horario (ej. +10% en móviles si convierten más).<br>
+      <strong>Ofertas automáticas:</strong> el sistema ajusta las pujas según datos históricos de Google y de la cuenta.</p>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 4 · El proceso de optimización</summary>
+    <div class="leccontent">
+      <h4>Ciclo de mejora continua</h4>
+      <p><strong>Ejecutar → Medir/Analizar → Optimizar</strong> → vuelve a empezar. Es un proceso continuo, no algo que se hace una sola vez a mitad de campaña.</p>
+      <h4>Historial de cambios</h4>
+      <p>Registra <strong>todos los cambios</strong> hechos en la cuenta: permite controlar <strong>cuándo</strong> se hicieron y <strong>quién</strong> los hizo (clave en cuentas con varios usuarios, como la de Frávega).</p>
+      <h4>Google Analytics — Fuente/Medio</h4>
+      <p>En Adquisición &gt; Todo el tráfico &gt; Fuente/Medio se ve qué canal generó más sesiones (ej. "google/organic", "google/cpc", "m.facebook.com"). Permite comparar qué medio es más <strong>rentable</strong>, no solo el que más tráfico trae.</p>
+      <h4>API de Google Ads</h4>
+      <p>Permite que desarrolladores integren Google Ads con sistemas propios (CRM, inventario) o generen reportes automáticos. Requiere conocimientos técnicos avanzados; se usa en cuentas grandes y complejas.</p>
+      <h4>Google Ads Editor</h4>
+      <p>Aplicación de <strong>escritorio, gratuita</strong>. Se baja la cuenta, se editan campañas <strong>sin conexión</strong> y luego se suben los cambios. Permite: edición masiva, copiar/pegar, importar/exportar, buscar y reemplazar, y armar <strong>borradores sin conexión</strong>.</p>
+      <div class="nota">Cuanto más largo y efectivo el historial de la cuenta, mejor puede Ads automatizar pujas. Por eso: <strong>ajustar, medir, optimizar y mejorar</strong> constantemente.</div>
+    </div>
+  </details>
+  </div>
+
+  <div class="mod4">
+  <div class="modheader">MÓDULO 4 · Facebook Ads (caso Clodet)</div>
+
+  <details class="lec">
+    <summary>Lectura 1 · Introducción a Facebook Ads</summary>
+    <div class="leccontent">
+      <div class="caso">Caso Clodet: emprendimiento de ropa que creció de venta por redes personales a locales físicos y fanpage/cuenta de Instagram propias.</div>
+      <h4>Perfil, página y cuenta publicitaria</h4>
+      <table>
+        <tr><th>Elemento</th><th>Qué es</th></tr>
+        <tr><td>Perfil</td><td>Representa a una <strong>persona real</strong> (ej. María). Se conecta con amigos.</td></tr>
+        <tr><td>Página (fanpage)</td><td>Representa a una <strong>empresa/marca</strong> (ej. Clodet). La crea y administra un perfil. Contenido público.</td></tr>
+        <tr><td>Cuenta publicitaria</td><td>Plataforma para administrar <strong>campañas</strong>.</td></tr>
+      </table>
+      <div class="nota">⚠️ Solo se puede hacer publicidad de una <strong>página</strong>, nunca de un perfil personal. Facebook suele bloquear perfiles que en realidad son empresas.</div>
+      <p>Al crear una página, se asigna una <strong>cuenta publicitaria por defecto</strong> ligada al perfil personal (no a la página). Se recomienda crear <strong>una cuenta publicitaria por página</strong> para mantener el orden.</p>
+      <h4>Evitar el botón "Promocionar publicación"</h4>
+      <p>Es una versión exprés de Facebook Ads con parámetros preconfigurados; conviene evitarla y usar la versión completa: menú ▾ &gt; <strong>Administrar anuncios</strong>.</p>
+      <h4>Business Manager (administrador comercial)</h4>
+      <p>Cuenta agencia que permite acceder a varias páginas y cuentas publicitarias, y dar acceso a distintas personas, desde <strong>business.facebook.com</strong>. Se recomienda cuando varias personas administran, o una persona administra varias páginas. No hace falta si el mismo usuario administra una sola página él solo.</p>
+      <h4>Estructura de una cuenta publicitaria de Facebook</h4>
+      <p><strong>Cuenta → Campaña → Conjunto de anuncios → Anuncio.</strong></p>
+      <table>
+        <tr><th>Nivel</th><th>Qué se define</th></tr>
+        <tr><td>Cuenta</td><td>Divisa y zona horaria (una sola vez), formas de pago, accesos</td></tr>
+        <tr><td>Campaña</td><td>Objetivo</td></tr>
+        <tr><td>Conjunto de anuncios</td><td>Público, ubicaciones, presupuesto y calendario</td></tr>
+        <tr><td>Anuncio</td><td>Página a usar, formato, contenido</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 2 · Creación de una campaña de Facebook Ads</summary>
+    <div class="leccontent">
+      <h4>Objetivo de campaña</h4>
+      <p>Facebook propone <strong>10 tipos de objetivos</strong> agrupados en 3 categorías:</p>
+      <table>
+        <tr><th>Categoría</th><th>Objetivos</th></tr>
+        <tr><td>Reconocimiento</td><td>Reconocimiento de marca, Alcance</td></tr>
+        <tr><td>Consideración</td><td>Tráfico, Interacción, Instalaciones de app, Reproducciones de video, Generación de clientes potenciales, Mensajes</td></tr>
+        <tr><td>Conversión</td><td>Conversiones, Ventas del catálogo, Tráfico en el negocio (visitas)</td></tr>
+      </table>
+      <div class="nota">⚠️ El formato del anuncio depende del objetivo: si el objetivo es reproducciones de video, solo se pueden promocionar anuncios con video; si es tráfico o conversiones, debe tener un link y conversiones configuradas.</div>
+      <h4>Conjunto de anuncios: público</h4>
+      <p>Se define ubicación geográfica, sexo, edad, idioma y, en <strong>segmentación detallada</strong>, intereses. Un indicador (gauge específico ↔ amplio) estima el alcance potencial. Un público demasiado específico puede no alcanzar la <strong>masa crítica</strong> necesaria.</p>
+      <h4>Ubicaciones</h4>
+      <p>Dónde se muestran los anuncios: Feed, Stories, Instream, Búsqueda, Mensajes, En artículos, Apps y sitios (Audience Network). Opción por defecto: <strong>Ubicaciones automáticas</strong>; se recomienda usar <strong>Editar ubicaciones</strong> para elegir manualmente.</p>
+      <h4>Presupuesto y calendario</h4>
+      <p>Dos opciones: <strong>presupuesto diario</strong> o <strong>presupuesto total</strong> del período (requiere fecha de fin). Se recomienda siempre definir fecha de finalización para controlar el gasto.</p>
+      <h4>Optimización y tipo de oferta</h4>
+      <p>Funciona por subasta, como Google Ads. Puede ser automática (por defecto) o manual. El cobro puede ser por <strong>CPC, CPM o por interacción</strong>, según el objetivo.</p>
+      <h4>Anuncios</h4>
+      <p>Se elige <strong>Crear un anuncio nuevo</strong> o <strong>Usar una publicación existente</strong> (de Facebook o Instagram de la página). Un grupo de anuncios debe tener al menos un anuncio.</p>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 3 · Mantener y controlar campañas de Facebook Ads</summary>
+    <div class="leccontent">
+      <h4>Pestañas del Administrador de anuncios</h4>
+      <p>4 pestañas: <strong>Información general de la cuenta, Campañas, Conjuntos de anuncios, Anuncios.</strong> Al seleccionar una fila en una pestaña, se filtran automáticamente las relacionadas en las otras pestañas.</p>
+      <h4>Duplicar, editar y ver gráficos</h4>
+      <p>Al pasar el mouse sobre el nombre de un elemento aparecen 3 íconos: <strong>Duplicar, Editar, Ver gráficos.</strong> Al duplicar una Campaña, se duplican también sus Conjuntos de anuncios y Anuncios.</p>
+      <div class="nota">⚠️ La fecha de inicio/fin y las características del público solo se editan a nivel de <strong>Conjunto de anuncios</strong>.</div>
+      <h4>Columnas, filtros y exportación</h4>
+      <p>Igual que en Google Ads: se personalizan columnas (Columnas &gt; Personalizar columnas), se filtran campañas por criterio, y se exporta para trabajar en hoja de cálculo.</p>
+      <h4>Anuncios rechazados</h4>
+      <div class="nota">⚠️ Motivo más común de rechazo: exceso de <strong>texto en la imagen</strong> (máximo recomendado: <strong>20%</strong> de la imagen). Si la calificación de texto es "alta", el anuncio probablemente no se apruebe; si es "media" o "baja", se publica con menos frecuencia y mayor costo por acción.</div>
+      <h4>Análisis de datos: Facebook como medio, no como fin</h4>
+      <p>Las redes sociales son un <strong>medio</strong> para cumplir objetivos de negocio, no un fin en sí mismas. Tener muchos "Me gusta" sin relación con el objetivo del negocio es un desperdicio de recursos.</p>
+    </div>
+  </details>
+
+  <details class="lec">
+    <summary>Lectura 4 · Herramientas y activos de Facebook Ads</summary>
+    <div class="leccontent">
+      <h4>Pixel de Facebook</h4>
+      <p>Código de seguimiento que se inserta en el sitio web (similar a Google Analytics). Se ubica en Menú &gt; Medir e informar &gt; Pixeles. <strong>Cada cuenta tiene un solo pixel.</strong> Permite crear públicos personalizados, conversiones y remarketing.</p>
+      <h4>Públicos</h4>
+      <table>
+        <tr><th>Tipo</th><th>Descripción</th></tr>
+        <tr><td>Público guardado</td><td>Configuración de audiencia guardada para reutilizar</td></tr>
+        <tr><td>Público personalizado</td><td>Según lista de clientes, tráfico web, actividad en app, interacción en Facebook</td></tr>
+        <tr><td>Público similar</td><td>Personas parecidas a un público de origen (mínimo 100 personas de origen)</td></tr>
+      </table>
+      <h4>Conversiones</h4>
+      <p>Se configuran en Menú &gt; Medir e informar &gt; Conversiones personalizadas. Solo se pueden medir en campañas cuyo anuncio tenga un link a un sitio <strong>fuera de Facebook</strong>.</p>
+      <h4>Análisis y control: diferencias con Google</h4>
+      <ul>
+        <li><strong>Clics vs. visitas:</strong> Facebook/Google cuentan clics; Analytics cuenta la sesión (carga de página) — pueden no coincidir, sobre todo en móvil.</li>
+        <li><strong>Métricas de video:</strong> Facebook cuenta reproducción desde los <strong>3 segundos</strong> (y autoplay); YouTube desde los <strong>30 segundos</strong> o el final del video si es más corto.</li>
+      </ul>
+      <h4>Instagram</h4>
+      <p>Se publicita desde el mismo Administrador de anuncios de Facebook. Se recomienda hacer campañas separadas por red social.</p>
+    </div>
+  </details>
+  </div>
+
+</div>
+
+<!-- ============ SIMULACRO ============ -->
+<div id="quiz" class="tabcontent">
+  <div id="quizmeta">
+    <span id="statsTxt">Ronda 1 · Acumulado: 0/0 (0%)</span>
+  </div>
+  <div id="roundControls">
+    <label for="roundSize">Preguntas por tanda:</label>
+    <select id="roundSize" onchange="cambiarTamano()">
+      <option value="10">10</option>
+      <option value="15" selected>15</option>
+      <option value="20">20</option>
+      <option value="30">30</option>
+      <option value="9999">Todas (181)</option>
+    </select>
+  </div>
+  <div id="progresoTxt" style="text-align:center; font-size:.85rem; color:var(--muted); margin:8px 0;">0 / 0 respondidas en esta tanda</div>
+  <div id="quizContainer"></div>
+  <button id="corregirBtn" onclick="corregir()">Corregir tanda</button>
+  <div id="resultado" style="display:none;"></div>
+  <button id="siguienteBtn" style="display:none;" onclick="nuevaTanda()">Siguiente tanda ▶</button>
+  <button id="reiniciarTodoBtn" onclick="reiniciarTodo()">🔄 Reiniciar todo el progreso</button>
+</div>
+
+</main>
+
+<footer>Compilado por Gonzalo Daniel Manca · mancgonz@gmail.com · 2255411525</footer>
+
+<script>
+function showTab(tab){
+  document.getElementById('teoria').classList.toggle('active', tab==='teoria');
+  document.getElementById('quiz').classList.toggle('active', tab==='quiz');
+  document.getElementById('tabBtnTeoria').classList.toggle('active', tab==='teoria');
+  document.getElementById('tabBtnQuiz').classList.toggle('active', tab==='quiz');
+  window.scrollTo(0,0);
+}
+
+// t: 's' single, 'm' multi. o: [ [texto, esCorrecta(1/0)], ... ]
+const preguntas = [
+// ============ MÓDULO 3 · Google Ads (control, informes, optimización) ============
+{q:"En YouTube podemos pagar por (seleccioná las 3 correctas):",t:'m',o:[["CPC",1],["CPV",1],["CPM",1],["CPA",0],["CPL",0]]},
+{q:"Incluso si utiliza la configuración de pago automático, Ud. siempre podrá realizar pagos:",t:'s',o:[["Manuales",1],["Recurrentes",0],["Diferidos",0]]},
+{q:"Cuando el objetivo es generar visitas al sitio web, una de las métricas que nos interesan es:",t:'s',o:[["El CPC medio",1],["El CPA medio",0],["El CTR acumulado",0]]},
+{q:"Desde Google Analytics podemos ver los datos que las campañas generan en:",t:'s',o:[["AdWords",1],["Google My Business",0],["Merchant Center",0]]},
+{q:"Con AdWords, si un usuario hace clic en su anuncio, usted:",t:'s',o:[["Lo sabrá",1],["Lo aprobará",0],["Lo verá en video",0]]},
+{q:"En una campaña, el alcance se refiere a la cantidad de:",t:'s',o:[["Visitantes expuestos al anuncio",1],["Compradores únicos",0],["Horas publicitadas",0]]},
+{q:"Dentro de Herramientas, en el menú superior de AdWords, encontraremos:",t:'s',o:[["Google Analytics",1],["Google Merchant",0],["Google Trends",0]]},
+{q:"En Facebook, en la pantalla de configuración de anuncios, luego de poner el nombre a nuestro anuncio, podemos elegir entre crear un anuncio nuevo o:",t:'s',o:[["Elegir una publicación existente",1],["Descargar un anuncio anterior",0],["Agregar un link externo",0]]},
+{q:"Si el objetivo publicitario es aumentar el tráfico al sitio web, la métrica a medir debe ser:",t:'s',o:[["CTR",1],["CPM",0],["Frecuencia",0]]},
+{q:"Si el objetivo de una campaña es el desarrollo de marca, la acción principal será:",t:'s',o:[["Crear conocimiento sobre la marca",1],["Aumentar las ventas directas",0],["Obtener formularios completados",0]]},
+{q:"Tener anuncios relevantes, páginas de destino amigables y claras y una alta tasa de clics mejora el nivel de:",t:'s',o:[["Calidad",1],["Distribución",0],["Complejidad",0]]},
+{q:"La herramienta más certera para conocer el desempeño de una campaña y las ganancias obtenidas es:",t:'s',o:[["ROI",1],["CTR promedio",0],["CPC mínimo",0]]},
+{q:"El ROI es la relación entre las ganancias netas y:",t:'s',o:[["Los costos",1],["El tiempo invertido",0],["La audiencia alcanzada",0]]},
+{q:"Calcular el ROI permite:",t:'s',o:[["Medir las ganancias",1],["Reducir el presupuesto",0],["Cambiar la marca",0]]},
+{q:"En el menú de descarga tenemos una opción de programar y enviar:",t:'s',o:[["Informes",1],["Gráficos interactivos",0],["Archivos de audio",0]]},
+{q:"La métrica que permite comparar el rendimiento de un anuncio respecto de la competencia es:",t:'s',o:[["Porcentaje de impresiones",1],["Valor de marca",0],["Tiempo de visualización",0]]},
+{q:"El editor de informes es una interfaz que permite armar tablas y gráficos:",t:'s',o:[["Dinámicos",1],["Estáticos",0],["Personalizados en PDF",0]]},
+{q:"El objetivo de la campaña se define antes de:",t:'s',o:[["Crear una campaña",1],["Hacer el presupuesto",0],["Subir las imágenes",0]]},
+{q:"El objetivo de la campaña se define al momento de analizar los datos:",t:'s',o:[["Falso",1],["Verdadero",0]]},
+{q:"Medir las conversiones es imprescindible para evaluar el:",t:'s',o:[["ROI",1],["Alcance",0],["CPM",0]]},
+{q:"Las fuentes de conversión pueden ser una aplicación, el celular o:",t:'s',o:[["Un sitio web",1],["Una llamada no registrada",0],["Un cartel en la calle",0]]},
+{q:"La métrica conocida como Alcance de un anuncio se refiere a:",t:'s',o:[["Cantidad de visitantes expuestos a un anuncio",1],["Total de clics",0],["Tiempo promedio en sitio",0]]},
+{q:"El nivel de calidad depende de la calidad del anuncio, las palabras clave y:",t:'s',o:[["Las páginas de destino",1],["El logo de la marca",0],["El idioma del anuncio",0]]},
+{q:"El nivel de calidad está formado, básicamente, por:",t:'s',o:[["CTR, relevancia y experiencia en página de destino",1],["Número de hashtags",0],["Tipo de dispositivo",0]]},
+{q:"Seleccioná las 2 respuestas correctas: los datos de rendimiento se pueden consultar en dos lugares:",t:'m',o:[["Pestaña de rendimiento",1],["Pestaña de informes",1],["Pestaña de audiencia",0],["Pestaña de creatividades",0]]},
+{q:"Google cuenta con redes donde se pueden publicar los anuncios (seleccioná 2 correctas):",t:'m',o:[["La Red de búsqueda",1],["La Red de Display",1],["La Red de Audio",0],["La Red de Prensa",0]]},
+{q:"La optimización de campañas digitales es un proceso de mejora continua. ¿Cuáles son herramientas para esto? (4 correctas)",t:'m',o:[["Google Analytics",1],["El Historial de cambios",1],["La API de Google Ads",1],["El Editor de Google Ads",1],["Google Trends",0]]},
+{q:"En AdWords, el anuncio de texto está formado por:",t:'s',o:[["Dos títulos",1],["Tres imágenes",0],["Un PDF adjunto",0]]},
+{q:"Calcular el ROI de campaña permite averiguar las ganancias que obtiene gracias a la publicación de:",t:'s',o:[["Anuncios con AdWords",1],["Carteles impresos",0],["Publicidad radial",0]]},
+{q:"HP vende notebooks a través de su e-commerce y lanzó una campaña para aumentar sus ventas online. ¿Qué métricas debería tener en cuenta? (3 correctas)",t:'m',o:[["Costo por conversión",1],["ROI",1],["Conversiones",1],["Alcance",0],["CPV",0]]},
+{q:"Si las métricas que interesan son clics y CPC medio, ¿qué tipo de objetivo tiene la campaña que se está analizando?",t:'s',o:[["De visitas al sitio web",1],["De reconocimiento de marca",0],["De conversiones",0]]},
+{q:"Si las métricas que interesan son impresiones y CPM medio, ¿qué tipo de objetivo tiene la campaña que se está analizando?",t:'s',o:[["De exposición",1],["De conversión",0],["De interacción",0]]},
+{q:"¿En qué aplicaciones se pueden ver anuncios (propagandas) de Facebook Ads?",t:'s',o:[["Instagram y Facebook",1],["Google Maps y Waze",0],["Word y Excel",0]]},
+{q:"Al momento de analizar los datos generados por las campañas, para hacer un control y optimización, hay que considerar (2 correctas):",t:'m',o:[["El contexto de los datos",1],["El objetivo de la campaña",1],["El color de las imágenes",0],["La cantidad de seguidores",0]]},
+{q:"Sofía vende joyas de plata en su e-commerce. Su anuncio dice \"Encontrá las mejores pulseras de plata\" y al hacer clic se ingresa directamente a la página con esas pulseras. Este anuncio tiene:",t:'s',o:[["Relevancia, porque en la página de destino aparece lo que se espera en el anuncio",1],["Optimización automática",0],["Concordancia amplia",0]]},
+{q:"¿Cómo se conforma el ranking de anuncios en Google Ads?",t:'s',o:[["Multiplicando la oferta por el nivel de calidad",1],["Sumando costo y clics",0],["Por orden alfabético",0]]},
+{q:"Google Ads decide la posición del anuncio a partir de:",t:'s',o:[["El ranking del anuncio",1],["El país de origen",0],["El idioma del navegador",0]]},
+{q:"Un anuncio de una diseñadora independiente tuvo un alcance de 500 y generó 2500 impresiones. ¿Cuántas veces se mostró el anuncio en total?",t:'s',o:[["2500, porque las impresiones son la cantidad de veces que se mostró el anuncio",1],["500",0],["5",0]]},
+{q:"Con los mismos datos (alcance 500, 2500 impresiones), ¿cuál fue la frecuencia promedio?",t:'s',o:[["5, porque el anuncio se mostró unas 5 veces por cada persona a la que llegó",1],["2500",0],["500",0]]},
+{q:"Con los mismos datos (alcance 500, 2500 impresiones), ¿cuántas personas únicas vieron el anuncio?",t:'s',o:[["500, porque el alcance es la cantidad de personas que vieron el anuncio",1],["2500",0],["5",0]]},
+{q:"La empresa de jugos BC lanza una campaña para dar a conocer un nuevo producto. ¿Qué métricas debería tener en cuenta? (2 correctas)",t:'m',o:[["Impresiones",1],["CPM",1],["Clics",0],["Costo por conversión",0]]},
+{q:"Se pueden elegir las columnas que se visualizarán en las tablas de los informes:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"Los informes de resultados nos permiten visualizar y controlar cómo se viene desarrollando:",t:'s',o:[["Una campaña",1],["El diseño gráfico",0],["Los recursos humanos",0]]},
+{q:"Con AdWords, al ver en qué anuncio se hizo clic y en cuáles no, también sabrá:",t:'s',o:[["Rápidamente dónde invertir en su compañía",1],["Quién creó la cuenta",0],["Quién escribió el anuncio",0]]},
+{q:"¿Cómo se denomina a la cantidad de personas que vieron nuestro anuncio?",t:'s',o:[["Alcance",1],["Frecuencia",0],["CPA",0]]},
+{q:"¿Cómo se denomina la cantidad de veces que un anuncio fue visto?",t:'s',o:[["Frecuencia",1],["CPC medio",0],["Costo total",0]]},
+{q:"Un elemento muy útil para verificar el rendimiento de las campañas a través de un período de tiempo es:",t:'s',o:[["El gráfico de rendimiento",1],["La planilla de costos",0],["El documento legal",0]]},
+{q:"Los informes se pueden revisar, editar, eliminar o añadir desde:",t:'s',o:[["La pestaña informe",1],["La pestaña público",0],["La pestaña conversiones",0]]},
+{q:"Identificá cuál es una desventaja que podría presentar una campaña de marketing:",t:'s',o:[["Puede generar rechazo",1],["Es siempre gratuita",0],["No se puede medir",0]]},
+{q:"Las listas de remarketing se pueden configurar desde AdWords o como Audiencias en:",t:'s',o:[["Google Analytics",1],["YouTube Music",0],["Google Meet",0]]},
+{q:"¿Qué nombre recibe la acción de mostrar anuncios a personas que visitaron nuestro sitio?",t:'s',o:[["Remarketing",1],["Retargeting inverso",0],["Rebranding",0]]},
+{q:"En AdWords, para comparar dos periodos de métricas, se debe seleccionar la opción:",t:'s',o:[["Comparar fechas",1],["Cambiar presupuesto",0],["Descargar CSV",0]]},
+{q:"Si se desea consultar los datos de una campaña individual o de varias campañas del mismo tipo rápidamente, ¿qué se debe utilizar?",t:'s',o:[["Los conjuntos de columnas predefinidos",1],["El historial de cambios",0],["Un archivo externo",0]]},
+{q:"Una administradora quiere controlar el rendimiento de su campaña de lanzamiento entre el 01/05 y el 02/06. ¿Qué herramienta debe utilizar?",t:'s',o:[["El gráfico de rendimiento, porque muestra el rendimiento a lo largo de un período",1],["El historial de cambios",0],["El editor de AdWords",0]]},
+{q:"Las métricas del porcentaje de impresiones se actualizan:",t:'s',o:[["Una vez al día",1],["Cada minuto",0],["Cada trimestre",0]]},
+{q:"Si bien es más habitual en campañas de Display y video, dos elementos que vienen de la publicidad tradicional son el alcance y la frecuencia:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"En AdWords, un filtro muestra:",t:'s',o:[["Algunos datos, según el criterio definido",1],["Todos los clics siempre",0],["Todas las cuentas de Gmail",0]]},
+{q:"¿Cómo se llama el importe invertido por cada venta lograda?",t:'s',o:[["Costo por conversión",1],["CPC máximo",0],["Frecuencia mensual",0]]},
+{q:"Nails&Co acumuló muchas campañas y quiere ver solo las que tienen un CTR mayor a 8%. ¿Qué debe utilizar?",t:'s',o:[["Un filtro, para ver solo las campañas según ese criterio",1],["Un segmento",0],["El historial de cambios",0]]},
+{q:"La estrategia Maximizar clics establece automáticamente las pujas para obtener el mayor número de clics posibles sin sobrepasar:",t:'s',o:[["El presupuesto",1],["El nivel de calidad",0],["El CPC máximo fijo",0]]},
+{q:"Candela, encargada de informes, quiere trabajar los datos desde Excel en su computadora. ¿Qué debe hacer?",t:'s',o:[["Exportar informes, para descargarlos y usar Excel para mayor profundidad",1],["Crear un filtro",0],["Usar el editor de informes online",0]]},
+{q:"Una tienda de productos gamers muestra publicidad de mouses a quienes vieron mouses, y de teclados a quienes vieron teclados. ¿Qué funcionalidad está utilizando?",t:'s',o:[["Remarketing, porque se le muestra el anuncio a quienes ya estuvieron en el sitio",1],["Segmentación geográfica",0],["Concordancia exacta",0]]},
+{q:"Martín quiere simplificar el informe para el directorio comercial mostrando solo métricas de conversiones. ¿Qué debe hacer?",t:'s',o:[["Modificar columnas, para incluir solo las métricas relacionadas con conversiones",1],["Crear un filtro",0],["Cambiar el segmento",0]]},
+{q:"El CPC mejorado es una función opcional de las pujas de CPC manuales o de las estrategias de puja de cartera:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"¿Qué es lo primero que se hace al realizar una publicidad, luego de configurarla?",t:'s',o:[["Se debe realizar el pago",1],["Pedir presupuesto externo",0],["Elegir música",0]]},
+{q:"Es necesario tener en cuenta los objetivos planteados para cada campaña y el contexto de cada dato, ya que eso define:",t:'s',o:[["La métrica a mejorar",1],["El tamaño del banner",0],["El color del logo",0]]},
+{q:"En la pestaña Palabra clave, en el botón \"Más información\", tenemos la opción de:",t:'s',o:[["Comparativa de subasta",1],["Crear nueva audiencia",0],["Generar factura",0]]},
+{q:"Coca-Cola tiene un buen nivel de calidad y quiere mejorar la posición de sus anuncios. ¿Qué puede hacer?",t:'s',o:[["Aumentar el CPC máx., ya que con buen nivel de calidad la posición mejora",1],["Reducir la duración del anuncio",0],["Cambiar el idioma del público",0]]},
+{q:"Si se utilizan palabras clave de concordancia amplia, es común que generen muchas impresiones pero pocos clics, bajando:",t:'s',o:[["El CTR",1],["El presupuesto diario",0],["El nivel de conversión",0]]},
+{q:"Si se utilizan palabras clave con concordancia amplia, se genera:",t:'s',o:[["Muchas impresiones",1],["Menos costos",0],["Más conversiones garantizadas",0]]},
+{q:"Google Analytics es una herramienta que permite medir:",t:'s',o:[["El comportamiento de los usuarios",1],["La calidad de las fotos",0],["El tono del copy",0]]},
+{q:"Google Analytics permite medir el comportamiento de los usuarios cuando entran a nuestro sitio o:",t:'s',o:[["Aplicaciones móviles",1],["Tarjetas de presentación",0],["Flyers impresos",0]]},
+{q:"AdWords automatiza pujas en función de datos de Google y de:",t:'s',o:[["Datos de nuestro historial",1],["Redes sociales externas",0],["Emails personales",0]]},
+{q:"Las estrategias de puja son:",t:'s',o:[["Manuales o automáticas",1],["Gráficas o textuales",0],["Fijas o libres",0]]},
+{q:"Cada tipo de estrategia de pujas automáticas está diseñada para ayudar a conseguir un objetivo específico para su:",t:'s',o:[["Negocio",1],["Página de inicio",0],["Nombre de marca",0]]},
+{q:"Si se tiene un presupuesto limitado, el aumento del CPC medio puede generar:",t:'s',o:[["Menos conversiones",1],["Más seguidores",0],["Más hashtags",0]]},
+{q:"El cambio de CPC máximo se puede hacer a nivel de:",t:'s',o:[["Grupo de anuncios",1],["Página de contacto",0],["Cuenta de Gmail",0]]},
+{q:"En las ofertas automáticas, el sistema de AdWords ajusta las ofertas en función a parámetros históricos de Google y de:",t:'s',o:[["Nuestras campañas",1],["El clima local",0],["El idioma del sitio",0]]},
+{q:"¿Qué herramienta debería utilizarse para integrar los datos de Google Ads con el sistema de inventario propio?",t:'s',o:[["La API de Google Ads, ya que permite que los desarrolladores accedan e interactúen con Ads desde sus propias aplicaciones",1],["Google Ads Editor",0],["Google Analytics",0]]},
+{q:"Mariela accede a la sección \"Términos de búsqueda\" para optimizar sus campañas. ¿Para qué le sirve este informe? (2 correctas)",t:'m',o:[["Identificar palabras clave irrelevantes y agregarlas como negativas",1],["Identificar nuevas palabras clave relevantes que no tenía en cuenta",1],["Cambiar la divisa de la cuenta",0],["Definir el objetivo de la campaña",0]]},
+{q:"Una acción para optimizar una campaña puede ser cambiar:",t:'s',o:[["El monto de la oferta",1],["El nombre del anunciante",0],["La zona horaria",0]]},
+{q:"Las pujas de CPA objetivo están disponibles como estrategia estándar en una única campaña o como estrategia de puja de cartera en múltiples campañas y:",t:'s',o:[["Grupos de anuncios",1],["Videos de YouTube",0],["Posts de Instagram",0]]},
+{q:"La estrategia ROAS objetivo establece automáticamente las pujas para obtener el mayor valor de conversión posible según el retorno de la inversión publicitaria que se haya definido:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"La encargada de la cuenta de Google Ads de Natura quiere saber quién agregó 10 palabras clave nuevas, en un equipo de 20 personas. ¿Cómo lo puede hacer?",t:'s',o:[["Con el historial de cambios, ya que permite ver quién y cuándo hizo cada cambio",1],["Con el editor de AdWords",0],["Con Google Analytics",0]]},
+{q:"Una CTR alta indica que los usuarios consideran los anuncios:",t:'s',o:[["Relevantes",1],["Caros",0],["Difíciles de entender",0]]},
+{q:"Cuanto más larga y efectiva sea nuestra historia, más elementos tiene AdWords para optimizar automáticamente. Para tener un buen historial es necesario (4 correctas):",t:'m',o:[["Optimizar",1],["Ajustar",1],["Mejorar",1],["Medir",1],["Cancelar",0]]},
+{q:"La empresa Stanley, en el lanzamiento de un nuevo termo, busca dar a conocer el producto a la mayor cantidad de gente. ¿Cuáles de estas son acciones del proceso de optimización? (Ejecutar → Medir → Optimizar)",t:'m',o:[["Idear y ejecutar la campaña",1],["Medir las métricas generadas",1],["Analizar el funcionamiento en base a las impresiones",1],["Hacer cambios y modificaciones",1]]},
+{q:"La red social donde los miembros destacan un perfil y talento profesional es:",t:'s',o:[["LinkedIn",1],["Pinterest",0],["Spotify",0]]},
+{q:"Al configurar un anuncio, ¿se pueden excluir personas del público?",t:'s',o:[["Sí",1],["No",0]]},
+{q:"La Red de Display puede pagarse de dos maneras: CPC o:",t:'s',o:[["CPM",1],["CPA",0],["CPL",0]]},
+{q:"Una de las características principales de los consumidores digitales es:",t:'s',o:[["Multipantalla",1],["Unisensorial",0],["Monomarca",0]]},
+{q:"Los medios digitales permiten segmentar la audiencia a la que se quiere llegar, y eso convierte los anuncios en relevantes para la:",t:'s',o:[["Persona adecuada",1],["Mayor cantidad de gente",0],["Competencia",0]]},
+{q:"¿En qué año aparece Internet incorporado a los momentos de verdad (concepto ZMOT)?",t:'s',o:[["2011",1],["2005",0],["2015",0]]},
+{q:"¿En qué parte de Facebook aparecen los anuncios, principalmente?",t:'s',o:[["En el espacio publicitario (sección noticias y columna derecha)",1],["Solo en Messenger",0],["Solo en el perfil personal",0]]},
+{q:"Google Ads (la Red de Display) está conformada, en parte, por:",t:'s',o:[["Sitios y apps asociados",1],["Solo perfiles de LinkedIn",0],["Solo canales de TV",0]]},
+{q:"Una empresa de electrónica lanzó una campaña de $150 que generó 1500 clics. Para controlar la campaña, ¿qué métricas debería tener en cuenta?",t:'s',o:[["Clics y CPC medio",1],["Impresiones y CPM",0],["Conversiones y ROI",0]]},
+
+// ============ MÓDULO 4 · Facebook Ads ============
+{q:"Una influencer, además de su cuenta profesional en Instagram y su fanpage en Facebook, ¿qué otro tipo de cuenta necesita para publicitar sus publicaciones?",t:'s',o:[["Una cuenta publicitaria",1],["Otra fanpage",0],["Un perfil adicional",0]]},
+{q:"¿Por cuántos momentos de verdad está formado el modelo tradicional (previo al ZMOT)?",t:'s',o:[["Por 3 pasos",1],["Por 2 pasos",0],["Por 5 pasos",0]]},
+{q:"Un perfil de Facebook representa:",t:'s',o:[["Una persona real",1],["Una empresa",0],["Una cuenta publicitaria",0]]},
+{q:"Facebook permite hacer un seguimiento de las personas a través de todos los dispositivos por los que va pasando:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"Si se crea una campaña para enviar personas al sitio web, se puede optimizar para clics en el enlace, impresiones o:",t:'s',o:[["Alcance único diario",1],["Nivel de calidad",0],["Concordancia de palabras clave",0]]},
+{q:"En segmentación detallada podemos agregar intereses u otras características:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"El Administrador Comercial (Business Manager) es una cuenta agencia que permite (3 correctas):",t:'m',o:[["Acceder a varias cuentas publicitarias",1],["Brindar acceso a distintas personas",1],["Acceder a varias páginas",1],["Publicar directamente sin revisión",0]]},
+{q:"Al acceder a la cuenta publicitaria de Facebook, la pantalla por defecto que se muestra es:",t:'s',o:[["El Administrador de anuncios",1],["El Business Manager",0],["El Pixel de Facebook",0]]},
+{q:"Las páginas de Facebook son creadas por:",t:'s',o:[["Una persona (perfil)",1],["Otra página",0],["El propio Business Manager",0]]},
+{q:"Para crear anuncios en Facebook primero hay que elegir un objetivo que se corresponda con las metas empresariales globales, que pueden ser de (3 correctas):",t:'m',o:[["Conversiones",1],["Consideración",1],["Reconocimiento (notoriedad)",1],["Distribución",0]]},
+{q:"En Facebook, las opciones Administrador comercial y Configuración del negocio brindan acceso a:",t:'s',o:[["El Business Manager",1],["El Pixel",0],["Los públicos guardados",0]]},
+{q:"En Facebook, la opción de optimización elegida por el anunciante indica qué se debe valorar:",t:'s',o:[["Al momento de entregar el anuncio",1],["Al momento de crear la página",0],["Al momento de facturar únicamente",0]]},
+{q:"¿Cuál es el único caso en el que NO es necesario usar el Administrador Comercial?",t:'s',o:[["Cuando se administra una sola página, uno mismo, con la cuenta por defecto",1],["Cuando se administran varias páginas",0],["Cuando varias personas manejan la misma página",0]]},
+{q:"Al igual que en Google Ads, la publicación de los anuncios de Facebook funciona a través de una:",t:'s',o:[["Subasta",1],["Licitación cerrada",0],["Tarifa fija",0]]},
+{q:"En Facebook, ¿cómo se denomina a la cantidad de usuarios que vieron la publicación?",t:'s',o:[["Alcance",1],["Frecuencia",0],["Interacción",0]]},
+{q:"Una empresa de alimentos naturales que solo administra contenido de marca necesita crear:",t:'s',o:[["Una página de Facebook, porque debe representar a una marca",1],["Un perfil de Facebook",0],["Un Business Manager obligatoriamente",0]]},
+{q:"Cuando una persona crea su primera página en Facebook, se le asigna automáticamente:",t:'s',o:[["Una cuenta publicitaria por defecto",1],["Un Business Manager",0],["Un Pixel activo",0]]},
+{q:"Facebook ofrece herramientas publicitarias para ayudar a:",t:'s',o:[["Alcanzar tus metas empresariales",1],["Aumentar seguidores personales",0],["Reducir el uso de datos móviles",0]]},
+{q:"Si se desea aumentar las ventas de productos o servicios, conviene segmentar a las personas que:",t:'s',o:[["Vieron el anuncio y luego compraron",1],["Solo vieron el anuncio",0],["Nunca vieron la página",0]]},
+{q:"En Facebook, el objetivo elegido determina, entre otras cosas, la optimización y la:",t:'s',o:[["Modalidad de cobro",1],["Divisa de la cuenta",0],["Zona horaria",0]]},
+{q:"En Facebook, cada ubicación de un anuncio es más o menos conveniente según (2 correctas):",t:'m',o:[["El objetivo",1],["La exposición buscada",1],["El color de fondo",0],["El nombre del anunciante",0]]},
+{q:"Una agencia de marketing digital con 8 personas maneja muchas cuentas de clientes. ¿Qué necesita para administrar varias cuentas publicitarias y dar acceso a varias personas?",t:'s',o:[["El Administrador Comercial (Business Manager)",1],["Una cuenta personal compartida",0],["Un Pixel por cliente",0]]},
+{q:"Una persona incluye en su cuenta de Facebook su fecha de nacimiento, características y gustos personales. ¿Qué tipo de cuenta está manejando?",t:'s',o:[["Un perfil de Facebook, porque representa a una persona real",1],["Una página de Facebook",0],["Una cuenta publicitaria",0]]},
+{q:"Al crear por primera vez una cuenta publicitaria de Facebook, en el nivel de Cuenta hay que completar (4 correctas):",t:'m',o:[["Forma de pago",1],["Divisa",1],["Zona horaria",1],["Accesos a la cuenta",1],["El objetivo de la campaña",0]]},
+{q:"En el nivel de Campaña de una cuenta publicitaria de Facebook, lo que se define es:",t:'s',o:[["El objetivo",1],["El público",0],["El presupuesto diario",0]]},
+{q:"En Facebook, la opción de \"cuándo se factura\" define si el cobro será por:",t:'s',o:[["Clic, impresión (CPM) o por interacción, según el objetivo",1],["Solo por CPA",0],["Solo por mes calendario",0]]},
+{q:"En Facebook, las opciones de formatos de anuncios propuestos son independientes de los objetivos propuestos:",t:'s',o:[["Falso",1],["Verdadero",0]]},
+{q:"Al igual que en Google Ads, en Facebook podemos agregar o sacar de las tablas:",t:'s',o:[["Columnas de datos",1],["El idioma de la cuenta",0],["El nivel de calidad",0]]},
+{q:"Al configurar una campaña con presupuesto diario en Facebook, es recomendable establecer una fecha final de campaña para tener mayor control de:",t:'s',o:[["Los gastos",1],["Las ubicaciones",0],["El público",0]]},
+{q:"En Facebook, si se elige la opción de presupuesto por todo el período, es necesario definir:",t:'s',o:[["Una fecha de finalización de campaña",1],["El país del público",0],["El formato del anuncio",0]]},
+{q:"En Facebook, los filtros y la exportación funcionan de manera similar a los de:",t:'s',o:[["Google Ads",1],["Excel",0],["LinkedIn Ads",0]]},
+{q:"La plataforma publicitaria de Facebook permite segmentar de manera:",t:'s',o:[["Muy específica",1],["Solo geográfica",0],["Solo por edad",0]]},
+{q:"Particularmente en Facebook, es muy difícil adquirir la habilidad de ajustar y controlar las ofertas de forma:",t:'s',o:[["Manual",1],["Automática",0],["Predeterminada",0]]},
+{q:"En los informes, ¿los clics de AdWords son los mismos que los usuarios (sesiones) de Analytics?",t:'s',o:[["Falso",1],["Verdadero",0]]},
+{q:"Si se quiere crear un nuevo anuncio en Facebook (no usar una publicación existente), este:",t:'s',o:[["No se verá en la página de Facebook, solo como anuncio",1],["Se publicará automáticamente en el feed de la página",0],["Reemplazará la publicación original",0]]},
+{q:"Los públicos personalizados en Facebook se definen a partir de condiciones como (elegí 3):",t:'m',o:[["Lista de clientes",1],["Tráfico en el sitio web",1],["Actividad en la aplicación",1],["Ubicación geográfica exclusivamente",0]]},
+{q:"El \"valor total del cliente\" representa el beneficio neto que se considera atribuible a un cliente a lo largo de su:",t:'s',o:[["Relación con la marca",1],["Primera compra únicamente",0],["Última visita al sitio",0]]},
+{q:"El Administrador Comercial de Facebook es:",t:'s',o:[["Una cuenta agencia",1],["Una cuenta publicitaria individual",0],["Un tipo de anuncio",0]]},
+{q:"La pestaña de Información general de la cuenta, en el Administrador de anuncios de Facebook, muestra:",t:'s',o:[["Un resumen de todas las campañas que se están ejecutando",1],["Solo las campañas pausadas",0],["Los datos de la competencia",0]]},
+{q:"En el conjunto de anuncios de Facebook también se definen las ubicaciones: los lugares de Facebook, Instagram y otros espacios donde aparecerán los anuncios:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"En Facebook, luego de tener definido el anuncio en la creación de campaña, el siguiente paso es:",t:'s',o:[["Realizar pedido",1],["Elegir el pixel",0],["Definir el ROI",0]]},
+{q:"Si un usuario permanece inactivo por 30 minutos en el sitio web y luego vuelve a interactuar, Google Analytics considera esa actividad como:",t:'s',o:[["Una nueva sesión",1],["Un rebote",0],["Parte de la misma sesión",0]]},
+{q:"Martina tiene una marca de accesorios y quiere que la gente identifique y recuerde su marca. ¿Qué objetivo debería seleccionar?",t:'s',o:[["Reconocimiento de marca",1],["Tráfico",0],["Conversiones",0]]},
+{q:"En la actualidad, cada cuenta publicitaria de Facebook tiene:",t:'s',o:[["Un solo pixel",1],["Hasta 3 pixeles",0],["Un pixel por campaña",0]]},
+{q:"Roberto lanza por primera vez su marca de calzados y quiere que la mayor cantidad de personas posible la conozca. ¿Qué tipo de objetivo debe seleccionar?",t:'s',o:[["Objetivos de reconocimiento",1],["Objetivos de conversión",0],["Objetivos de consideración",0]]},
+{q:"Para configurar públicos similares en Facebook, ¿de qué cantidad mínima de personas debe ser el público de origen?",t:'s',o:[["100 personas",1],["10 personas",0],["1000 personas",0]]},
+{q:"Una empresa de yerba orgánica ya conocida quiere que los usuarios tengan en cuenta su marca e interactúen con ella. ¿Qué tipo de objetivo debe seleccionar?",t:'s',o:[["Objetivos de consideración",1],["Objetivos de reconocimiento",0],["Objetivos de conversión",0]]},
+{q:"El dueño de una florería quiere animar a las personas interesadas en su negocio a comprar en su local físico. ¿Qué tipo de objetivo debe seleccionar?",t:'s',o:[["Objetivos de conversiones (visitas al negocio)",1],["Objetivos de reconocimiento",0],["Objetivos de consideración",0]]},
+{q:"Un gimnasio que va a abrir en una nueva localidad quiere llegar a la mayor cantidad de personas posible en esa zona. ¿Qué objetivo debería seleccionar?",t:'s',o:[["Alcance",1],["Reconocimiento de marca",0],["Interacción",0]]},
+{q:"Una marca lanza un sorteo en Facebook y quiere llegar a personas que interactúen con la publicación. ¿Qué objetivo debería seleccionar?",t:'s',o:[["Interacción",1],["Tráfico",0],["Alcance",0]]},
+{q:"Una revista con una página web de contenido quiere que su público de Facebook conozca su sitio. ¿Qué objetivo debería seleccionar?",t:'s',o:[["Tráfico",1],["Interacción",0],["Alcance",0]]},
+{q:"En Facebook contamos con 5 opciones de lugar para las publicaciones; 4 de ellas son (elegí 4):",t:'m',o:[["Noticias (Feed)",1],["Artículos instantáneos",1],["Videos Instream",1],["Columna derecha",1],["Búsqueda de Google",0]]},
+{q:"El público guardado nos permite crear y guardar una configuración de:",t:'s',o:[["Audiencia",1],["Presupuesto",0],["Pixel",0]]},
+{q:"Los públicos personalizados en Facebook son segmentos de público que incluyen (4 correctas):",t:'m',o:[["Interacción en Facebook",1],["Lista de clientes",1],["Actividad en la aplicación",1],["Tráfico en el sitio web",1],["Videos cargados",0]]},
+{q:"En toda estrategia de marketing digital debemos considerar a las redes sociales como:",t:'s',o:[["Medios (no fines en sí mismos)",1],["El único canal de venta",0],["Recursos humanos",0]]},
+{q:"En Facebook, en los anuncios por secuencia (carrusel), si solo una imagen contiene demasiado texto, se verá afectado:",t:'s',o:[["Todo el anuncio",1],["Solo esa imagen",0],["Ningún elemento",0]]},
+{q:"En la misma columna del menú donde está el ítem Pixeles, se puede encontrar la opción:",t:'s',o:[["Públicos",1],["Facturación",0],["Configuración del negocio",0]]},
+{q:"Cuando un usuario mira un video en Facebook, aparecen sugerencias de:",t:'s',o:[["Otros videos que le podrían interesar",1],["Anuncios de Google",0],["Contactos nuevos",0]]},
+{q:"Cuando se utiliza texto en una imagen de un anuncio de Facebook, la plataforma identifica automáticamente si el anuncio cumple los requisitos para:",t:'s',o:[["Una excepción",1],["Un descuento",0],["Una recategorización",0]]},
+{q:"En los anuncios de Facebook, las marcas de agua se consideran:",t:'s',o:[["Textos",1],["Elementos decorativos sin efecto",0],["Logos permitidos sin límite",0]]},
+{q:"Cuando se crea un anuncio de Facebook al mismo tiempo que la campaña, se puede modificar directamente desde:",t:'s',o:[["El Administrador de anuncios",1],["La app de Instagram",0],["El perfil personal",0]]},
+{q:"Al usar imágenes en anuncios de Facebook, se debe incluir en ellas:",t:'s',o:[["Solo el texto imprescindible",1],["La mayor cantidad de texto posible",0],["Ningún texto bajo ninguna circunstancia",0]]},
+{q:"En los anuncios de Facebook, existen cuatro categorías de cantidad de texto en la imagen (4 correctas):",t:'m',o:[["Elevada",1],["Baja",1],["Adecuada",1],["Moderada",1],["Nula",0]]},
+{q:"En Facebook, los objetivos del negocio siempre deben estar por encima de los objetivos de:",t:'s',o:[["Las campañas de Facebook",1],["La competencia",0],["El presupuesto",0]]},
+{q:"El Administrador de Anuncios de Facebook cuenta con 4 pestañas (elegí las 4):",t:'m',o:[["Información general de la cuenta",1],["Campañas",1],["Conjuntos de anuncios (Grupos de anuncios)",1],["Anuncios",1],["Sistemas",0]]},
+{q:"El lugar de Facebook donde se van a publicar los anuncios es de gran importancia porque:",t:'s',o:[["Puede condicionar los resultados",1],["Define la divisa de la cuenta",0],["Es obligatorio elegir uno solo",0]]},
+{q:"¿Cómo se denomina al código de seguimiento que se inserta en el sitio web de Facebook?",t:'s',o:[["Pixel de Facebook",1],["Business Manager",0],["Audience Network",0]]},
+{q:"Usar un pixel de Facebook en el sitio web o aplicación es una forma excelente de realizar:",t:'s',o:[["Medición y remarketing (segmentación de conversiones)",1],["Diseño gráfico",0],["Facturación automática",0]]},
+{q:"La plataforma publicitaria de Facebook nos permite, entre otras cosas:",t:'s',o:[["Segmentar de manera muy precisa",1],["Vender directamente sin sitio web",0],["Evitar el proceso de revisión",0]]},
+{q:"En una campaña de Facebook hay dos opciones para definir el presupuesto (2 correctas):",t:'m',o:[["Diario",1],["Por toda la campaña",1],["Semanal fijo",0],["Anual fijo",0]]},
+{q:"Cuando se termina de crear, modificar o agregar anuncios de Facebook, estos entran en un proceso de revisión que verifica si cumplen con:",t:'s',o:[["Las políticas publicitarias",1],["El presupuesto de la cuenta",0],["El idioma del anunciante",0]]},
+{q:"Fernando ya tiene un público guardado en Facebook y quiere crear otros tipos de público. ¿Qué opciones tiene?",t:'m',o:[["Público similar, basado en el público que ya tiene",1],["Público personalizado, basado en otros datos disponibles",1],["Modificar el público guardado para que sea el único",0]]},
+{q:"Al posar el mouse sobre una campaña en el Administrador de anuncios de Facebook, aparecen las opciones:",t:'m',o:[["Editar",1],["Duplicar",1],["Ver gráficos",1],["Eliminar directamente",0]]},
+{q:"El código base del Pixel de Facebook, que sigue la actividad en el sitio, debe instalarse en:",t:'s',o:[["Cada página del sitio web",1],["Solo la página de inicio",0],["Solo la página de checkout",0]]},
+{q:"En Facebook, al igual que en AdWords, se pueden definir conversiones en:",t:'s',o:[["Nuestro propio sitio web",1],["El sitio de la competencia",0],["Instagram exclusivamente",0]]},
+{q:"En Facebook, los públicos similares suelen usarse para:",t:'s',o:[["Ampliar la audiencia",1],["Reducir el alcance",0],["Bajar el presupuesto",0]]},
+{q:"Al crear un anuncio, se puede elegir que llegue a personas de cualquier público personalizado o similar que ya se haya definido:",t:'s',o:[["Verdadero",1],["Falso",0]]},
+{q:"Si se segmenta una campaña publicitaria por región (por ejemplo, Asia), se puede obtener:",t:'s',o:[["Un mayor rendimiento (si la segmentación es adecuada al negocio)",1],["Un rechazo automático",0],["Menor alcance garantizado",0]]},
+{q:"María va a seleccionar las ubicaciones de su campaña de forma manual. ¿Cuáles de las siguientes puede elegir? (4 correctas)",t:'m',o:[["Mensajes",1],["Feed",1],["Stories",1],["Instream",1],["Buscador de Google",0]]},
+{q:"La creación de nuevos anuncios en Facebook ofrece varios formatos (elegí los 4 correctos):",t:'m',o:[["Una imagen",1],["Varias imágenes",1],["Video",1],["Presentación",1],["Encuesta",0]]},
+{q:"Los públicos similares permiten llegar a nuevas personas que probablemente estén interesadas en la empresa porque se parecen a otras que:",t:'s',o:[["Ya se encuentran interesadas",1],["Nunca vieron la marca",0],["Son de otro país",0]]},
+{q:"Facebook analiza la cantidad de texto de las imágenes de los anuncios y los califica en correcto, bajo, medio y:",t:'s',o:[["Alto",1],["Excesivo",0],["Nulo",0]]},
+{q:"¿Qué es el Pixel de Facebook?",t:'s',o:[["Un fragmento de código",1],["Una imagen publicitaria",0],["Un tipo de público",0]]},
+{q:"¿Para qué es útil el Pixel de Facebook?",t:'s',o:[["Para conocer las acciones que las personas realizan en el sitio",1],["Para diseñar el anuncio",0],["Para cambiar la divisa de la cuenta",0]]},
+{q:"Una marca de tecnología quiere volver a alcanzar a usuarios que ya habían visitado su página web. ¿Qué elemento necesita sí o sí?",t:'s',o:[["El Pixel de Facebook, para poder hacer remarketing",1],["Un público similar",0],["Un público guardado",0]]},
+];
+
+// ---- Registro de visitas y resultados (Google Sheet vía Apps Script) ----
+// Pegá acá la URL que te da "Implementar > Nueva implementación" (termina en /exec).
+// Si la dejás vacía (''), el registro simplemente no hace nada.
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzI2lCBNrkdU_4DNYEDhoTbf8O60ZWoyNijdqgk_qsQfXHmjMhBxB_jdO2HtagC2mKQ/exec';
+const NOMBRE_APP = 'Certificaciones Digitales · Parcial 2';
+const IDENTIDAD_KEY = 'siglo21_identidad';
+
+function obtenerIdentidad(){
+  try{
+    const raw = localStorage.getItem(IDENTIDAD_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function registrarEvento(payload){
+  if(!APPS_SCRIPT_URL) return;
+  const idn = obtenerIdentidad();
+  try{
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(Object.assign({
+        app: NOMBRE_APP,
+        nombre: idn ? idn.nombre : 'Anónimo',
+        email: idn ? idn.email : ''
+      }, payload))
+    });
+  }catch(err){ /* si falla el registro, no interrumpe el estudio */ }
+}
+
+function mostrarBannerIdentidad(){
+  if(obtenerIdentidad()) return;
+  const b = document.createElement('div');
+  b.style.cssText = 'background:#fff3e0;border-bottom:2px solid var(--naranja);padding:8px 14px;text-align:center;font-size:.8rem;color:var(--text);';
+  b.innerHTML = 'No estás identificado — tu progreso se guarda como "Anónimo". <a href="index.html" style="color:var(--bordo);font-weight:700;">Ir al inicio para identificarte</a>';
+  document.body.insertBefore(b, document.body.firstChild);
+}
+mostrarBannerIdentidad();
+
+// ---- Motor de tandas aleatorias con reciclado del banco completo ----
+let mazo = [];          // cola de índices de preguntas aún no usados en el ciclo actual
+let rondaActual = [];   // índices de la tanda visible ahora
+let respuestas = {};    // respuestas de la tanda actual: {indiceEnRonda: [opciones elegidas]}
+let opcionesMostradas = {}; // orden de opciones (barajado) por índice de ronda
+let rondaNum = 1;
+let acumCorrectas = 0;
+let acumRespondidas = 0;
+let corregido = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function refillMazo(){
+  mazo = shuffle([...Array(preguntas.length).keys()]);
+}
+
+function tamanoTanda(){
+  const v = parseInt(document.getElementById('roundSize').value);
+  return Math.min(v, preguntas.length);
+}
+
+function nuevaTanda(){
+  const size = tamanoTanda();
+  let recicló = false;
+  const round = [];
+  while(round.length < size){
+    if(mazo.length === 0){
+      refillMazo();
+      if(round.length > 0 || rondaNum > 1) recicló = true;
+    }
+    round.push(mazo.shift());
+  }
+  rondaActual = round;
+  respuestas = {};
+  opcionesMostradas = {};
+  corregido = false;
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('corregirBtn').style.display = 'block';
+  document.getElementById('siguienteBtn').style.display = 'none';
+  renderQuiz();
+  actualizarStats(recicló);
+  window.scrollTo(0,0);
+}
+
+function cambiarTamano(){
+  nuevaTanda();
+}
+
+function renderQuiz(){
+  const cont = document.getElementById('quizContainer');
+  cont.innerHTML = '';
+  rondaActual.forEach((qi, ri)=>{
+    const p = preguntas[qi];
+    const ordenOpciones = shuffle(p.o.map((o,j)=>j)); // índices originales, barajados
+    opcionesMostradas[ri] = ordenOpciones;
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    const tipoTxt = p.t==='m' ? ' (seleccioná todas las correctas)' : '';
+    card.innerHTML = `<div class="qnum">Pregunta ${ri+1} de ${rondaActual.length}</div>
+      <div class="qtext">${p.q}${tipoTxt}</div>
+      <div class="opts" id="opts-${ri}"></div>`;
+    cont.appendChild(card);
+    const optsDiv = card.querySelector('.opts');
+    ordenOpciones.forEach(origIdx=>{
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = p.o[origIdx][0];
+      btn.onclick = ()=> seleccionar(ri, origIdx, p.t);
+      btn.dataset.orig = origIdx;
+      optsDiv.appendChild(btn);
+    });
+  });
+  actualizarProgreso();
+}
+
+function seleccionar(ri, origIdx, tipo){
+  if(corregido) return;
+  if(tipo === 's'){
+    respuestas[ri] = [origIdx];
+  } else {
+    if(!respuestas[ri]) respuestas[ri] = [];
+    const idx = respuestas[ri].indexOf(origIdx);
+    if(idx>-1) respuestas[ri].splice(idx,1);
+    else respuestas[ri].push(origIdx);
+  }
+  const optsDiv = document.getElementById('opts-'+ri);
+  Array.from(optsDiv.children).forEach(btn=>{
+    const orig = parseInt(btn.dataset.orig);
+    btn.classList.toggle('selected', respuestas[ri] && respuestas[ri].includes(orig));
+  });
+  actualizarProgreso();
+}
+
+function actualizarProgreso(){
+  const respondidas = Object.values(respuestas).filter(r=>r && r.length>0).length;
+  document.getElementById('progresoTxt').textContent = `${respondidas} / ${rondaActual.length} respondidas en esta tanda`;
+}
+
+function actualizarStats(recicló){
+  const pct = acumRespondidas>0 ? ((acumCorrectas/acumRespondidas)*100).toFixed(1) : '0';
+  let txt = `Ronda ${rondaNum} · Acumulado: ${acumCorrectas}/${acumRespondidas} (${pct}%)`;
+  if(recicló) txt = `🔄 Reciclando el banco completo · ` + txt;
+  document.getElementById('statsTxt').textContent = txt;
+}
+
+function corregir(){
+  let correctas = 0;
+  rondaActual.forEach((qi, ri)=>{
+    const p = preguntas[qi];
+    const correctIdx = p.o.map((o,j)=>o[1]===1?j:-1).filter(j=>j>=0);
+    const userAns = respuestas[ri] || [];
+    const esCorrecta = correctIdx.length === userAns.length && correctIdx.every(idx=>userAns.includes(idx));
+    if(esCorrecta) correctas++;
+    const optsDiv = document.getElementById('opts-'+ri);
+    Array.from(optsDiv.children).forEach(btn=>{
+      const orig = parseInt(btn.dataset.orig);
+      btn.disabled = true;
+      if(p.o[orig][1]===1) btn.classList.add('correct');
+      else if(userAns.includes(orig)) btn.classList.add('incorrect');
+    });
+  });
+  corregido = true;
+  acumCorrectas += correctas;
+  acumRespondidas += rondaActual.length;
+  const pct = ((correctas/rondaActual.length)*100).toFixed(1);
+  registrarEvento({tipo:'resultado', ronda: rondaNum, correctas: correctas, total: rondaActual.length, pct: pct});
+  const res = document.getElementById('resultado');
+  res.style.display = 'block';
+  res.textContent = `Resultado de esta tanda: ${correctas} / ${rondaActual.length} correctas (${pct}%)`;
+  if(typeof res.scrollIntoView === 'function') res.scrollIntoView({behavior:'smooth'});
+  document.getElementById('corregirBtn').style.display = 'none';
+  document.getElementById('siguienteBtn').style.display = 'block';
+  rondaNum++;
+  actualizarStats(false);
+}
+
+function reiniciarTodo(){
+  rondaNum = 1;
+  acumCorrectas = 0;
+  acumRespondidas = 0;
+  refillMazo();
+  nuevaTanda();
+}
+
+refillMazo();
+nuevaTanda();
+registrarEvento({tipo:'visita'});
+</script>
+
+</body>
+</html>
