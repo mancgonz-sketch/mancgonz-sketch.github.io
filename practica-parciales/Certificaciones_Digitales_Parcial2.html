@@ -118,9 +118,20 @@
     border-radius:10px; background:var(--card); border:1px solid var(--border);
   }
   footer{text-align:center; font-size:.78rem; color:var(--muted); margin-top:30px;}
+  #barraIdentidad{
+    display:flex; justify-content:space-between; align-items:center;
+    background:#2b2320; color:#fff; padding:6px 14px; font-size:.78rem;
+  }
+  #barraIdentidad a, #barraIdentidad button{
+    color:#fff; text-decoration:none; background:none; border:none; font-size:.78rem;
+    cursor:pointer; padding:0; margin-left:14px;
+  }
+  #barraIdentidad a:hover, #barraIdentidad button:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
+
+<div id="barraIdentidad"></div>
 
 <header class="top">
   <h1>Certificaciones Digitales</h1>
@@ -604,6 +615,24 @@ function bloquearSiNoIdentificado(){
     </div>`;
   document.body.appendChild(overlay);
 }
+function pintarBarraIdentidad(){
+  const idn = obtenerIdentidad();
+  const barra = document.getElementById('barraIdentidad');
+  if(idn){
+    barra.innerHTML = `<span>👋 ${idn.nombre}</span>
+      <span><a href="index.html">‹ Volver al inicio</a><button onclick="cerrarSesionLocal()">Cerrar sesión</button></span>`;
+  } else {
+    barra.innerHTML = `<span>No identificado</span>
+      <span><a href="index.html">‹ Ir al inicio para identificarme</a></span>`;
+  }
+}
+
+function cerrarSesionLocal(){
+  localStorage.removeItem(IDENTIDAD_KEY);
+  window.location.href = 'index.html';
+}
+
+pintarBarraIdentidad();
 bloquearSiNoIdentificado();
 
 // ---- Motor de tandas aleatorias con reciclado del banco completo ----
