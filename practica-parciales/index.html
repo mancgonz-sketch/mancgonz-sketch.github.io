@@ -195,6 +195,7 @@ let materiaActual = null;
 let gisReady = false;
 let gisInicializado = false;
 let feedbackEsperandoLogin = false;
+const materiasVisitadasEnSesion = new Set();
 
 /* ================= IDENTIDAD (localStorage, compartida con las apps de la misma carpeta) ================= */
 function obtenerIdentidad(){
@@ -231,7 +232,10 @@ function elegirMateria(m){
   const idn = obtenerIdentidad();
   if(idn){
     vista = 'fichas';
-    registrarEvento({tipo:'visita', app:'Hub Siglo 21', nombre:idn.nombre, email:idn.email, materia:m.nombre});
+    if(!materiasVisitadasEnSesion.has(m.nombre)){
+      materiasVisitadasEnSesion.add(m.nombre);
+      registrarEvento({tipo:'visita', app:'Hub Siglo 21', nombre:idn.nombre, email:idn.email, materia:m.nombre});
+    }
   } else {
     vista = 'login';
   }
@@ -256,9 +260,10 @@ function handleCredentialResponse(response){
   const payload = decodeJwt(response.credential);
   const idn = { nombre: payload.name, email: payload.email, foto: payload.picture };
   guardarIdentidad(idn);
+  const materiaParaRegistro = materiaActual ? materiaActual.nombre : (feedbackEsperandoLogin ? '(vía Sugerencias)' : '(sin materia)');
   registrarEvento({
     tipo:'login', idToken: response.credential,
-    nombre: idn.nombre, email: idn.email, materia: materiaActual ? materiaActual.nombre : ''
+    nombre: idn.nombre, email: idn.email, materia: materiaParaRegistro
   });
   if(feedbackEsperandoLogin){
     feedbackEsperandoLogin = false;
