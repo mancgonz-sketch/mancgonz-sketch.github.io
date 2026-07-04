@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sociología del Poder — Parcial 2 (M3 y M4)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Public+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  --paper:#faf6ee;
+  --paper-2:#f2ece0;
+  --ink:#241f1a;
+  --ink-soft:#5a5148;
+  --oxblood:#7a1f2b;
+  --oxblood-dark:#5c1620;
+  --gold:#b8863b;
+  --line:#e2d8c4;
+  --good:#3f6b46;
+  --bad:#a8352f;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Public Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:700;margin:0 0 .4em 0;}
+p{line-height:1.55;}
+
+.app{max-width:760px;margin:0 auto;min-height:100vh;background:var(--paper);}
+
+header.top{
+  background:linear-gradient(135deg,var(--oxblood) 0%,var(--oxblood-dark) 100%);
+  color:#fff;padding:28px 20px 22px;position:relative;overflow:hidden;
+}
+header.top::after{
+  content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;
+  background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);
+}
+header.top h1{font-size:1.5rem;line-height:1.25;position:relative;}
+header.top .sub{font-size:.85rem;opacity:.85;margin-top:6px;position:relative;font-family:'Public Sans';}
+
+nav.tabs{
+  display:flex;position:sticky;top:0;z-index:20;background:var(--paper);
+  border-bottom:1px solid var(--line);
+}
+nav.tabs button{
+  flex:1;padding:14px 8px;background:none;border:none;font-family:'Public Sans';
+  font-weight:600;font-size:.95rem;color:var(--ink-soft);cursor:pointer;
+  border-bottom:3px solid transparent;transition:.15s;
+}
+nav.tabs button.active{color:var(--oxblood);border-bottom-color:var(--oxblood);}
+
+.view{display:none;padding:18px 18px 60px;}
+.view.active{display:block;}
+
+/* THEORY */
+.eje-index{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--line);
+}
+.chip{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:20px;
+  padding:6px 12px;font-size:.78rem;font-weight:600;color:var(--ink-soft);cursor:pointer;
+}
+.chip:active{background:var(--oxblood);color:#fff;}
+
+details.eje{
+  background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden;
+}
+details.eje summary{
+  padding:14px 16px;cursor:pointer;font-family:'Fraunces';font-weight:700;font-size:1.02rem;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--oxblood-dark);
+}
+details.eje summary::-webkit-details-marker{display:none;}
+details.eje summary .num{
+  display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+  background:var(--oxblood);color:#fff;font-size:.8rem;margin-right:10px;font-family:'Public Sans';flex-shrink:0;
+}
+details.eje .body{padding:0 16px 16px;font-size:.92rem;color:var(--ink);}
+details.eje .body h4{font-size:.88rem;color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-top:16px;}
+details.eje .body ul{padding-left:20px;}
+.callout{
+  background:var(--paper-2);border-left:4px solid var(--oxblood);padding:10px 12px;border-radius:4px;
+  margin:12px 0;font-size:.88rem;font-style:italic;color:var(--ink-soft);
+}
+table.cmp{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem;}
+table.cmp th,table.cmp td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+table.cmp th{background:var(--paper-2);font-family:'Fraunces';}
+
+/* SIMULACRO */
+.quiz-setup{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
+.quiz-setup label{display:block;font-size:.85rem;font-weight:600;margin-bottom:8px;color:var(--ink-soft);}
+select{width:100%;padding:10px;border-radius:6px;border:1px solid var(--line);font-family:'Public Sans';font-size:.95rem;background:#fff;}
+.btn{
+  display:inline-block;background:var(--oxblood);color:#fff;border:none;padding:12px 20px;
+  border-radius:6px;font-family:'Public Sans';font-weight:700;font-size:.95rem;cursor:pointer;width:100%;margin-top:12px;
+}
+.btn.secondary{background:transparent;color:var(--oxblood);border:1.5px solid var(--oxblood);}
+.progress{font-size:.8rem;color:var(--ink-soft);margin-bottom:6px;}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:14px;}
+.qcard .qtag{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);font-weight:700;}
+.qcard h3{font-size:1.05rem;margin:6px 0 14px;line-height:1.4;}
+.opt{
+  display:block;width:100%;text-align:left;background:var(--paper-2);border:1.5px solid var(--line);
+  padding:11px 14px;border-radius:8px;margin-bottom:8px;font-family:'Public Sans';font-size:.9rem;cursor:pointer;color:var(--ink);
+}
+.opt.correct{border-color:var(--good);background:#e9f2ea;color:var(--good);font-weight:600;}
+.opt.wrong{border-color:var(--bad);background:#f7e9e8;color:var(--bad);font-weight:600;}
+.explain{background:var(--paper-2);border-radius:8px;padding:10px 12px;font-size:.85rem;margin-top:10px;color:var(--ink-soft);display:none;}
+.explain.show{display:block;}
+.score-screen{text-align:center;padding:30px 10px;}
+.score-screen .big{font-family:'Fraunces';font-size:3rem;color:var(--oxblood);}
+.wrong-list .qcard{border-left:4px solid var(--bad);}
+footer.credit{text-align:center;padding:20px;font-size:.75rem;color:var(--ink-soft);border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <h1>Sociología del Poder</h1>
+    <div class="sub">Parcial 2 · Módulos 3 y 4 · 8 ejes temáticos</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="teoria">📖 Teoría</button>
+    <button class="tab-btn" data-tab="simulacro">✎ Simulacro</button>
+  </nav>
+
+  <!-- ================= TEORÍA ================= -->
+  <section id="teoria" class="view active">
+
+    <div class="eje-index" id="ejeIndex"></div>
+
+    <details class="eje" id="t1">
+      <summary><span><span class="num">1</span>Colonialidad del poder (Quijano)</span></summary>
+      <div class="body">
+        <p>Aníbal Quijano propone la <b>colonialidad del poder</b> como una mirada latinoamericana que rompe con las teorías eurocéntricas del poder (liberalismo y marxismo), a las que llama "paradigma de la totalidad" porque conciben a la sociedad como un organismo homogéneo regido por una sola lógica.</p>
+        <h4>Colonización ≠ Colonialidad</h4>
+        <p>La colonización (proceso histórico) ya terminó; la colonialidad (patrón de poder) sigue vigente hoy. Ambas están relacionadas pero no son lo mismo.</p>
+        <h4>Estructura de análisis de Quijano</h4>
+        <p>Tres elementos atraviesan las relaciones de poder: <b>dominación, explotación y conflicto</b>. Estos afectan cinco ámbitos de la existencia social: trabajo, sexo, subjetividad/intersubjetividad, autoridad colectiva y naturaleza.</p>
+        <h4>Los dos ejes del patrón actual</h4>
+        <ul>
+          <li><b>Raza:</b> categoría social creada en la modernidad para clasificar y jerarquizar a la población mundial, nacida con la conquista de América.</li>
+          <li><b>Trabajo:</b> articulación de todas las formas de explotación (asalariado, esclavo, infantil) en una estructura mundial de producción alrededor del capital.</li>
+        </ul>
+        <div class="callout">Quijano se burla: "la ciencia que estudiará a los europeos se llamará Sociología; la que estudie a los no europeos, Etnografía."</div>
+        <p>El eurocentrismo funciona como relaciones intersubjetivas que obligan a los dominados a verse "con los ojos del dominador".</p>
+      </div>
+    </details>
+
+    <details class="eje" id="t2">
+      <summary><span><span class="num">2</span>Colonialidad y decolonialidad del saber</span></summary>
+      <div class="body">
+        <p>Continuando la línea de Quijano, distintos autores proponen la <b>decolonialidad del saber</b> como forma de emanciparse del poder que ejercen los países del Norte también sobre el conocimiento.</p>
+        <h4>Violencia epistémica (Zulma Palermo)</h4>
+        <div class="callout">"Una forma silenciosa de genocidio intelectual operada por el pensamiento único."</div>
+        <p>Genera dicotomías que ponen a Europa como patrón: moderno/premoderno, comunidad/sociedad, sujeto que conoce (europeo)/objeto de conocimiento (no europeo).</p>
+        <h4>La crítica al "desarrollo"</h4>
+        <p>La noción de desarrollo asume que los países no europeos parten de una ausencia de desarrollo y deben seguir el camino europeo (desarrollados/subdesarrollados, centro/periferia). Esto legitima la relación con organismos como el FMI o el Banco Mundial.</p>
+        <h4>Cuatro líneas de estudios decoloniales (ejemplos)</h4>
+        <table class="cmp">
+          <tr><th>Autor/a</th><th>Aporte</th></tr>
+          <tr><td>Zulma Palermo</td><td>Interculturalidad real (no solo bilingüismo)</td></tr>
+          <tr><td>Maldonado Torres</td><td>Colonialidad del ser: la raza habilita una "no ética de la guerra"</td></tr>
+          <tr><td>Castro-Gómez / Sanjinés</td><td>Historiografía de la "limpieza de sangre" y el mestizaje</td></tr>
+          <tr><td>Catherine Walsh</td><td>Tensión Estado-sociedad en movimientos indígenas (Bolivia/Ecuador)</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details class="eje" id="t3">
+      <summary><span><span class="num">3</span>Poder y violencia simbólica (Bourdieu)</span></summary>
+      <div class="body">
+        <p>Bourdieu articula dos visiones opuestas de la sociedad: el <b>objetivismo</b> (sociedad como algo externo) y el <b>subjetivismo</b> (sociedad interiorizada). Para él, ambas coexisten.</p>
+        <h4>Habitus y campo</h4>
+        <ul>
+          <li><b>Habitus:</b> "la historia hecha cuerpo" — disposiciones duraderas de pensar, hablar, moverse que se presentan como naturaleza.</li>
+          <li><b>Campo:</b> espacio de lucha entre agentes por algún tipo de capital (económico, cultural, social, simbólico).</li>
+        </ul>
+        <div class="callout">"El poder simbólico es ese poder invisible que solo puede ejercerse con la complicidad de quienes no quieren saber que lo sufren o que incluso lo ejercen." (Bourdieu)</div>
+        <h4>Tres padres fundadores en Bourdieu</h4>
+        <table class="cmp">
+          <tr><th>Autor</th><th>Aporte que rescata Bourdieu</th></tr>
+          <tr><td>Marx</td><td>El poder es producto de relaciones sociales</td></tr>
+          <tr><td>Weber</td><td>El poder requiere aceptación simbólica de ambas partes</td></tr>
+          <tr><td>Durkheim</td><td>La realidad externa es coercitiva</td></tr>
+        </table>
+        <h4>Violencia simbólica</h4>
+        <p>Es una violencia "suave" y "eufemizada" ejercida con la complicidad del propio dominado. Se ejerce principalmente por la <b>escuela</b> (acción pedagógica) y también por la familia y los medios. Cumple una triple función: integración de la clase dominante, integración ficticia de la sociedad, y legitimación del orden establecido.</p>
+      </div>
+    </details>
+
+    <details class="eje" id="t4">
+      <summary><span><span class="num">4</span>Poder, sexo y género</span></summary>
+      <div class="body">
+        <h4>Sexo vs. Género</h4>
+        <table class="cmp">
+          <tr><th>Sexo biológico</th><th>Género</th></tr>
+          <tr><td>Aspectos físicos medibles (cromosomas, genitales)</td><td>Construcción cultural/social binaria sobre lo que se espera de varones y mujeres</td></tr>
+        </table>
+        <p>Las <b>normas de género</b> (Martínez Finzi) son construcciones que regulan comportamientos según la categoría sexual: mandatos que delimitan lo pensable, lo posible y los espacios de acción.</p>
+        <h4>Estereotipos de género</h4>
+        <table class="cmp">
+          <tr><th>Hombres</th><th>Mujeres</th></tr>
+          <tr><td>Afuera / Público / Racionalidad / Dinámico</td><td>Adentro / Privado / Emotividad / Estático</td></tr>
+        </table>
+        <h4>Mujeres y política — la paridad (Rosa Cobo)</h4>
+        <p>La paridad busca alterar la estructura patriarcal del poder; requiere que las mujeres se constituyan como colectivo político, aunque esa identidad sea provisional (el objetivo final es la desaparición del género como categoría social).</p>
+        <h4>Disconfort de género (Martínez Finzi)</h4>
+        <p>Sensación de incomodidad cuando el rol propio en la pareja se aleja de lo aprendido en el habitus. Son los <b>hombres</b> quienes más incomodidad muestran al perder su rol de jefe de familia. El <b>capital cultural</b> es el factor que más flexibiliza los roles tradicionales.</p>
+        <div class="callout">María Lugones: la colonialidad del poder debe leerse cruzada con raza, clase, sexualidad y género — las mujeres negras sufren peores condiciones que los hombres de su mismo grupo racial.</div>
+      </div>
+    </details>
+
+    <details class="eje" id="t5">
+      <summary><span><span class="num">5</span>El poder en las organizaciones</span></summary>
+      <div class="body">
+        <h4>Escuela clásica (racionalista, 1920)</h4>
+        <p>Taylor y Fayol. Fayol define administrar como: <i>planear, organizar, dirigir, coordinar y controlar</i>. El poder estaba ligado a la autoridad pero no era un problema relevante de estudio — el objetivo era "pasar del gobierno de los hombres a la administración de las cosas" (Crozier). Crítica: <i>Tiempos Modernos</i> de Chaplin.</p>
+        <h4>Escuela de las relaciones humanas (desde los '30)</h4>
+        <p>Elton Mayo y Kurt Lewin, reacción antimecanicista tras la Gran Depresión. Mayo descubre el "factor humano"; Crozier los critica por casi ignorar el poder y negar la racionalidad técnica. Lewin sí profundizó en estilos de liderazgo. Parsons (sistémico, '30-'50) ve el poder como lo que mantiene cohesionada a la organización.</p>
+        <h4>March y Simon (años '60)</h4>
+        <p>Introducen la <b>racionalidad limitada</b>: las personas deciden según expectativas y sentimientos, pero dentro de las restricciones de la organización.</p>
+        <h4>La tercera mirada (Crozier)</h4>
+        <p>En <i>El fenómeno burocrático</i>, Crozier sostiene que hay que integrar racionalidad y factor humano: existe cálculo racional en los sentimientos y constricción en las decisiones técnicas. Ejemplo actual: los <b>call centers</b> combinan control mecanicista (clásica) con entorno cultural/tecnológico (relaciones humanas).</p>
+      </div>
+    </details>
+
+    <details class="eje" id="t6">
+      <summary><span><span class="num">6</span>El ejercicio del poder en las organizaciones</span></summary>
+      <div class="body">
+        <h4>Bases del poder (Raven y French)</h4>
+        <p>Recompensa · Coerción · Legitimidad · Experticia · Referente. La gerencia busca monopolizar estos recursos.</p>
+        <h4>Pfeffer: el poder como herramienta de gestión</h4>
+        <div class="callout">"Capacidad de influir en las conductas, de cambiar cursos de los acontecimientos, de vencer resistencias y de conseguir que la gente haga algo que de otro modo no haría." (Pfeffer, 1993)</div>
+        <p>Propone 6 pasos de implantación de políticas: definir objetivos → mapear (inter)dependencia → identificar bases de poder ajenas → identificar bases propias → elegir tácticas → seleccionar curso de acción.</p>
+        <h4>Interdependencia</h4>
+        <p>Regla de Pfeffer: interdependencia <b>alta</b> → conviene consenso; interdependencia <b>media</b> → conviene usar el poder; interdependencia <b>baja</b> → el poder no es necesario. Aumenta con la escasez de recursos.</p>
+        <h4>Centralidad reticular</h4>
+        <table class="cmp">
+          <tr><th>Medianería</th><th>Conexión</th><th>Proximidad</th></tr>
+          <tr><td>Interposición entre pares en el canal de comunicación</td><td>Cantidad de personas con las que me comunico (volumen, no jerarquía)</td><td>Quién llega a más gente sin mediaciones</td></tr>
+        </table>
+        <p>Mariño-Arévalo critica esta visión por "sustancialista": trata al poder como un atributo ubicado en la jerarquía, en vez de una relación social (como después proponen Crozier y Foucault).</p>
+      </div>
+    </details>
+
+    <details class="eje" id="t7">
+      <summary><span><span class="num">7</span>Foucault y la microfísica del poder</span></summary>
+      <div class="body">
+        <div class="callout">Foucault: el poder "no se posee, sino que se ejerce"; es "una acción sobre las acciones de los otros"; invade, pasa por los sujetos y a través de ellos.</div>
+        <h4>Tres elementos de la relación de poder</h4>
+        <ul>
+          <li>El otro, sus reacciones (debe ser <b>libre</b>: sobre un esclavo no hay poder, hay sometimiento puro)</li>
+          <li>El juego entre dos libertades que buscan actuar una sobre la acción de la otra</li>
+          <li>La resistencia (siempre esperable dada la libertad del otro)</li>
+        </ul>
+        <h4>Herramientas de análisis (Mariño-Arévalo sobre Foucault, "El sujeto y el poder")</h4>
+        <ol>
+          <li><b>Sistema de diferenciaciones:</b> jerarquía, género, edad, instrucción, raza, competencias</li>
+          <li><b>Tipo de objetivo perseguido:</b> intereses múltiples y comunes en la comunicación</li>
+          <li><b>Modalidades instrumentales:</b> amenazas, incentivos, castigos, vigilancia</li>
+          <li><b>Maneras de institucionalización:</b> estructura jerárquica, redes formales e informales</li>
+          <li><b>Grados de racionalización:</b> combinación de los anteriores para dar certeza a quien ejerce el poder</li>
+        </ol>
+        <h4>Disciplina y vigilancia (Vigilar y castigar)</h4>
+        <p><b>Disciplina:</b> control minucioso del cuerpo mediante el uso del espacio (clausura, emplazamientos funcionales, rango). <b>Vigilancia:</b> no basta con observar, el sujeto debe saber que es observado — así se interioriza el control (modelo del <b>panóptico</b>). La <b>vigilancia solidaria</b> es el control recíproco entre pares, que rompe la complicidad entre trabajadores.</p>
+      </div>
+    </details>
+
+    <details class="eje" id="t8">
+      <summary><span><span class="num">8</span>El poder y la acción colectiva (Crozier y Friedberg)</span></summary>
+      <div class="body">
+        <p>En <i>El actor y el sistema</i> (1990), Crozier y Friedberg conciben a la organización como una forma de <b>acción colectiva</b>: un intento de estabilizar la cooperación a lo largo del tiempo, más allá de los intereses individuales.</p>
+        <h4>Cuatro problemas que la organización resuelve</h4>
+        <ol>
+          <li><b>Cooperación:</b> alinear intereses individuales sin suprimirlos</li>
+          <li><b>Incertidumbre:</b> las reglas no pueden predecirlo todo — fuente de toda negociación</li>
+          <li><b>Poder:</b> nace de la incertidumbre, no está fijo en un lugar</li>
+          <li><b>Cambio:</b> aprendizaje colectivo que inventa nuevas reglas de juego</li>
+        </ol>
+        <h4>Características del poder (Crozier y Friedberg)</h4>
+        <ul>
+          <li><b>Instrumental:</b> persigue siempre un fin</li>
+          <li><b>No transitiva:</b> obtener X de alguien no garantiza obtener Y o Z</li>
+          <li><b>Recíproca pero desequilibrada:</b> es un intercambio entre dos o más actores, pero no simétrico</li>
+        </ul>
+        <div class="callout">"El poder reside en el margen de libertad que disponga cada participante... es decir, en su posibilidad de rehusar lo que el otro pida." (Crozier y Friedberg, 1990)</div>
+        <h4>Cuatro fuentes de incertidumbre = fuentes de poder</h4>
+        <ol>
+          <li>Pericia (poder del experto)</li>
+          <li>Relación de la organización con su entorno</li>
+          <li>Control de la comunicación y la información</li>
+          <li>Control de las reglas de la organización (su creación y su aplicación real)</li>
+        </ol>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ================= SIMULACRO ================= -->
+  <section id="simulacro" class="view">
+
+    <div class="quiz-setup" id="setupScreen">
+      <label>Elegí qué eje querés practicar</label>
+      <select id="ejeSelect">
+        <option value="all">Todos mezclado (simulacro completo)</option>
+        <option value="1">1 · Colonialidad del poder</option>
+        <option value="2">2 · Colonialidad y decolonialidad del saber</option>
+        <option value="3">3 · Poder y violencia simbólica</option>
+        <option value="4">4 · Poder, sexo y género</option>
+        <option value="5">5 · El poder en las organizaciones</option>
+        <option value="6">6 · El ejercicio del poder en las organizaciones</option>
+        <option value="7">7 · Foucault y la microfísica del poder</option>
+        <option value="8">8 · Poder y acción colectiva</option>
+      </select>
+      <button class="btn" id="startBtn">Empezar simulacro</button>
+    </div>
+
+    <div id="quizScreen" style="display:none;">
+      <div class="progress" id="progressLabel"></div>
+      <div id="qContainer"></div>
+      <button class="btn secondary" id="nextBtn" style="display:none;">Siguiente →</button>
+    </div>
+
+    <div id="scoreScreen" style="display:none;">
+      <div class="score-screen">
+        <div class="progress">Resultado</div>
+        <div class="big" id="scoreBig">0/0</div>
+        <p id="scoreMsg"></p>
+        <button class="btn" id="retryBtn">Repetir</button>
+        <button class="btn secondary" id="reviewBtn" style="display:none;">Ver errores</button>
+      </div>
+      <div class="wrong-list" id="wrongList"></div>
+    </div>
+
+  </section>
+
+  <footer class="credit">Compilado por Gonzalo Manca · Sociología del Poder, Siglo 21</footer>
+</div>
+
+<script>
+const EJES = {
+  1:"Colonialidad del poder", 2:"Colonialidad y decolonialidad del saber",
+  3:"Poder y violencia simbólica", 4:"Poder, sexo y género",
+  5:"El poder en las organizaciones", 6:"El ejercicio del poder en las organizaciones",
+  7:"Foucault y la microfísica del poder", 8:"Poder y acción colectiva"
+};
+
+const Q = [
+// ===== EJE 1 — Colonialidad del poder (Quijano) =====
+{e:1,q:"La propuesta de la colonialidad del poder toma un aporte de otra corriente teórica para pensar el trabajo. ¿Cuál es?",o:["El concepto de dominación del trabajo","El concepto de alienación religiosa","El concepto de contrato social","El concepto de solidaridad orgánica"],c:0,x:"Es uno de los aportes que retoma la perspectiva de Quijano (preguntero 2022)."},
+{e:1,q:"Según la crítica decolonial, ¿por qué puede cuestionarse el método científico eurocéntrico aplicado al estudio de la realidad social de América?",o:["Porque es una racionalidad única y eurocentrada","Porque no usa estadística","Porque es demasiado reciente","Porque no tiene aplicación práctica"],c:0,x:"El preguntero afirma esto como Verdadero: toda investigación bajo ese método puede cuestionarse por su carácter eurocéntrico."},
+{e:1,q:"Desde la perspectiva eurocéntrica y positivista, ¿qué dos características debía tener el conocimiento científico válido?",o:["Ser medible y objetivable","Ser subjetivo e intuitivo","Ser espiritual y narrativo","Ser relativo y local"],c:0,x:"Los centros hegemónicos del poder eurocentrado generalizan como válido el conocimiento medible y objetivable."},
+{e:1,q:"Las clasificaciones sociales en torno al trabajo, género y raza representan o son el resultado de:",o:["Disputas por el control de los ámbitos sociales","Acuerdos pacíficos entre clases","Decisiones exclusivamente estatales","Tradiciones religiosas sin conflicto"],c:0,x:"Son procesos de largo plazo donde las gentes disputan el control de ámbitos básicos de la existencia."},
+{e:1,q:"¿Cuáles son los ejes constitutivos del patrón de poder capitalista, según Quijano?",o:["Colonialidad y modernidad","Colonialidad y decolonialidad","Decolonialidad y modernidad","Raza y clase"],c:0,x:"Ambos ejes se instalan, hasta hoy, como constitutivos de ese patrón específico de poder."},
+{e:1,q:"¿Cuál de las siguientes describe mejor el eurocentrismo, según el material del módulo?",o:["Un espejo distorsionante que obliga a los dominados a verse con los ojos del dominador","Una simple preferencia estética por lo europeo","Un sistema de alianzas comerciales entre países","Una teoría exclusivamente económica sin relación con el saber"],c:0,x:"También puede definirse como el grado de aceptación de los dominados y de justificación de los dominantes, y como relaciones intersubjetivas impuestas."},
+{e:1,q:"El eurocentrismo está caracterizado, según el módulo, por tres dimensiones. ¿Cuáles son?",o:["Un imaginario social, una memoria histórica y una perspectiva de conocimiento","Una raza, una lengua y una religión únicas","Un sistema legal, uno económico y uno militar","Una ideología, un partido y un territorio"],c:0,x:"Estos tres elementos sintetizan el eurocentrismo dentro del patrón de poder capitalista."},
+{e:1,q:"¿Dónde pueden localizarse geográficamente los centros hegemónicos del capitalismo mundial, según Quijano?",o:["En zonas situadas sobre el Atlántico Norte (Europa)","En el sudeste asiático","En el Pacífico sur","En África subsahariana"],c:0,x:"Con la constitución de América (Latina), esos centros se localizan sobre el Atlántico, que luego se identificará como Europa."},
+{e:1,q:"¿Qué problema común señala Quijano entre el liberalismo y el materialismo histórico (marxismo), pese a sus diferencias?",o:["Ambos presuponen una estructura social homogénea y relaciones ahistóricas entre sus componentes","Ambos niegan la existencia de clases sociales","Ambos surgieron en América Latina","Ambos rechazan cualquier forma de Estado"],c:0,x:"Los dos comparten un 'linaje común': ven a la sociedad como una totalidad determinada por factores inamovibles."},
+{e:1,q:"El famoso 'Facundo, civilización y barbarie' de Sarmiento, que opone al poblador originario (barbarie) con el europeo (civilización), puede explicarse con el concepto de:",o:["Violencia epistémica","Violencia física directa","Capital social","Racionalidad limitada"],c:0,x:"Es un ejemplo clásico de cómo el pensamiento único clasifica binariamente usando a Europa como patrón superior."},
+{e:1,q:"'La colonialidad se funda en la imposición de una clasificación racial y étnica de la población del mundo y es uno de los elementos constitutivos del poder capitalista.' ¿Esta afirmación es correcta?",o:["Sí, es correcta","No, la colonialidad no tiene relación con la raza","No, la colonialidad es solo un concepto económico","No, esa clasificación no es parte del poder capitalista"],c:0,x:"Es una de las tesis centrales de Quijano sobre la colonialidad del poder."},
+{e:1,q:"¿En qué momento histórico comienzan a visibilizarse las críticas contra la perspectiva y el modo eurocéntrico de producir conocimiento?",o:["Después de la Segunda Guerra Mundial","Durante la Revolución Francesa","En la Edad Media","Con la caída del Muro de Berlín"],c:0,x:"La revuelta intelectual contra el eurocentrismo levanta vuelo tras la Segunda Guerra Mundial, comenzando en las áreas dominadas del capitalismo."},
+{e:1,q:"¿Cuál es el hito histórico central que marca la aparición de la colonialidad del poder como eje del patrón de poder mundial?",o:["El descubrimiento/conquista de América","La Revolución Industrial","La Primera Guerra Mundial","La caída del Imperio Romano"],c:0,x:"Con la inserción de América en el capitalismo mundial moderno/colonial comienza a implementarse esta clasificación."},
+{e:1,q:"En la dualidad moderno/primitivo, racional/irracional que propone la colonialidad del poder, ¿qué ciencia estudia lo moderno y civilizado (es decir, lo europeo)?",o:["La Sociología","La Etnografía","La Antropología física","La Biología"],c:0,x:"Y la que estudia lo NO europeo, irónicamente, se llama Etnografía — según la burla de Quijano."},
+{e:1,q:"Según Quijano, ¿cuáles son (entre otros) los ámbitos de la existencia social en disputa dentro de la 'malla de relaciones' que constituye el poder?",o:["El trabajo, el sexo, la naturaleza y la autoridad, entre otros","La economía, la política, el arte y la ciencia","El Norte, el Sur, el Este y el Oeste","La familia, la escuela, la iglesia y el Estado únicamente"],c:0,x:"Estos ámbitos, junto con la subjetividad, conforman los cinco puntos del esquema de Quijano."},
+{e:1,q:"Según Quijano, ¿qué procesos de subjetivación social pueden ser reconocidos como verdaderos procesos de clasificación social?",o:["Aquellos cuyo sentido es el conflicto en torno a la explotación y la dominación","Aquellos que buscan el consenso pacífico entre clases","Aquellos vinculados exclusivamente a la religión","Aquellos que ocurren solo dentro del Estado"],c:0,x:"Es la definición que da Quijano para diferenciar clasificación social genuina de otras formas de agrupamiento."},
+{e:1,q:"¿Qué crítica recibe la teoría eurocéntrica sobre las clases sociales en el materialismo histórico marxista-positivista?",o:["Su reduccionismo","Su exceso de pluralismo","Su falta de método","Su origen no europeo"],c:0,x:"Se la critica por reducir toda la explicación social a la dimensión económica de clase."},
+{e:1,q:"La clasificación de las personas según raza, género y trabajo tiene, en última instancia, como fin proteger:",o:["La propiedad","La libertad de expresión","El medio ambiente","La democracia directa"],c:0,x:"Estas clasificaciones sirven a los intereses de un sistema centrado en la propiedad privada."},
+{e:1,q:"¿Qué punto central comparte la colonialidad del poder con la propuesta sobre el poder que analiza Foucault?",o:["La relación entre el poder y el saber","La relación entre el esclavo y el amo","La relación entre el Estado y la Iglesia","La relación entre el consumo y la producción"],c:0,x:"Ambas perspectivas entienden que el poder y el conocimiento están profundamente entrelazados."},
+{e:1,q:"¿De qué campo del conocimiento se adquiere originalmente la idea de 'clase' como forma de clasificación social?",o:["De los estudios sobre la naturaleza (taxonomías biológicas)","De la teología medieval","De la física newtoniana","De la lingüística estructural"],c:0,x:"La palabra 'clase' proviene de sistemas de clasificación tomados de las ciencias naturales."},
+
+// ===== EJE 2 — Colonialidad y decolonialidad del saber =====
+{e:2,q:"Según Restrepo y Rojas, ¿cómo puede entenderse el pensamiento decolonial o descolonial?",o:["Como un conjunto de reflexiones críticas sobre el 'lado oscuro' de la modernidad","Como una simple corriente artística","Como una teoría exclusivamente económica","Como un movimiento político partidario"],c:0,x:"Es la definición que citan Restrepo y Rojas sobre esta corriente de pensamiento."},
+{e:2,q:"Además de las críticas al eurocentrismo en las ciencias sociales, ¿qué nombre recibe la búsqueda de renovadas perspectivas para entender el mundo?",o:["Giro colonial (o decolonial)","Giro lingüístico","Giro positivista","Giro funcionalista"],c:0,x:"Este 'giro' agrupa a los autores que continúan la crítica de Quijano."},
+{e:2,q:"¿Cómo puede definirse de forma general el eurocentrismo?",o:["La asunción de que Europa y su cultura fueron el centro y el motor de la evolución social","La creencia de que todas las culturas son equivalentes","Un sistema exclusivamente jurídico","Una corriente artística del siglo XX"],c:0,x:"Es la definición básica que asume que Europa fue el motor de la evolución social y no económica exclusivamente."},
+{e:2,q:"El modo de conocimiento de origen eurocéntrico que se impuso como emblema de la modernidad capitalista se caracteriza por ser de tipo:",o:["Racional","Irracional","Espiritual","Artístico"],c:0,x:"Este tipo de conocimiento buscaba medición, cuantificación y objetivación de lo cognoscible para su control."},
+{e:2,q:"Una crítica a la teoría de la modernización señala que muchas sociedades no se desarrollaron en dirección de los Estados-nación europeos (Eisenstadt). ¿A qué concepción critica esta afirmación?",o:["A la concepción etnocéntrica del desarrollo","A la concepción marxista del Estado","A la concepción decolonial del poder","A la concepción funcionalista de la familia"],c:0,x:"Cuestiona la idea de que todos los países deben seguir el mismo camino europeo hacia el desarrollo."},
+{e:2,q:"Desde la década del 80 del siglo XX, con la caída de los socialismos reales y la crisis del capitalismo, ¿qué nuevo discurso dominante comienza a imponerse?",o:["El discurso neoliberal","El discurso socialdemócrata","El discurso decolonial","El discurso keynesiano clásico"],c:0,x:"Este discurso se vuelve hegemónico desde entonces hasta la actualidad."},
+{e:2,q:"¿Qué critica Zulma Palermo a la noción extendida de 'interculturalidad'?",o:["Que suele reducirse al bilingüismo y sigue siendo colonialista aunque parezca políticamente correcta","Que es un concepto inexistente en América Latina","Que solo aplica a comunidades europeas","Que fue inventada por Foucault"],c:0,x:"Atenúa la diferencia real y deja sin transformar otros aspectos de la dominación racial."},
+{e:2,q:"¿Qué propone Nelson Maldonado Torres con el concepto de 'colonialidad del ser'?",o:["Que la colonialidad del poder, centrada en la raza, genera una 'no ética de la guerra' que avasalla la humanidad del otro","Que el ser humano no tiene identidad cultural","Que la colonialidad terminó con la independencia americana","Que la colonialidad solo afecta al saber académico"],c:0,x:"Relaciona la colonialidad del saber con la del ser, habilitando violencia real y no solo epistémica."},
+{e:2,q:"¿Qué analiza Catherine Walsh en su línea de estudios decoloniales sobre Bolivia y Ecuador?",o:["La tensión constante entre el Estado y la sociedad desde los movimientos indígenas y afrodescendientes","El sistema bancario europeo","La escuela clásica de administración","El panóptico de Foucault"],c:0,x:"Es uno de los ejemplos de estudios decoloniales que menciona el módulo."},
+
+// ===== EJE 3 — Poder y violencia simbólica (Bourdieu) =====
+{e:3,q:"¿De quién toma principalmente sus aportes Pierre Bourdieu para pensar el poder?",o:["De los padres fundadores de la Sociología (Marx, Weber, Durkheim)","Exclusivamente de Foucault","Exclusivamente de Quijano","De los economistas clásicos"],c:0,x:"Bourdieu articula los aportes de Marx, Weber y Durkheim en su teoría del poder."},
+{e:3,q:"Según Bourdieu, ¿qué asumen los sujetos a partir de la interiorización de las relaciones de poder mediante la violencia simbólica?",o:["Prácticas y representaciones del mundo","Únicamente ingresos económicos","Solamente títulos académicos","Relaciones de parentesco"],c:0,x:"La violencia simbólica opera generando en los sujetos ciertas prácticas y visiones del mundo naturalizadas."},
+{e:3,q:"En su libro 'La reproducción', ¿cuál es el propósito que Bourdieu atribuye a la acción y el trabajo pedagógico como violencia simbólica?",o:["Producir un habitus que mantenga las relaciones de dominación","Producir un habitus que destruya las relaciones de dominación","Eliminar completamente la desigualdad social","Fomentar la movilidad social ascendente"],c:0,x:"El trabajo pedagógico reproduce, a través del habitus, las relaciones de dominación existentes."},
+{e:3,q:"¿Con cuál de las siguientes ideas podemos relacionar mejor el concepto de habitus en Bourdieu?",o:["Con las perspectivas o disposiciones que estructuran la manera de ver y actuar en el mundo","Con un tipo de contrato legal","Con una institución estatal específica","Con una teoría exclusivamente económica"],c:0,x:"El habitus son disposiciones duraderas de pensar, sentir y actuar."},
+{e:3,q:"Bourdieu retoma una idea central de Max Weber para el estudio del poder. ¿Cuál es?",o:["La legitimidad","La lucha de clases","El materialismo histórico","La solidaridad orgánica"],c:0,x:"De Weber recupera que el poder requiere aceptación simbólica y legitimidad de ambas partes."},
+{e:3,q:"Cuando los agentes internalizan las relaciones de poder, se da una correspondencia entre estructuras mentales y sociales, idea que Bourdieu extrae de Durkheim. ¿Qué función específica cumple esa correspondencia?",o:["Una función política","Una función exclusivamente económica","Una función biológica","Una función meramente estética"],c:0,x:"Esa correspondencia entre estructuras cumple, para Bourdieu, una función política de legitimación."},
+{e:3,q:"¿Cuál de las siguientes opciones es un ejemplo de capital cultural, según Bourdieu?",o:["Una profesión (título universitario)","Un terreno o propiedad inmueble","Una cuenta bancaria","Una red de contactos políticos"],c:0,x:"El título universitario es capital cultural institucionalizado; el terreno sería capital económico y los contactos, capital social."},
+{e:3,q:"¿Cuáles de las siguientes son características del habitus según Bourdieu?",o:["Es lo social incorporado de modo duradero en el cuerpo, y a la vez una estructura estructurada y estructurante","Es exclusivamente una idea consciente y racional","Es un documento legal registrado en instituciones","Es un tipo de moneda simbólica intercambiable"],c:0,x:"El habitus también es capital y resultado de condiciones objetivas, y es una interiorización de la exterioridad."},
+{e:3,q:"¿Qué tipo de pensamiento propone Bourdieu para analizar los fenómenos sociales?",o:["Un pensamiento relacional e histórico","Un pensamiento exclusivamente cuantitativo","Un pensamiento ahistórico y estático","Un pensamiento puramente especulativo"],c:0,x:"Bourdieu busca integrar objetivismo y subjetivismo desde una perspectiva relacional e histórica."},
+{e:3,q:"Además de la función pedagógica, ¿qué otra misión estructural cumple la escuela según Bourdieu?",o:["La de distinción social, ya que no todas las instituciones educativas tienen el mismo prestigio","La de reemplazar completamente a la familia","La de eliminar la desigualdad social","La de garantizar el acceso igualitario al poder político"],c:0,x:"Las escuelas públicas y privadas cumplen una función de distinción que produce división de clase."},
+{e:3,q:"Un alumno cita a Bourdieu: 'Legitimar una dominación es dar toda la fuerza de la razón (el interés, el capital) del más fuerte.' ¿Cuál sería la explicación más adecuada de esta frase?",o:["Los ganadores en un campo de lucha imponen una visión del campo, de la lucha y del capital, que termina siendo aceptada por todos","Los perdedores en un campo de lucha nunca aceptan a los ganadores","La razón siempre está del lado de quien tiene más dinero, sin excepción","Los capitales por los que se lucha son totalmente independientes de los significados en disputa"],c:0,x:"Es la interpretación que da el módulo sobre esta frase de Bourdieu."},
+{e:3,q:"La violencia simbólica se manifiesta en todos los ámbitos de producción simbólica. ¿Qué logra de este modo la cultura dominante?",o:["Ser reconocida como universal y legitimar sus intereses","Ser rechazada por la mayoría de la sociedad","Perder su capacidad de reproducirse","Quedar confinada solo al ámbito privado"],c:0,x:"Esta es una de las funciones centrales de la violencia simbólica en la teoría de Bourdieu."},
+{e:3,q:"En la teoría de Bourdieu, que integra perspectivas objetivistas y subjetivistas, ¿dónde se verifica o manifiesta la realidad social?",o:["En las cosas y en los cuerpos","Únicamente en las leyes escritas","Únicamente en el discurso político","Solo en la economía formal"],c:0,x:"Para Bourdieu el poder existe físicamente (en cosas y cuerpos) y simbólicamente (en habitus e instituciones)."},
+{e:3,q:"En la teoría de Bourdieu, ¿quién cumple el rol de integración de la clase dominante, integración ficticia de la sociedad y legitimación del orden establecido?",o:["Los sistemas ideológicos (escuela, medios, academia)","El Poder Judicial exclusivamente","Los sindicatos","Las organizaciones no gubernamentales"],c:0,x:"Es la triple función que cumplen los sistemas ideológicos según Bourdieu."},
+{e:3,q:"¿Cuáles son los dos teóricos fundamentales a quienes se atribuye el desarrollo de una perspectiva relacional del mundo social, retomada por Bourdieu?",o:["Marx y Weber","Freud y Jung","Comte y Spencer","Rousseau y Locke"],c:0,x:"Ambos aportan la idea de que la sociedad se comprende a través de relaciones, no de atributos aislados."},
+{e:3,q:"Los aportes de la teoría de Max Weber que utiliza Pierre Bourdieu están relacionados principalmente con el concepto de:",o:["Dominación social","Violencia física","Estratificación por castas","Determinismo económico"],c:0,x:"Bourdieu retoma de Weber especialmente la noción de dominación y legitimidad."},
+{e:3,q:"¿Cuáles son las tres características centrales de la violencia simbólica según Bourdieu?",o:["Es una violencia suave sustentada en el poder simbólico; se funda en el reconocimiento/desconocimiento de su arbitrariedad; busca reproducir relaciones sociales entre clases","Es exclusivamente física y directa; se ejerce con el consentimiento explícito de la víctima; busca destruir toda jerarquía","Es solo económica; es siempre consciente para ambas partes; busca la igualdad social","No tiene relación con las clases sociales; es momentánea; no se reproduce en el tiempo"],c:0,x:"Estas tres características definen la violencia simbólica en la obra de Bourdieu."},
+{e:3,q:"Según Bourdieu, el poder es constitutivo de la sociedad y posee una doble dimensión. ¿Cuáles son esas dos dimensiones?",o:["Física (objetiva) y simbólica","Legal y religiosa","Nacional e internacional","Pública y estatal exclusivamente"],c:0,x:"Existe en las cosas y en los cuerpos, pero también en las instituciones y en los cerebros, según la cita de Bourdieu."},
+{e:3,q:"Una publicidad de cerveza fue criticada en 2020 en Argentina por ejercer violencia simbólica hacia la mujer. ¿Cuáles de las siguientes características fundamentarían esa crítica desde Bourdieu?",o:["Es una violencia suave sustentada en el poder simbólico, y se funda en el reconocimiento/desconocimiento de su arbitrariedad","Es una violencia física directa y consciente para quien la recibe","No tiene relación con la reproducción de relaciones entre clases o géneros","Es un fenómeno exclusivamente jurídico, no simbólico"],c:0,x:"El caso ejemplifica cómo la publicidad puede reproducir relaciones de dominación de forma sutil y naturalizada."},
+{e:3,q:"¿Cuáles son los cuatro tipos de capital que analiza Bourdieu, cuyas luchas definen los distintos campos de fuerza?",o:["Económico, simbólico, social y cultural","Económico, político, militar y religioso","Físico, mental, espiritual y digital","Público, privado, mixto y estatal"],c:0,x:"Cada tipo de capital da lugar a un campo de lucha específico (económico, cultural, social, simbólico)."},
+
+// ===== EJE 4 — Poder, sexo y género =====
+{e:4,q:"¿A qué apuntan las políticas del reconocimiento tendientes a mejorar el déficit de derechos y recursos que sufren las mujeres?",o:["Al reconocimiento de la identidad de género","A la eliminación de toda diferencia biológica","A la creación de nuevas categorías tributarias","Al aumento del gasto militar"],c:0,x:"Buscan reconocer específicamente la identidad de género como base de derechos."},
+{e:4,q:"En el estudio sobre disconfort de género de Martínez Finzi, ¿cuáles son cuatro de las condiciones objetivas de existencia más influyentes en la variación de las representaciones sobre el género?",o:["El género mismo, la posesión de capitales económicos y culturales, la estructura de ingresos en la pareja y el marco familiar donde se gestaron los habitus","La edad, la nacionalidad, la religión y el nivel educativo exclusivamente","El clima, la geografía, el idioma y la etnia","La orientación política, el club de fútbol, la vestimenta y el gusto musical"],c:0,x:"Estas cuatro condiciones son las que el estudio identifica como más influyentes."},
+{e:4,q:"¿Cuál es la relevancia atribuida al capital cultural en el estudio sobre disconfort de género?",o:["Ayuda a disminuir el disconfort de género en la pareja","Aumenta siempre el disconfort de género","No tiene ninguna relevancia en el estudio","Solo afecta a las relaciones laborales, no a las de pareja"],c:0,x:"El capital cultural permite legitimar el avance de uno u otro miembro de la pareja en un rol tradicionalmente ajeno."},
+{e:4,q:"¿Cuándo aparece el disconfort de género según el estudio de Martínez Finzi?",o:["Cuando la situación de la persona en la pareja se aleja de las normas de género que ha aprendido","Cuando ambos miembros de la pareja ganan el mismo salario","Cuando la pareja decide no tener hijos","Cuando la pareja se muda de ciudad"],c:0,x:"Es la sensación de incomodidad que surge de esa distancia entre el rol vivido y el habitus aprendido."},
+{e:4,q:"Según los estereotipos de género descritos en el módulo, ¿cuál de las siguientes sería una característica atribuida generalmente a las mujeres?",o:["Pertenecer al ámbito doméstico","Pertenecer al ámbito público exclusivamente","Ser el principal proveedor económico","Ocupar cargos de máxima jerarquía"],c:0,x:"Es parte de la tabla de estereotipos de género (adentro/privado) que describe el módulo."},
+{e:4,q:"Las normas de género se definen en torno a una red de oposiciones entre lo femenino y lo masculino. ¿Cuál de las siguientes características es atribuida tradicionalmente a la femineidad?",o:["Pasividad","Actividad","Dinamismo","Racionalidad"],c:0,x:"Al rol masculino se le atribuye tradicionalmente dinamismo y racionalidad; al femenino, pasividad y emotividad."},
+{e:4,q:"El patriarcado es un sistema de dominación donde un grupo de hombres ejerce poder sobre las mujeres. ¿En qué ámbitos de la existencia social puede verse esta dominación?",o:["En el ámbito público y en el doméstico","Únicamente en el ámbito religioso","Únicamente en el ámbito deportivo","Solo en países no desarrollados"],c:0,x:"El patriarcado atraviesa tanto la esfera pública (política, trabajo) como la privada (familia, hogar)."},
+{e:4,q:"¿Cuál de las siguientes situaciones cotidianas es señalada como un indicador sutil de la dominación masculina?",o:["El hecho de nombrar siempre primero al hombre cuando se habla de un matrimonio","El hecho de que las parejas compartan gastos por igual","El hecho de que ambos trabajen fuera del hogar","El hecho de que compartan las mismas amistades"],c:0,x:"Es un ejemplo de cómo el lenguaje cotidiano reproduce jerarquías de género de forma naturalizada."},
+{e:4,q:"¿Cuáles de las siguientes situaciones pueden generar disconfort de género dentro de una pareja, según el estudio citado?",o:["Que la mujer gane más dinero que el hombre, que el varón realice las tareas del hogar, que el hombre esté desempleado, o que la mujer sea mecánica de autos","Que ambos trabajen en la misma empresa","Que ambos tengan la misma edad","Que vivan en la misma ciudad donde nacieron"],c:0,x:"Todas estas situaciones invierten roles de género tradicionalmente asignados, generando incomodidad."},
+{e:4,q:"¿Cuáles son cuatro características que definen a las normas de género según el módulo?",o:["Son construcciones constitutivas de las relaciones sociales en función de diferencias biológicas; son parámetros diferenciados para varones y mujeres; son mandatos que definen conductas y expectativas; son representaciones en función de oposiciones","Son leyes escritas en el código civil exclusivamente; son iguales en todas las culturas; no cambian con el tiempo; solo aplican al ámbito laboral","Son acuerdos internacionales firmados por la ONU; se aplican solo en democracias; son inmutables; no tienen base biológica","Son reglas religiosas exclusivamente; solo existen en Occidente; no afectan a la política; son consensuadas por todos"],c:0,x:"Estas cuatro características son las que propone el módulo para definir las normas de género."},
+{e:4,q:"Las familias tradicionales son aquellas que asignan a la mujer un rol principalmente de:",o:["Cuidado y reproducción","Producción y liderazgo político","Innovación tecnológica","Representación diplomática"],c:0,x:"Históricamente se asigna al hombre la producción (afuera) y a la mujer la reproducción (adentro del hogar)."},
+{e:4,q:"Para que exista una relación de poder, esta debe ejercerse sobre una persona libre. ¿A qué autor corresponde esta idea?",o:["Michel Foucault","Pierre Bourdieu","Aníbal Quijano","Max Weber"],c:0,x:"Foucault sostiene que sobre un esclavo no hay poder, sino sometimiento puro, ya que falta la libertad necesaria para la resistencia."},
+{e:4,q:"¿Por qué el concepto de habitus de Bourdieu permite entender la relación de poder al interior de la pareja?",o:["Porque explica la reproducción de las condiciones de existencia mediante prácticas irreflexivas que reproducen lo aprendido socialmente","Porque establece leyes explícitas sobre el matrimonio","Porque predice matemáticamente el comportamiento de cada persona","Porque elimina cualquier posibilidad de cambio en los roles de género"],c:0,x:"Las personas criadas en un contexto determinado tienden a reproducir esos patrones de forma acrítica y naturalizada."},
+
+// ===== EJE 5 — El poder en las organizaciones =====
+{e:5,q:"Para Gibson, ¿cómo es el poder en las organizaciones?",o:["Bidireccional","Unidireccional, siempre de arriba hacia abajo","Inexistente en las organizaciones modernas","Exclusivamente económico"],c:0,x:"Gibson concibe al poder como una relación que circula en más de una dirección dentro de la organización."},
+{e:5,q:"¿Cuál era el objetivo central de la corriente teórica llamada 'organización científica', representada principalmente por Taylor?",o:["Lograr el control del proceso de trabajo en los talleres y fábricas grandes","Eliminar completamente la jerarquía organizacional","Fomentar el liderazgo informal entre pares","Estudiar exclusivamente el factor humano en el trabajo"],c:0,x:"Taylor buscaba maximizar la producción mediante el control minucioso del tiempo y el movimiento."},
+{e:5,q:"¿Cuáles son las funciones de la administración planteadas por Fayol?",o:["Organizar, planear, controlar y dirigir","Vender, comprar, producir y distribuir","Vigilar, castigar, premiar y sancionar","Negociar, resistir, ceder y avanzar"],c:0,x:"Es el aporte clásico de Fayol, todavía vigente para pensar el rol del administrador."},
+{e:5,q:"Según Max Weber, ¿en qué tipos de legitimidad se fundamenta la dominación?",o:["Tradicional, carismática y racional-legal","Económica, política y militar","Formal, informal y mixta","Nacional, internacional y local"],c:0,x:"Estos tres tipos ideales de legitimidad explican por qué las personas obedecen a una autoridad."},
+{e:5,q:"En la teoría de Max Weber, el concepto de poder está estrechamente vinculado con otros dos conceptos. ¿Cuáles son?",o:["Autoridad y legitimidad","Capital y trabajo","Carisma y violencia","Norma y sanción"],c:0,x:"Para Weber, el ejercicio efectivo del poder requiere de autoridad reconocida y legitimidad."},
+{e:5,q:"¿Cuál de las siguientes sería un ejemplo de dominación tradicional dentro de una organización, según Weber?",o:["Un jefe de mandos medios cuyo ejercicio se renueva a pesar de los cambios de gerencia, en virtud de su trayectoria y antigüedad","Un gerente elegido por concurso de méritos técnicos","Un líder que convence por su carisma personal a todo el equipo","Un directivo designado por una ley específica"],c:0,x:"La dominación tradicional se sostiene por la costumbre y el tiempo en el cargo, más allá de cambios formales."},
+{e:5,q:"Para Talcott Parsons, ¿cuál es la función que cumple el poder dentro de una organización?",o:["Garantizar el cumplimiento de las metas colectivas","Generar conflicto permanente entre las áreas","Eliminar toda forma de autoridad formal","Sustituir completamente a la comunicación interna"],c:0,x:"Parsons ve al poder como aquello que mantiene cohesionada a la organización en torno a sus objetivos comunes."},
+{e:5,q:"¿Cómo puede definirse una organización, en términos generales?",o:["Como un grupo de seres humanos que busca un objetivo en común","Como un edificio con empleados dentro","Como un conjunto de máquinas coordinadas","Como una entidad exclusivamente estatal"],c:0,x:"La definición pone el foco en la búsqueda de un objetivo compartido, más allá de la estructura física."},
+{e:5,q:"¿Cuál de las siguientes corrientes del estudio organizacional analiza la estructura informal de la organización, para ver cómo influye sobre la formal y sobre el aumento de la productividad?",o:["La escuela de relaciones humanas","La escuela clásica racionalista","La tercera mirada de Crozier","El enfoque funcionalista de Parsons"],c:0,x:"Es el aporte distintivo de Mayo y Lewin frente a la escuela clásica de Taylor y Fayol."},
+{e:5,q:"¿Cuál de los siguientes autores realizó un aporte central a la sociología de las organizaciones al reconocer la importancia del factor humano e interpersonal en su funcionamiento?",o:["Elton Mayo","Frederick Taylor","Henri Fayol","Max Weber"],c:0,x:"Mayo es el referente central de la escuela de las relaciones humanas."},
+{e:5,q:"Herbert Simon afirma que los procesos decisorios en las organizaciones están guiados por un principio de:",o:["Racionalidad limitada","Racionalidad absoluta","Irracionalidad total","Determinismo tecnológico"],c:0,x:"Las personas deciden según sus expectativas y sentimientos, dentro de las restricciones organizacionales."},
+{e:5,q:"¿Cuál es el rol que la visión actual de la organización empresarial pretende para sus integrantes?",o:["Una actitud responsable en la toma de decisiones para el logro del objetivo general","Una obediencia estrictamente jerárquica sin margen de decisión","La búsqueda exclusiva del beneficio individual","La ausencia total de compromiso con la organización"],c:0,x:"Se espera de los colaboradores una participación activa y responsable en las decisiones."},
+{e:5,q:"Según Crozier y Friedberg, ¿qué es lo que se intercambia específicamente en una relación de poder dentro de una organización?",o:["Posibilidades de acción","Únicamente dinero","Únicamente información técnica","Cargos jerárquicos formales"],c:0,x:"El intercambio de posibilidades de acción es la base de la negociación de poder entre actores."},
+{e:5,q:"Crozier y Friedberg citan la 'ley de bronce de la oligarquía' de Michels como ejemplo de:",o:["Los efectos contraintuitivos de los asuntos humanos","Una ley matemática exacta y predecible","Un modelo ideal de democracia directa","Una teoría exclusivamente económica"],c:0,x:"Muestra cómo las organizaciones, aun buscando fines democráticos, tienden a generar estructuras oligárquicas."},
+
+// ===== EJE 6 — El ejercicio del poder en las organizaciones =====
+{e:6,q:"Según Pfeffer, ¿cuál es la principal fuente de poder dentro de una organización?",o:["El puesto en la estructura organizacional","Exclusivamente los rasgos de personalidad","La antigüedad familiar","El nivel educativo formal"],c:0,x:"Pfeffer sostiene que las características personales intervienen muy poco frente al puesto ocupado."},
+{e:6,q:"Se observa que un buen uso del poder gerencial puede medirse por la calidad de las conversaciones. ¿En qué se traduce esta observación?",o:["En la posibilidad de generar nuevas visiones sobre un asunto","En la reducción automática de costos","En el aumento inmediato de ventas","En la eliminación de todo conflicto"],c:0,x:"Si la comunicación es adecuada, deberían surgir nuevas visiones y soluciones sobre un mismo tema."},
+{e:6,q:"Según García Vargas, ¿cuál es la característica central de un buen dirigente organizacional?",o:["Inspirar respeto y confianza entre los subordinados","Imponer siempre su autoridad por la fuerza","Evitar todo contacto directo con el personal","Delegar completamente la toma de decisiones"],c:0,x:"El respeto y la confianza son la base de un liderazgo efectivo según este autor."},
+{e:6,q:"¿Cómo clasifica Raven y French al 'poder referente'?",o:["Como aquel que surge de una relación interpersonal donde el sujeto influido reconoce como referente o modelo a quien lo influye","Como aquel que surge exclusivamente del cargo formal","Como aquel basado únicamente en el castigo","Como aquel que depende solo del conocimiento técnico"],c:0,x:"El poder referente se basa en la identificación y cercanía que un sujeto busca con otro al que admira."},
+{e:6,q:"Durante un paro de colectivos, algunos choferes que no están de acuerdo con la medida son apedreados por sus propios compañeros. ¿Qué base de poder está utilizando el gremio para garantizar esa acción colectiva?",o:["Coercitivo","Referente","De experticia","Legítimo"],c:0,x:"Es un ejemplo claro de uso de la base de poder coercitiva (Raven y French) dentro de la acción colectiva."},
+{e:6,q:"Cuando las organizaciones se vuelven más grandes, se burocratizan y especializan. Esto genera una tensión constante entre:",o:["Eficiencia y democracia","Producción y consumo","Ganancia y pérdida","Norte y Sur"],c:0,x:"La burocratización mejora la eficiencia pero puede reducir la participación democrática interna."},
+{e:6,q:"Desde la visión funcionalista, ¿dónde se encuentra localizado el poder dentro de una organización?",o:["En algún lugar específico de la estructura organizacional","En ningún lugar concreto, es puramente relacional","Únicamente fuera de la organización","Exclusivamente en el mercado externo"],c:0,x:"Esta es la crítica central que reciben los enfoques funcionalistas: tratan al poder como un atributo ubicado en la jerarquía."},
+{e:6,q:"En situaciones de interdependencia muy alta entre áreas de una organización, ¿qué recomienda Pfeffer?",o:["No usar el poder como herramienta de gestión, sino arribar a acuerdos y consensos","Usar siempre el poder de forma directa","Eliminar toda forma de negociación","Delegar la decisión al azar"],c:0,x:"En alta interdependencia el consenso es más efectivo que la imposición del poder."},
+{e:6,q:"Según Raven y French, ¿con qué se asocia el poder que se origina en la experiencia (poder de experticia)?",o:["Con el conocimiento acumulado en el ejercicio experto de una tarea definida","Con el cargo jerárquico más alto","Con la antigüedad familiar en la empresa","Con la posesión de bienes materiales"],c:0,x:"Es la base de poder ligada al saber técnico especializado sobre una tarea concreta."},
+{e:6,q:"Según Mintzberg, el modelo organizacional 'burocrático-mecánico' concentra el poder principalmente en:",o:["La tecnoestructura","Los operarios de base","El entorno externo","Los accionistas exclusivamente"],c:0,x:"Mintzberg propone distintos modelos organizacionales según dónde se concentra el poder."},
+{e:6,q:"Según Mintzberg, ¿en función de qué cuatro factores se constituyen las organizaciones?",o:["Antigüedad y tamaño, poder, medio ambiente y sistema técnico","Ingresos, egresos, activos y pasivos","Misión, visión, valores y objetivos","Empleados, clientes, proveedores y competidores"],c:0,x:"Estos cuatro factores explican la variedad de configuraciones organizacionales posibles."},
+{e:6,q:"Pfeffer propone un proceso de implantación de políticas a través del poder. ¿Cuál de los siguientes es uno de esos pasos?",o:["Identificar cuáles son las bases de poder de las personas implicadas en el proceso","Contratar exclusivamente personal externo","Eliminar toda forma de jerarquía previa","Ignorar el contexto organizacional"],c:0,x:"Este paso es parte de la secuencia de seis pasos que propone Pfeffer para implantar políticas mediante el poder."},
+{e:6,q:"Según Pfeffer, cuando la interdependencia entre áreas es grande, ¿qué es más probable que ocurra?",o:["Que la gente sea propensa a trabajar en equipo y fraguar metas comunes","Que cada área actúe de forma completamente aislada","Que el conflicto desaparezca automáticamente","Que se elimine la necesidad de comunicación"],c:0,x:"La alta interdependencia fomenta la cooperación entre las partes."},
+{e:6,q:"Pfeffer afirma que las grandes organizaciones son entidades políticas, por lo que guardan cierta analogía con:",o:["Los gobiernos","Los clubes deportivos","Las familias","Las religiones"],c:0,x:"Ve a las organizaciones grandes como espacios de negociación política similares a los gobiernos."},
+{e:6,q:"En las conclusiones de Pfeffer sobre el desarrollo del poder en las organizaciones, ¿qué es importante adquirir en los primeros estadios de una carrera?",o:["Fama de eficaces","Fama de conflictivos","Fama de indecisos","Fama de rígidos"],c:0,x:"Construir una reputación de eficacia temprana favorece la acumulación de poder posterior."},
+{e:6,q:"Pfeffer destaca la importancia de los aliados o partidarios como recurso de poder. ¿Qué medios señala como importantes para la formación de alianzas?",o:["Brindar posiciones de poder y hacer favores","Imponer sanciones económicas","Aislar a los posibles rivales","Ignorar las relaciones informales"],c:0,x:"El principio de reciprocidad sostiene que estamos obligados a devolver de algún modo los favores que recibimos."},
+{e:6,q:"En la noción de centralidad reticular, ¿qué indica específicamente la posición de 'conexión'?",o:["Con cuántas personas nos comunicamos dentro de una red, marcando el volumen de contactos","La interposición de una persona entre otras dos en el canal de comunicación","Quién puede llegar a más personas sin mediaciones","La antigüedad de una persona en la organización"],c:0,x:"La medianería mide la interposición y la proximidad mide el alcance sin mediaciones; la conexión mide el volumen de contactos."},
+{e:6,q:"¿Qué posición de la centralidad reticular indica quién, dentro de la red de comunicación, puede llegar a un número más grande de personas sin mediaciones?",o:["La proximidad","La medianería","La conexión","La antigüedad"],c:0,x:"Es la tercera posición de la centralidad reticular propuesta por Pfeffer."},
+
+// ===== EJE 7 — Foucault y la microfísica del poder =====
+{e:7,q:"En la propuesta de Foucault, ¿cuáles son los elementos a partir de los cuales el poder entra en juego?",o:["El sujeto sobre el que se ejerce el poder, sus reacciones/resultados, y la resistencia","El sujeto, la ley y el castigo exclusivamente","El Estado, el mercado y la sociedad civil","La economía, la política y la cultura"],c:0,x:"Estos tres elementos son centrales para distinguir el poder foucaultiano de un simple sometimiento."},
+{e:7,q:"¿Cuáles son los elementos sobre los que se constituye una relación de poder según Foucault?",o:["El otro, la libertad y las resistencias","El yo, la autoridad y la obediencia","El Estado, la ley y la sanción","El capital, el trabajo y la plusvalía"],c:0,x:"Sin libertad del otro no hay relación de poder posible, sino sometimiento puro, según Foucault."},
+{e:7,q:"¿Cuáles son las cinco herramientas de análisis que Foucault propone en su texto 'El sujeto y el poder' (1988) para estudiar el poder en las organizaciones?",o:["Sistema de diferenciaciones, tipo de objetivo perseguido, modalidades instrumentales, maneras de institucionalización y grados de racionalización","Recompensa, coerción, legitimidad, experticia y poder referente","Trabajo, sexo, naturaleza, subjetividad y autoridad colectiva","Cooperación, incertidumbre, poder, cambio y resistencia"],c:0,x:"Estas cinco herramientas permiten analizar cómo se ejerce el poder al interior de una organización."},
+{e:7,q:"Dentro de una organización, ¿qué atributos pueden generar diferenciaciones según el sistema de diferenciaciones de Foucault?",o:["Género, edad, profesión y raza, entre otros","Únicamente el salario","Únicamente la antigüedad","Únicamente la nacionalidad"],c:0,x:"El sistema de diferenciaciones incluye múltiples condiciones, tanto formales como informales."},
+{e:7,q:"En el análisis histórico que hace Foucault de los mecanismos de poder, ¿cuáles son los dispositivos que identifica y en qué orden histórico predominaron?",o:["Castigo (predominante en el siglo XVII), disciplina (siglo XIX) y vigilancia (siglo XX)","Recompensa, coerción y legitimidad, en ese orden","Trabajo, capital y Estado, sin orden histórico específico","Colonización, modernización y globalización"],c:0,x:"Foucault traza esta evolución histórica de los dispositivos de poder en Vigilar y castigar."},
+{e:7,q:"Para expresar e ilustrar su teoría sobre el poder, Foucault utilizaba una imagen metafórica extraída de la obra de Jeremy Bentham. ¿Cuál es esa imagen?",o:["El panóptico","La pirámide jerárquica","El árbol genealógico","El laberinto"],c:0,x:"El panóptico es el modelo arquitectónico que ilustra cómo la vigilancia interioriza el control."},
+{e:7,q:"En los análisis organizacionales que retoman a Foucault, se introduce la noción de vigilancia solidaria. ¿Qué implica este tipo de vigilancia?",o:["Que existe un control mutuo entre los propios empleados, que se desmovilizan como grupo frente a la dirección","Que solo los directivos vigilan al personal, sin ningún control recíproco","Que la vigilancia desaparece por completo en las organizaciones modernas","Que los sindicatos son los únicos que ejercen control"],c:0,x:"Funciona como un panóptico sin estructura arquitectónica diseñada específicamente para ese fin."},
+{e:7,q:"¿Cómo se conoce el enfoque de Michel Foucault sobre el análisis del poder, muy diferente a las visiones desarrolladas previamente?",o:["Como la perspectiva relacional del poder","Como la perspectiva clásica del poder","Como la perspectiva funcionalista del poder","Como la perspectiva económica del poder"],c:0,x:"Foucault centra su análisis en las relaciones entre sujetos libres, no en la estructura o el atributo."},
+{e:7,q:"En la teoría de Foucault, el llamado 'poder pastoral' es un tipo de poder particular basado en:",o:["La individualización","La colectivización total","La eliminación de la jerarquía","El anonimato absoluto"],c:0,x:"El poder pastoral se centra en el cuidado individualizado de cada sujeto, típico de instituciones religiosas y luego estatales."},
+{e:7,q:"Siguiendo la perspectiva de Foucault, ¿cómo se llama, dentro de las organizaciones, a los métodos que permiten el control minucioso de las operaciones del cuerpo?",o:["Disciplina","Autoridad","Legitimidad","Cooperación"],c:0,x:"La disciplina organiza el espacio y el cuerpo para garantizar sujeción constante y una relación de docilidad-utilidad."},
+{e:7,q:"Desde la perspectiva de Foucault, ¿cómo puede analizarse la cadena de montaje típica del modelo fordista?",o:["Como un dispositivo de disciplina","Como un simple reglamento administrativo","Como una forma de vigilancia solidaria exclusivamente","Como un ejemplo de poder referente"],c:0,x:"La cadena de montaje organiza minuciosamente el cuerpo y el movimiento de los trabajadores, típico de la disciplina foucaultiana."},
+{e:7,q:"¿Qué concepto se utiliza desde la perspectiva de Foucault para identificar los controles digitales que se realizan hoy en una empresa?",o:["Vigilancia digital","Coerción digital","Legitimidad digital","Experticia digital"],c:0,x:"Es una extensión contemporánea del concepto de vigilancia que describe Foucault."},
+{e:7,q:"Según la teoría de Foucault, el discurso cumple una doble función en relación con el poder. ¿Cuál es?",o:["Sostenerlo y, a la vez, luchar para o contra él","Ocultarlo completamente y negarlo siempre","Reemplazarlo totalmente por la violencia física","Ser completamente neutral frente al poder"],c:0,x:"El discurso puede tanto reforzar el poder existente como ser un instrumento de resistencia contra él."},
+{e:7,q:"A partir del esquema teórico de Foucault, ¿mediante qué medios se institucionaliza y desarrolla la comunicación dentro de una organización?",o:["La estructura jerárquica, las redes de cooperación profesional y los lazos personales","Exclusivamente los memorandos escritos","Solo las reuniones formales programadas","Únicamente el organigrama oficial"],c:0,x:"La comunicación se institucionaliza a través de estos tres canales combinados."},
+{e:7,q:"Según el enfoque de Foucault, el sistema de diferenciaciones es clave para analizar las relaciones de poder. ¿Cuál de los siguientes elementos sirve como diferenciador dentro de una organización?",o:["Las categorías profesionales","Únicamente el color de la vestimenta","Únicamente el idioma hablado","Exclusivamente la ubicación geográfica de la oficina"],c:0,x:"Las categorías profesionales, junto con género, edad y raza, entre otras, son diferenciadores relevantes."},
+{e:7,q:"En los análisis que toman aportes de Foucault, ¿cómo se manifiestan en las organizaciones las resistencias que todo ejercicio de poder genera?",o:["Como conflicto","Como renuncias masivas inmediatas","Como aumento automático de productividad","Como eliminación total del poder"],c:0,x:"El conflicto es la forma organizacional en que se expresa la resistencia inherente a las relaciones de poder."},
+{e:7,q:"En el marco del estudio de las organizaciones, ¿cuáles de las siguientes son características de la comunicación como factor organizacional?",o:["Es un componente que determina las dinámicas bajo las cuales se estructuran las relaciones, y un elemento que salvaguarda la identidad de la organización","Es completamente irrelevante para la cultura organizacional","Solo tiene un rol técnico, sin relación con el poder","Se limita exclusivamente a documentos escritos formales"],c:0,x:"La comunicación también genera cultura organizacional y facilita la readaptación ante cambios del entorno."},
+
+// ===== EJE 8 — Poder y acción colectiva (Crozier y Friedberg) =====
+{e:8,q:"Según Crozier y Friedberg, ¿cuáles son las cuatro fuentes de incertidumbre que son, a la vez, fuentes de poder dentro de una organización?",o:["La relación de la organización con su entorno, la pericia, el control de la comunicación/información y el control de las reglas","La recompensa, la coerción, la legitimidad y la experticia","El trabajo, el sexo, la naturaleza y la autoridad colectiva","La cooperación, la vigilancia, la disciplina y el castigo"],c:0,x:"Cuanto más crucial sea la zona de incertidumbre, más poder genera esa fuente dentro de la organización."},
+{e:8,q:"¿Cuáles son las tres características específicas de la relación de poder según Crozier y Friedberg?",o:["Es instrumental, no es transitiva, y es una acción recíproca pero desequilibrada","Es siempre simétrica, hereditaria y medible con exactitud","Es exclusivamente económica, lineal y predecible","Es momentánea, azarosa e irreversible"],c:0,x:"Estas tres características distinguen su concepción relacional del poder."},
+{e:8,q:"'El poder reside en el margen de libertad que dispone cada uno de los participantes comprometidos en una relación de poder, es decir, en su mayor o menor posibilidad de rehusar lo que el otro pida.' ¿Esta afirmación de Crozier y Friedberg es correcta?",o:["Sí, es correcta","No, el poder no tiene relación con la libertad","No, el poder solo depende del cargo formal","No, esta idea corresponde a Foucault, no a Crozier y Friedberg"],c:0,x:"Es una cita textual del planteo de Crozier y Friedberg sobre el fundamento del poder."},
+{e:8,q:"¿Cuáles son los cuatro problemas de la acción colectiva que, según Crozier y Friedberg, la organización viene a resolver?",o:["Cooperación, incertidumbre, poder y cambio","Vigilancia, comunicación, disciplina y castigo","Trabajo, sexo, naturaleza y subjetividad","Recompensa, coerción, legitimidad y experticia"],c:0,x:"Estos cuatro problemas están interrelacionados entre sí en la teoría de la acción colectiva."},
+{e:8,q:"El problema de la acción colectiva es que requiere de la acción concertada de personas racionales que calculan si les conviene participar, aun teniendo un objetivo común pero también divergente. ¿Esta afirmación es correcta?",o:["Sí, es correcta","No, la acción colectiva nunca genera cálculo racional individual","No, los objetivos siempre son idénticos entre los participantes","No, este problema no existe en las organizaciones reales"],c:0,x:"Es el llamado problema del 'polizón' o free-rider en la teoría de la acción colectiva."},
+{e:8,q:"Una organización decide capacitar a una sola persona en el nuevo sistema de control de presentismo, quien luego lo aplica al resto del personal. ¿Qué fuente de incertidumbre/poder de Crozier y Friedberg ejemplifica este caso?",o:["El control de las reglas de la organización","La relación de la organización con su entorno","El control de la comunicación externa","La pericia técnica en programación"],c:0,x:"Esa persona adquiere poder porque controla la aplicación de las reglas de control del personal."},
+{e:8,q:"Los delegados gremiales que negocian una paritaria en representación de los trabajadores, ¿qué fuente de incertidumbre/poder de Crozier y Friedberg ejemplifican?",o:["La relación de la organización con su entorno","El control de las reglas internas","La pericia técnica exclusivamente","El control de la comunicación interna únicamente"],c:0,x:"La negociación con actores externos (sindicatos, entorno) es una fuente relevante de incertidumbre y poder."},
+{e:8,q:"Según Crozier y Friedberg, ¿qué cosas producen incertidumbre dentro de una organización?",o:["La relación con el entorno, las comunicaciones internas, el establecimiento y manejo de las reglas, y el conocimiento experto","Únicamente la falta de presupuesto","Únicamente el tamaño de la organización","Únicamente la antigüedad de los empleados"],c:0,x:"Estas cuatro fuentes de incertidumbre son también, para los autores, fuentes de poder."},
+{e:8,q:"¿En qué libro Crozier y Friedberg consideran a la organización como una forma de acción colectiva?",o:["El actor y el sistema (1990)","El fenómeno burocrático (1969)","Vigilar y castigar","El sujeto y el poder"],c:0,x:"Es la obra donde desarrollan en profundidad esta perspectiva relacional del poder y la acción colectiva."},
+{e:8,q:"¿Cómo describen Crozier y Friedberg al 'cambio' dentro de la organización?",o:["Como un proceso de aprendizaje colectivo que inventa y determina nuevas reglas de juego","Como un evento que nunca ocurre en las organizaciones estables","Como un sinónimo exacto de cooperación","Como algo sin ninguna relación con el poder"],c:0,x:"El cambio está vinculado al poder porque modificar las reglas también modifica las zonas de incertidumbre existentes."},
+];
+
+// build index chips
+const idxDiv = document.getElementById('ejeIndex');
+Object.keys(EJES).forEach(k=>{
+  const c = document.createElement('div');
+  c.className='chip';
+  c.textContent = k+' · '+EJES[k].split(' ').slice(0,2).join(' ');
+  c.onclick = ()=>{ document.getElementById('t'+k).open = true; document.getElementById('t'+k).scrollIntoView({behavior:'smooth',block:'start'}); };
+  idxDiv.appendChild(c);
+});
+
+// tabs
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// quiz logic
+let quizPool = [], current = 0, score = 0, wrong = [];
+
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
+
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  const val = document.getElementById('ejeSelect').value;
+  quizPool = shuffle(val==='all' ? Q.slice() : Q.filter(q=>q.e==val));
+  current = 0; score = 0; wrong = [];
+  document.getElementById('setupScreen').style.display='none';
+  document.getElementById('scoreScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  renderQuestion();
+});
+
+function renderQuestion(){
+  const item = quizPool[current];
+  document.getElementById('progressLabel').textContent = `Pregunta ${current+1} de ${quizPool.length} · Eje ${item.e}: ${EJES[item.e]}`;
+  const container = document.getElementById('qContainer');
+  container.innerHTML = '';
+  const card = document.createElement('div');
+  card.className='qcard';
+  const optsShuffled = item.o.map((text,i)=>({text,correct:i===item.c}));
+  const shuffled = shuffle(optsShuffled);
+  card.innerHTML = `<div class="qtag">Eje ${item.e}</div><h3>${item.q}</h3>`;
+  const optWrap = document.createElement('div');
+  shuffled.forEach(opt=>{
+    const b = document.createElement('button');
+    b.className='opt';
+    b.textContent = opt.text;
+    b.onclick = ()=>{
+      if(card.dataset.answered) return;
+      card.dataset.answered = '1';
+      const allBtns = optWrap.querySelectorAll('.opt');
+      allBtns.forEach(bb=>bb.disabled=true);
+      if(opt.correct){
+        b.classList.add('correct');
+        score++;
+      } else {
+        b.classList.add('wrong');
+        allBtns.forEach(bb=>{ if(bb.textContent === item.o[item.c]) bb.classList.add('correct'); });
+        wrong.push(item);
+      }
+      const ex = document.createElement('div');
+      ex.className='explain show';
+      ex.textContent = item.x;
+      card.appendChild(ex);
+      document.getElementById('nextBtn').style.display='block';
+    };
+    optWrap.appendChild(b);
+  });
+  card.appendChild(optWrap);
+  container.appendChild(card);
+  document.getElementById('nextBtn').style.display='none';
+}
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  current++;
+  if(current >= quizPool.length){
+    showScore();
+  } else {
+    renderQuestion();
+  }
+});
+
+function showScore(){
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('scoreScreen').style.display='block';
+  document.getElementById('scoreBig').textContent = `${score}/${quizPool.length}`;
+  const pct = Math.round((score/quizPool.length)*100);
+  let msg = '';
+  if(pct>=90) msg='Excelente, dominás el material.';
+  else if(pct>=70) msg='Muy bien, repasá los errores para afianzar.';
+  else if(pct>=50) msg='Vas bien, pero conviene repasar la teoría de los ejes falladas.';
+  else msg='Convendría repasar la teoría antes de reintentar.';
+  document.getElementById('scoreMsg').textContent = `${pct}% correctas. ${msg}`;
+  const reviewBtn = document.getElementById('reviewBtn');
+  const wrongList = document.getElementById('wrongList');
+  wrongList.innerHTML='';
+  if(wrong.length){
+    reviewBtn.style.display='inline-block';
+    reviewBtn.onclick = ()=>{
+      wrongList.innerHTML = '<h3 style="margin-top:20px;">Preguntas a repasar</h3>';
+      wrong.forEach(item=>{
+        const c = document.createElement('div');
+        c.className='qcard';
+        c.innerHTML = `<div class="qtag">Eje ${item.e}</div><h3>${item.q}</h3><div class="explain show"><b>Correcta:</b> ${item.o[item.c]}<br>${item.x}</div>`;
+        wrongList.appendChild(c);
+      });
+    };
+  } else {
+    reviewBtn.style.display='none';
+  }
+}
+
+document.getElementById('retryBtn').addEventListener('click', ()=>{
+  document.getElementById('scoreScreen').style.display='none';
+  document.getElementById('setupScreen').style.display='block';
+  document.getElementById('wrongList').innerHTML='';
+});
+</script>
+</body>
+</html>
