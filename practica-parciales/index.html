@@ -127,17 +127,27 @@
 <div id="feedbackOverlay">
   <div class="feedback-box">
     <h3>Sugerencias, consultas o recomendaciones</h3>
-    <p>Le llega directo a Gonzalo por email. Si estás logueado, ya sabe quién sos.</p>
-    <label>Tu nombre</label>
-    <input type="text" id="fbNombre" placeholder="Nombre y apellido">
-    <label>Tu email</label>
-    <input type="email" id="fbEmail" placeholder="tu@email.com">
-    <label>Mensaje</label>
-    <textarea id="fbMensaje" rows="4" placeholder="Contame qué se te ocurre, qué falta, o cualquier consulta..."></textarea>
-    <div class="feedback-botones">
-      <button class="fb-cancelar" onclick="cerrarFeedback()">Cancelar</button>
-      <button class="fb-enviar" onclick="enviarFeedback()">Enviar</button>
+
+    <div id="fbLoginPrompt" style="display:none;">
+      <p>Iniciá sesión con Google para mandar tu mensaje — así queda identificado quién escribe.</p>
+      <div id="fbGoogleWrap" style="display:flex; justify-content:center; min-height:44px; margin:10px 0;"></div>
+      <button class="volver" onclick="cerrarFeedback()">Cancelar</button>
     </div>
+
+    <div id="fbCamposForm" style="display:none;">
+      <p>Le llega directo a Gonzalo por email, con tu identidad verificada.</p>
+      <label>Tu nombre</label>
+      <input type="text" id="fbNombre" readonly>
+      <label>Tu email</label>
+      <input type="email" id="fbEmail" readonly>
+      <label>Mensaje</label>
+      <textarea id="fbMensaje" rows="4" placeholder="Contame qué se te ocurre, qué falta, o cualquier consulta..."></textarea>
+      <div class="feedback-botones">
+        <button class="fb-cancelar" onclick="cerrarFeedback()">Cancelar</button>
+        <button class="fb-enviar" onclick="enviarFeedback()">Enviar</button>
+      </div>
+    </div>
+
     <div id="fbGracias" style="display:none;">✅ ¡Gracias! Tu mensaje ya está en camino.</div>
   </div>
 </div>
@@ -184,6 +194,7 @@ let vista = 'portada';       // 'portada' | 'login' | 'fichas'
 let materiaActual = null;
 let gisReady = false;
 let gisInicializado = false;
+let feedbackEsperandoLogin = false;
 
 /* ================= IDENTIDAD (localStorage, compartida con las apps de la misma carpeta) ================= */
 function obtenerIdentidad(){
@@ -249,22 +260,29 @@ function handleCredentialResponse(response){
     tipo:'login', idToken: response.credential,
     nombre: idn.nombre, email: idn.email, materia: materiaActual ? materiaActual.nombre : ''
   });
-  vista = 'fichas';
-  render();
+  if(feedbackEsperandoLogin){
+    feedbackEsperandoLogin = false;
+    mostrarCamposFeedback(idn);
+  } else {
+    vista = 'fichas';
+    render();
+  }
 }
 
-function intentarMontarBotonGoogle(intentos){
-  if(!document.getElementById('googleBtnWrap')) return; // ya no estamos en la vista de login
+function intentarMontarBotonGoogle(intentos, contenedorId){
+  contenedorId = contenedorId || 'googleBtnWrap';
+  const cont = document.getElementById(contenedorId);
+  if(!cont) return; // ya no estamos en esa vista
   if(window.google && window.google.accounts && window.google.accounts.id){
     if(!gisInicializado){
       google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
       gisInicializado = true;
     }
-    google.accounts.id.renderButton(document.getElementById('googleBtnWrap'), { theme:'outline', size:'large', text:'signin_with', shape:'pill', width:240 });
+    google.accounts.id.renderButton(cont, { theme:'outline', size:'large', text:'signin_with', shape:'pill', width:240 });
   } else if(intentos < 25){
-    setTimeout(()=>intentarMontarBotonGoogle(intentos+1), 200);
+    setTimeout(()=>intentarMontarBotonGoogle(intentos+1, contenedorId), 200);
   } else {
-    document.getElementById('googleBtnWrap').innerHTML = '<span style="color:#c62828; font-size:.82rem;">No se pudo cargar el botón de Google. Revisá tu conexión o recargá la página.</span>';
+    cont.innerHTML = '<span style="color:#c62828; font-size:.82rem;">No se pudo cargar el botón de Google. Revisá tu conexión o recargá la página.</span>';
   }
 }
 
@@ -352,23 +370,34 @@ function render(){
 
 /* ================= FEEDBACK ================= */
 function abrirFeedback(){
-  const idn = obtenerIdentidad();
-  document.getElementById('fbNombre').value = idn ? idn.nombre : '';
-  document.getElementById('fbMensaje').value = '';
   document.getElementById('fbGracias').style.display = 'none';
-  document.querySelector('.feedback-botones').style.display = 'flex';
-  const campoEmail = document.getElementById('fbEmail');
+  const idn = obtenerIdentidad();
   if(idn){
-    campoEmail.value = idn.email;
-    campoEmail.readOnly = true;
+    mostrarCamposFeedback(idn);
   } else {
-    campoEmail.value = '';
-    campoEmail.readOnly = false;
+    mostrarLoginFeedback();
   }
   document.getElementById('feedbackOverlay').classList.add('abierto');
 }
 
+function mostrarCamposFeedback(idn){
+  feedbackEsperandoLogin = false;
+  document.getElementById('fbLoginPrompt').style.display = 'none';
+  document.getElementById('fbCamposForm').style.display = 'block';
+  document.getElementById('fbNombre').value = idn.nombre;
+  document.getElementById('fbEmail').value = idn.email;
+  document.getElementById('fbMensaje').value = '';
+}
+
+function mostrarLoginFeedback(){
+  feedbackEsperandoLogin = true;
+  document.getElementById('fbCamposForm').style.display = 'none';
+  document.getElementById('fbLoginPrompt').style.display = 'block';
+  intentarMontarBotonGoogle(0, 'fbGoogleWrap');
+}
+
 function cerrarFeedback(){
+  feedbackEsperandoLogin = false;
   document.getElementById('feedbackOverlay').classList.remove('abierto');
 }
 
@@ -376,10 +405,21 @@ function enviarFeedback(){
   const nombre = document.getElementById('fbNombre').value.trim();
   const email = document.getElementById('fbEmail').value.trim();
   const mensaje = document.getElementById('fbMensaje').value.trim();
-  if(!mensaje){
-    alert('Escribí tu mensaje antes de enviar.');
+
+  if(mensaje.length < 15){
+    alert('Contame un poco más — el mensaje necesita al menos 15 caracteres.');
     return;
   }
+  const letrasUnicas = new Set(mensaje.toLowerCase().replace(/[^a-záéíóúñ]/g, '')).size;
+  if(letrasUnicas < 4){
+    alert('Parece que el mensaje no tiene contenido real. Escribí tu consulta o sugerencia.');
+    return;
+  }
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    alert('Ese email no parece válido. Revisalo o dejalo vacío.');
+    return;
+  }
+
   registrarEvento({
     tipo: 'feedback',
     nombre: nombre || 'Anónimo',
