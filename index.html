@@ -21,6 +21,7 @@
     --c-salud:#29b6b6;
     --c-herramientas:#8b6fd1;
     --c-gestion:#e2793d;
+    --c-impositiva:#c9457a;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -184,12 +185,15 @@
   .herramientas .go{color:var(--c-herramientas);}
   .gestion .tag{color:var(--c-gestion);background:rgba(226,121,61,.12);}
   .gestion .go{color:var(--c-gestion);}
+  .impositiva .tag{color:var(--c-impositiva);background:rgba(201,69,122,.12);}
+  .impositiva .go{color:var(--c-impositiva);}
 
   .section-head.estudio .marker{background:var(--c-estudio);}
   .section-head.capacitacion .marker{background:var(--c-capacitacion);}
   .section-head.salud .marker{background:var(--c-salud);}
   .section-head.herramientas .marker{background:var(--c-herramientas);}
   .section-head.gestion .marker{background:var(--c-gestion);}
+  .section-head.impositiva .marker{background:var(--c-impositiva);}
 
   footer{
     max-width:1600px;
@@ -358,6 +362,28 @@
       </div>
     </div>
   </section>
+
+  <section>
+    <div class="section-head impositiva">
+      <div class="marker"></div>
+      <h2>Impositiva Previsional y Dotación</h2>
+      <div class="count">06</div>
+    </div>
+    <div class="grid">
+      <div class="card impositiva">
+        <div class="top">
+          <h3>Dotación de Empleados</h3>
+          <span class="tag">Personal</span>
+        </div>
+        <p>Control de dotación de personal por dependencia de GD Neuquén, con login, notificaciones por email y exportación/importación en Excel, sobre base de datos compartida.</p>
+        <a class="go" href="https://mancgonz-sketch.github.io/dotacion-gd5/" target="_blank" rel="noopener">
+          Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
