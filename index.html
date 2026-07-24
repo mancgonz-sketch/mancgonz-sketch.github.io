@@ -22,6 +22,7 @@
     --c-herramientas:#8b6fd1;
     --c-gestion:#e2793d;
     --c-impositiva:#c9457a;
+    --c-combustibles:#f2b705;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -188,6 +189,8 @@
   .gestion .go{color:var(--c-gestion);}
   .impositiva .tag{color:var(--c-impositiva);background:rgba(201,69,122,.12);}
   .impositiva .go{color:var(--c-impositiva);}
+  .combustibles .tag{color:var(--c-combustibles);background:rgba(242,183,5,.14);}
+  .combustibles .go{color:var(--c-combustibles);}
 
   .section-head.estudio .marker{background:var(--c-estudio);}
   .section-head.capacitacion .marker{background:var(--c-capacitacion);}
@@ -195,6 +198,7 @@
   .section-head.herramientas .marker{background:var(--c-herramientas);}
   .section-head.gestion .marker{background:var(--c-gestion);}
   .section-head.impositiva .marker{background:var(--c-impositiva);}
+  .section-head.combustibles .marker{background:var(--c-combustibles);}
 
   footer{
     max-width:1600px;
@@ -361,6 +365,17 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
+      <div class="card gestion">
+        <div class="top">
+          <h3>Seguimiento de GC y SeH</h3>
+          <span class="tag">Dashboard</span>
+        </div>
+        <p>Seguimiento de No Conformidades de Gestión de Calidad y Seguridad e Higiene en GD Neuquén: carga automática desde el PDF del check, semáforo por antigüedad (en gestión / alerta / urgente), alertas de vencimiento y exportación a Excel. Acceso por usuario y dependencia.</p>
+        <a class="go" href="https://mancgonz-sketch.github.io/nc-gc-sshh/" target="_blank" rel="noopener">
+          Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -378,6 +393,27 @@
         </div>
         <p>Control de dotación de personal por dependencia de GD Neuquén, con login, notificaciones por email y exportación/importación en Excel, sobre base de datos compartida.</p>
         <a class="go" href="https://mancgonz-sketch.github.io/dotacion_gd5/" target="_blank" rel="noopener">
+          Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head combustibles">
+      <div class="marker"></div>
+      <h2>Combustibles</h2>
+      <div class="count">07</div>
+    </div>
+    <div class="grid">
+      <div class="card combustibles">
+        <div class="top">
+          <h3>Combustibles y Vox</h3>
+          <span class="tag">Dashboard</span>
+        </div>
+        <p>Análisis de despachos VOX por dependencia: ventas por producto, día y turno horario, alertas de surtidor/manguera sin venta, detección de paradas generales y evolución contra presupuesto y Objetivo Plus. Umbrales configurables y export a Excel.</p>
+        <a class="go" href="https://mancgonz-sketch.github.io/combustibles-vox/" target="_blank" rel="noopener">
           Abrir
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
