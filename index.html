@@ -26,6 +26,7 @@
     --c-seguros:#2e9e8f;
     --c-tiendas:#d64545;
     --c-utilidades:#6b7a8f;
+    --c-socios:#7a9e3f;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -200,6 +201,8 @@
   .tiendas .go{color:var(--c-tiendas);}
   .utilidades .tag{color:var(--c-utilidades);background:rgba(107,122,143,.14);}
   .utilidades .go{color:var(--c-utilidades);}
+  .socios .tag{color:var(--c-socios);background:rgba(122,158,63,.14);}
+  .socios .go{color:var(--c-socios);}
 
   .section-head.estudio .marker{background:var(--c-estudio);}
   .section-head.capacitacion .marker{background:var(--c-capacitacion);}
@@ -211,6 +214,7 @@
   .section-head.seguros .marker{background:var(--c-seguros);}
   .section-head.tiendas .marker{background:var(--c-tiendas);}
   .section-head.utilidades .marker{background:var(--c-utilidades);}
+  .section-head.socios .marker{background:var(--c-socios);}
 
   footer{
     max-width:1600px;
@@ -509,10 +513,31 @@
   </section>
 
   <section>
+    <div class="section-head socios">
+      <div class="marker"></div>
+      <h2>Socios</h2>
+      <div class="count">10</div>
+    </div>
+    <div class="grid">
+      <div class="card socios">
+        <div class="top">
+          <h3>Reporte Semanal de Socios</h3>
+          <span class="tag">Reporte</span>
+        </div>
+        <p>Producción semanal de socios a nivel país: carga las bases, depura altas repetidas y arma la estadística por divisional, oficina y vendedor, con export a Excel y PDF.</p>
+        <a class="go" href="https://mancgonz-sketch.github.io/socios_semanal/" target="_blank" rel="noopener">
+          Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <div class="section-head utilidades">
       <div class="marker"></div>
       <h2>Utilidades</h2>
-      <div class="count">10</div>
+      <div class="count">11</div>
     </div>
     <div class="grid">
       <div class="card utilidades">
